@@ -34,6 +34,10 @@ void Game::run()
 
 		updateStatistics(elapsedTime);
 		render();
+
+		sf::Time timeToSleep = TimePerFrame - clock.getElapsedTime();
+    	if (timeToSleep > sf::Time::Zero)
+        	sf::sleep(timeToSleep);
 	}
 }
 
