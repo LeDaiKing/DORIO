@@ -30,5 +30,13 @@ void Entity::accelerate(float vx, float vy)
 
 void Entity::updateCurrent(sf::Time dt)
 {	
+	if (nVelocity.x != 0.f && nVelocity.y != 0.f)
+	{
+		nVelocity.x = nVelocity.x / std::sqrt(2.f);
+		nVelocity.y = nVelocity.y / std::sqrt(2.f);
+	}
+
 	move(nVelocity * dt.asSeconds());
+	
+	nVelocity = sf::Vector2f(0.f, 0.f);
 }

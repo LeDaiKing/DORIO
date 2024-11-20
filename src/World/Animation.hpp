@@ -3,6 +3,19 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 
+struct AnimationType
+{
+	std::size_t nCurrentFrame;
+	std::size_t nNumFrames;
+	sf::Time nDuration;
+	bool nRepeat;
+
+	AnimationType(std::size_t nNumFrames, sf::Time nDuration, bool nRepeat = false)
+	: nCurrentFrame(0), nNumFrames(nNumFrames), nDuration(nDuration), nRepeat(nRepeat)
+	{
+	}
+};
+
 
 class Animation : public sf::Drawable, public sf::Transformable
 {
@@ -16,14 +29,21 @@ class Animation : public sf::Drawable, public sf::Transformable
 		void setFrameSize(sf::Vector2i nFrameSize);
 		sf::Vector2i getFrameSize() const;
 
-		void setNumFrames(std::size_t numFrames);
-		std::size_t getNumFrames() const;
+		// void setNumFrames(std::size_t numFrames);
+		// std::size_t getNumFrames() const;
 
-		void setDuration(sf::Time duration);
-		sf::Time getDuration() const;
+		// void setDuration(sf::Time duration);
+		// sf::Time getDuration() const;
 
 		void setRepeating(bool flag);
 		bool isRepeating() const;
+
+		void setFlipped(bool flag);
+		bool isFlipped() const;
+
+		void addTypeAnimation(std::size_t numFrames, sf::Time duration, bool repeat = false);
+
+		void setAnimationID(std::size_t type);
 
 		void restart();
 		bool isFinished() const;
@@ -41,9 +61,8 @@ class Animation : public sf::Drawable, public sf::Transformable
 	private:
 		sf::Sprite nSprite;
 		sf::Vector2i nFrameSize;
-		std::size_t nNumFrames;
-		std::size_t nCurrentFrame;
-		sf::Time nDuration;
+		std::size_t nAnimationID;
+		std::vector<AnimationType> nTypeAnimations;
 		sf::Time nElapsedTime;
-		bool nRepeat;
+		bool nFlipped;
 };

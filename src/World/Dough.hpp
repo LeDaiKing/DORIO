@@ -18,6 +18,9 @@ class Dough : public Entity
 	public:
 		Dough(Type type, const TextureHolder& textures);
 		virtual unsigned int getCategory() const;
+		void setAnimationID(std::size_t type);
+		void turnLeft();
+		void turnRight();
 
 
 	private:

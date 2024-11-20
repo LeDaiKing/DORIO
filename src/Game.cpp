@@ -20,6 +20,7 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+	nWindow.setFramerateLimit(60);
 	while (nWindow.isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();
@@ -31,13 +32,8 @@ void Game::run()
 			processInput();
 			update(TimePerFrame);
 		}
-
 		updateStatistics(elapsedTime);
 		render();
-
-		sf::Time timeToSleep = TimePerFrame - clock.getElapsedTime();
-    	if (timeToSleep > sf::Time::Zero)
-        	sf::sleep(timeToSleep);
 	}
 }
 

@@ -21,7 +21,8 @@ World::World(sf::RenderWindow& window)
 
 	// Prepare the view
 	//zoom(0.5f);
-	nWorldView.setViewport(sf::FloatRect(0.f, 0.f, 1.5f, 1.5f));
+	// nWorldView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+	nWorldView.zoom(0.5f);
 	nWorldView.setCenter(nSpawnPosition);
 }
 
@@ -29,12 +30,12 @@ void World::update(sf::Time dt)
 {
 	// Scroll the world, reset player velocity
 	// nWorldView.move(0.f, mScrollSpeed * dt.asSeconds());	
-	nPlayerDough->setVelocity(0.f, 0.f);
+	// nPlayerDough->setVelocity(0.f, 0.f);
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!nCommandQueue.isEmpty())
 		nSceneGraph.onCommand(nCommandQueue.pop(), dt);
-	adaptPlayerVelocity();
+	// adaptPlayerVelocity();
 
 	nSceneGraph.update(dt);
 	// Regular update step, adapt position (correct if outside view)
@@ -90,14 +91,15 @@ void World::adaptPlayerPosition()
 {
 	// Keep player's position inside the screen bounds, at least borderDistance units from the border
 	sf::FloatRect viewBounds(nWorldView.getCenter() - nWorldView.getSize() / 2.f, nWorldView.getSize());
-	const float borderDistance = 40.f;
+	// const float borderDistance = 40.f;
 
 	sf::Vector2f position = nPlayerDough->getPosition();
-	position.x = std::max(position.x, viewBounds.left + borderDistance);
-	position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
-	position.y = std::max(position.y, viewBounds.top + borderDistance);
-	position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
-	nPlayerDough->setPosition(position);
+	// position.x = std::max(position.x, viewBounds.left + borderDistance);
+	// position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
+	// position.y = std::max(position.y, viewBounds.top + borderDistance);
+	// position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
+	// nPlayerDough->setPosition(position);
+	
 }
 
 void World::adaptPlayerVelocity()

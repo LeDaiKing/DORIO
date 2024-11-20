@@ -24,9 +24,12 @@ Dough::Dough(Type type, const TextureHolder& textures)
 	centerOrigin(nSprite);
 
 	nSprite.setFrameSize(sf::Vector2i(48, 48));
-	nSprite.setNumFrames(12);
-	nSprite.setDuration(sf::seconds(1));
-	nSprite.setRepeating(true);
+	nSprite.addTypeAnimation(12, sf::seconds(1.f), true);
+	nSprite.addTypeAnimation(12, sf::seconds(1.f), true);
+	nSprite.addTypeAnimation(6, sf::seconds(0.8f), true);
+	nSprite.addTypeAnimation(6, sf::seconds(0.8f), true);
+
+
 }
 
 void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
@@ -50,4 +53,19 @@ void Dough::updateCurrent(sf::Time dt)
 {
 	nSprite.update(dt);
 	Entity::updateCurrent(dt);
+}
+
+void Dough::setAnimationID(std::size_t type)
+{
+	nSprite.setAnimationID(type);
+}
+
+void Dough::turnLeft()
+{
+	nSprite.setFlipped(true);
+}
+
+void Dough::turnRight()
+{
+	nSprite.setFlipped(false);
 }

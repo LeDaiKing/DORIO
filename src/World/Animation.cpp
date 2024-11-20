@@ -7,22 +7,18 @@
 Animation::Animation()
 : nSprite()
 , nFrameSize()
-, nNumFrames(0)
-, nCurrentFrame(0)
-, nDuration(sf::Time::Zero)
 , nElapsedTime(sf::Time::Zero)
-, nRepeat(false)
+, nAnimationID(0)
+, nFlipped(false)
 {
 }
 
 Animation::Animation(const sf::Texture& texture)
 : nSprite(texture)
 , nFrameSize()
-, nNumFrames(0)
-, nCurrentFrame(0)
-, nDuration(sf::Time::Zero)
 , nElapsedTime(sf::Time::Zero)
-, nRepeat(false)
+, nAnimationID(0)
+, nFlipped(false)
 {
 }
 
@@ -46,44 +42,63 @@ sf::Vector2i Animation::getFrameSize() const
 	return nFrameSize;
 }
 
-void Animation::setNumFrames(std::size_t numFrames)
+void Animation::setFlipped(bool flag)
 {
-	nNumFrames = numFrames;
+	nFlipped = flag;
 }
 
-std::size_t Animation::getNumFrames() const
+bool Animation::isFlipped() const
 {
-	return nNumFrames;
+	return nFlipped;
 }
 
-void Animation::setDuration(sf::Time duration)
+void Animation::addTypeAnimation(std::size_t numFrames, sf::Time duration, bool repeat)
 {
-	nDuration = duration;
+	nTypeAnimations.push_back(AnimationType(numFrames, duration, repeat));
 }
 
-sf::Time Animation::getDuration() const
+void Animation::setAnimationID(std::size_t type)
 {
-	return nDuration;
+	nAnimationID = type;
 }
+// void Animation::setNumFrames(std::size_t numFrames)
+// {
+// 	nNumFrames = numFrames;
+// }
+
+// std::size_t Animation::getNumFrames() const
+// {
+// 	return nNumFrames;
+// }
+
+// void Animation::setDuration(sf::Time duration)
+// {
+// 	nDuration = duration;
+// }
+
+// sf::Time Animation::getDuration() const
+// {
+// 	return nDuration;
+// }
 
 void Animation::setRepeating(bool flag)
 {
-	nRepeat = flag;
+	nTypeAnimations[nAnimationID].nRepeat = flag;
 }
 
 bool Animation::isRepeating() const
 {
-	return nRepeat;
+	return nTypeAnimations[nAnimationID].nRepeat;
 }
 
 void Animation::restart()
 {
-	nCurrentFrame = 0;
+	nTypeAnimations[nAnimationID].nCurrentFrame = 0;
 }
 
 bool Animation::isFinished() const
 {
-	return nCurrentFrame >= nNumFrames;
+	return nTypeAnimations[nAnimationID].nCurrentFrame >= nTypeAnimations[nAnimationID].nNumFrames;
 }
 
 sf::FloatRect Animation::getLocalBounds() const
@@ -98,37 +113,35 @@ sf::FloatRect Animation::getGlobalBounds() const
 
 void Animation::update(sf::Time dt)
 {
+	std::size_t nNumFrames = nTypeAnimations[nAnimationID].nNumFrames;
+	sf::Time nDuration = nTypeAnimations[nAnimationID].nDuration;
+	std::size_t &nCurrentFrame = nTypeAnimations[nAnimationID].nCurrentFrame;
+
 	sf::Time timePerFrame = nDuration / static_cast<float>(nNumFrames);
 	nElapsedTime += dt;
 
-	sf::Vector2i textureBounds(nSprite.getTexture()->getSize());
+	// sf::Vector2i textureBounds(nSprite.getTexture()->getSize());
 	sf::IntRect textureRect = nSprite.getTextureRect();
 
-	if (nCurrentFrame == 0)
-		textureRect = sf::IntRect(0, 0, nFrameSize.x, nFrameSize.y);
+	textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nAnimationID * nFrameSize.y, nFrameSize.x, nFrameSize.y);
+
 	
 	// While we have a frame to process
-	while (nElapsedTime >= timePerFrame && (nCurrentFrame <= nNumFrames || nRepeat))
+	while (nElapsedTime >= timePerFrame && (nCurrentFrame <= nNumFrames || nTypeAnimations[nAnimationID].nRepeat))
 	{
 		// Move the texture rect left
 		textureRect.left += textureRect.width;
 
 		// If we reach the end of the texture
-		if (textureRect.left + textureRect.width > textureBounds.x)
-		{
-			// Move it down one line
-			textureRect.left = 0;
-			textureRect.top += textureRect.height;
-		}
 
 		// And progress to next frame
 		nElapsedTime -= timePerFrame;
-		if (nRepeat)
+		if (nTypeAnimations[nAnimationID].nRepeat)
 		{
 			nCurrentFrame = (nCurrentFrame + 1) % nNumFrames;
 
 			if (nCurrentFrame == 0)
-				textureRect = sf::IntRect(0, 0, nFrameSize.x, nFrameSize.y);
+				textureRect = sf::IntRect(0, nAnimationID *  nFrameSize.y, nFrameSize.x, nFrameSize.y);
 		}
 		else
 		{
@@ -136,6 +149,11 @@ void Animation::update(sf::Time dt)
 		}
 	}
 
+	if (nFlipped)
+	{
+		textureRect.left = textureRect.left + textureRect.width;
+		textureRect.width = -textureRect.width;
+	}
 	nSprite.setTextureRect(textureRect);
 }
 
