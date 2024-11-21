@@ -178,3 +178,32 @@ sf::Vector2f unitVector(sf::Vector2f vector)
 	assert(vector != sf::Vector2f(0.f, 0.f));
 	return vector / length(vector);
 }
+
+bool checkCollision(const sf::FloatRect rect1, const sf::FloatRect rect2)
+{
+	return (rect1.intersects(rect2));
+}
+
+collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRect rect2)
+{
+	float leftOverlap = rect1.left + rect1.width - rect2.left;
+	float rightOverlap = rect2.left + rect2.width - rect1.left;
+	float topOverlap = rect1.top + rect1.height - rect2.top;
+	float bottomOverlap = rect2.top + rect2.height - rect1.top;
+
+	if (leftOverlap <= 0.f || rightOverlap <= 0.f || topOverlap <= 0.f || bottomOverlap <= 0.f)
+		return collision::None;
+
+	float minOverlap = std::min(std::min(leftOverlap, rightOverlap), std::min(topOverlap, bottomOverlap));
+
+	if (minOverlap == leftOverlap)
+		return collision::Left;
+	if (minOverlap == rightOverlap)
+		return collision::Right;
+	if (minOverlap == topOverlap)
+		return collision::Top;
+	if (minOverlap == bottomOverlap)
+		return collision::Bottom;
+
+	return collision::None;
+}

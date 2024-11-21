@@ -97,3 +97,13 @@ unsigned int SceneNode::getCategory() const
 {
 	return Category::Scene;
 }
+
+sf::FloatRect SceneNode::getBoundingRect() const
+{
+	return sf::FloatRect();
+}
+
+std::vector<SceneNode::Ptr>& SceneNode::getChildren() 
+{
+	return nChildren;
+}

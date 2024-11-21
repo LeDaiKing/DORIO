@@ -12,7 +12,7 @@ World::World(sf::RenderWindow& window)
 , nTextures() 
 , nSceneGraph()
 , nSceneLayers()
-, nWorldBounds(0.f, 0.f, 2000, nWorldView.getSize().y)
+, nWorldBounds(0.f, 0.f, 5000, nWorldView.getSize().y)
 , nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
 , nGravity(512)
@@ -33,6 +33,7 @@ void World::update(sf::Time dt)
 	// Scroll the world, reset player velocity
 	// nWorldView.move(0.f, mScrollSpeed * dt.asSeconds());	
 	// nPlayerDough->setVelocity(0.f, 0.f);
+	applyNormal();
 	applyGravity();
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!nCommandQueue.isEmpty())
@@ -68,6 +69,7 @@ void World::loadTextures()
 {
 	nTextures.load(Textures::normal, "res/Dough/tile001.png");
     nTextures.load(Textures::Sky, "res/Background/Blue.png");
+	nTextures.load(Textures::Dirt, "res/Background/Dirt.png");
 
 }
 
@@ -83,23 +85,15 @@ void World::buildScene()
 		nSceneGraph.attachChild(std::move(layer));
 	}
 
-	// Prepare the tiled background
-	sf::Texture& texture = nTextures.get(Textures::Sky);
-	sf::IntRect textureRect(nWorldBounds);
-	texture.setRepeated(true);
+	loadMap();
 
-	// Add the background sprite to the scene
-	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
-	backgroundSprite->setPosition(nWorldBounds.left, nWorldBounds.top);
-	nSceneLayers[Background]->attachChild(std::move(backgroundSprite));
-	nCategoryLayers[Background] |= Category::Scene;
 
 	// Add player's Dough
 	std::unique_ptr<Dough> leader(new Dough(Dough::normal, nTextures));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Air]->attachChild(std::move(leader));
-	nCategoryLayers[Air] |= Category::PlayerDough;
+	nCategoryLayers[Air] |= Category::Entity;
 }
 
 void World::adaptPlayerPosition()
@@ -123,27 +117,10 @@ void World::adaptPlayerPosition()
 void World::applyGravity()
 {
 	Command applyGravity;
-	applyGravity.category = Category::PlayerDough;
+	applyGravity.category = Category::Entity;
 	applyGravity.action = derivedAction<Entity>([this] (Entity& Dough, sf::Time)
 	{
-		sf::FloatRect viewBounds(nWorldView.getCenter() - nWorldView.getSize() / 2.f, nWorldView.getSize());
-		const float borderDistance = 40.f;
-
-		
-
-		sf::Vector2f position = Dough.getPosition();
-		// position.x = std::max(position.x, viewBounds.left + borderDistance);
-		// position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
-		// position.y = std::max(position.y, viewBounds.top + borderDistance);
-		// position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
-		if (position.y  > viewBounds.top + viewBounds.height - borderDistance)
-		{
-			if (Dough.getVelocity().y > 0)
-				Dough.addVelocity(0.f, -Dough.getVelocity().y);
-			// nPlayerDough->setPosition(position.x, viewBounds.top + viewBounds.height - borderDistance - 16);
-		} else
 		Dough.accelerate(0.f, nGravity);
-		
 	});
 	
 	nCommandQueue.push(applyGravity);
@@ -163,4 +140,54 @@ void World::adaptCameraPosition()
 	}
 
 	// nWorldView.move(0.0001, 0);
+}
+
+void World::loadMap()
+{
+	// Prepare the tiled background
+	sf::Texture& texture = nTextures.get(Textures::Sky);
+	sf::IntRect textureRect(nWorldBounds);
+	texture.setRepeated(true);
+
+	// Add the background sprite to the scene
+	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
+	backgroundSprite->setPosition(nWorldBounds.left, nWorldBounds.top);
+	nSceneLayers[Background]->attachChild(std::move(backgroundSprite));
+	nCategoryLayers[Background] |= Category::Scene;
+
+
+	// Add the dirt sprite to the scene
+	sf::Texture& dirtTexture = nTextures.get(Textures::Dirt);
+	for (int i = 0; i < 60; i++)
+	{
+		std::unique_ptr<Block> block(new Block(dirtTexture, sf::Vector2f(48 * i, nSpawnPosition.y + 128)));
+		nSceneLayers[Map]->attachChild(std::move(block));
+
+		if (i == 8)
+		{
+			std::unique_ptr<Block> block(new Block(dirtTexture, sf::Vector2f(48 * i, nSpawnPosition.y + 80)));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+
+		if (i == 5)
+		{
+			std::unique_ptr<Block> block(new Block(dirtTexture, sf::Vector2f(48 * i, nSpawnPosition.y + -18)));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+	}
+	
+
+	nCategoryLayers[Map] |= Category::Block;
+}
+
+void World::applyNormal()
+{
+	Command applyNormal;
+	applyNormal.category = Category::Block;
+	applyNormal.action = derivedAction<Block>([this] (Block& block, sf::Time)
+	{
+		block.applyNormal(nSceneGraph);
+	});
+	
+	nCommandQueue.push(applyNormal);
 }

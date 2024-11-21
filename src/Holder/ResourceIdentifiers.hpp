@@ -13,6 +13,7 @@ namespace Textures
         // Add an entry for each new texture
 		normal,
 		Sky,
+		Dirt,
 	};
 }
 

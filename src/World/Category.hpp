@@ -6,7 +6,9 @@ namespace Category
 	{
 		None				= 0,
 		Scene				= 1 << 0,
+		Entity				= 1 << 1 | 1 << 2,
 		PlayerDough			= 1 << 1,
-	
+		Enemy 				= 1 << 2,
+		Block 				= 1 << 3,
 	};
 }

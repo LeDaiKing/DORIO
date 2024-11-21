@@ -21,10 +21,10 @@ Dough::Dough(Type type, const TextureHolder& textures)
 : nType(type)
 , Entity(textures.get(toTextureID(type)))
 {
-	addAnimationState(State::Idle, 3, 11, sf::seconds(1.f), true);
-	addAnimationState(State::Walk, 5, 12, sf::seconds(0.6f), true);
-	addAnimationState(State::Jump, 4, 1, sf::seconds(0.6f));
-	addAnimationState(State::DoubleJump, 0, 6, sf::seconds(0.2f));
+	addAnimationState(State::Idle, 3, 11, sf::seconds(1.f), sf::Vector2i(32, 32), true);
+	addAnimationState(State::Walk, 5, 12, sf::seconds(0.6f), sf::Vector2i(32, 32), true);
+	addAnimationState(State::Jump, 4, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
+	addAnimationState(State::DoubleJump, 0, 6, sf::seconds(0.2f), sf::Vector2i(32, 32), true);
 
 	setAnimationState(State::Idle);
 
@@ -58,7 +58,7 @@ void Dough::setUpEntity()
 	nSpeed = sf::Vector2f(1024.f, 128.f);
 	nMaxVelocity = sf::Vector2f(200.f, 1024.f);
 	friction = sf::Vector2f(0.f, 0.f);
-	nJumpVelocitty = 250;
+	nJumpVelocitty = 270;
 }
 
 void Dough::jump()

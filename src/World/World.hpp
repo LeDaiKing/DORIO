@@ -4,6 +4,7 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
 #include "SpriteNode.hpp"
+#include "Block.hpp"
 #include "Dough.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
@@ -37,13 +38,16 @@ class World : private sf::NonCopyable
 		void buildScene();
 		void adaptPlayerPosition();
 		void applyGravity();
+		void applyNormal();
 		void adaptCameraPosition();
+		void loadMap();
 
 
 	private:
 		enum Layer
 		{
 			Background,
+			Map,
 			Air,
 			LayerCount
 		};

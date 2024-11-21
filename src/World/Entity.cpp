@@ -5,9 +5,10 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 Entity::Entity(const sf::Texture& texture)
-: nSprite(texture, sf::Vector2i(32, 32)), nCurrentState(State::None)
+: nSprite(texture), nCurrentState(State::None)
 {
 	centerOrigin(nSprite);
 }
@@ -98,13 +99,11 @@ void Entity::updateCurrent(sf::Time dt)
 	if ((nCurrentState == State::Jump || nCurrentState == State::DoubleJump)&& nVelocity.y == 0)
 		setAnimationState(State::Idle);
 
-	if (nVelocity == sf::Vector2f(0.f, 0.f))
+	if (nVelocity.x == 0.f && nOnGround)
 		setAnimationState(State::Idle);
 
-	if (nCurrentState == State::Idle) nOnGround = true;
-	else nOnGround = false;
 
-	if (nCurrentState == State::DoubleJump && nSprite.isFinished())
+	if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
 		setAnimationState(State::Jump);
 
 	nSprite.update(dt);
@@ -144,20 +143,43 @@ void Entity::walk(bool nDirection)
 
 void Entity::jump()
 {
-	if (nCurrentState == State::Jump)
+	if (!nOnGround)
 		return;
+
+	nOnGround = false;
 	setAnimationState(State::Jump);
 	addVelocity(0.f, -nJumpVelocitty);
 }
 
-void Entity::addAnimationState(State state, std::size_t row, std::size_t numFrames, sf::Time duration, bool repeat)
+void Entity::addAnimationState(State state, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat)
 {
-	nSprite.addAnimationState(state, row, numFrames, duration, repeat);
+	nSprite.addAnimationState(state, row, numFrames, duration, frameSize, repeat);
 }
 
 
 void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	sf::FloatRect bounds = getBoundingRect();
+	sf::RectangleShape rect(sf::Vector2f(bounds.width, bounds.height));
+	rect.setPosition(bounds.left, bounds.top);
+	rect.setFillColor(sf::Color(255, 255, 255, 0));
+	rect.setOutlineColor(sf::Color::Red);
+	rect.setOutlineThickness(1.f);
+	target.draw(rect);
 	target.draw(nSprite, states);
 }
 
+sf::FloatRect Entity::getBoundingRect() const
+{
+	return getWorldTransform().transformRect(nSprite.getGlobalBounds());
+}
+
+unsigned int Entity::getCategory() const
+{
+	return Category::Entity;
+}
+
+void Entity::setOnGround(bool flag)
+{
+	nOnGround = flag;
+}

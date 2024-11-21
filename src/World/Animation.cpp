@@ -1,11 +1,11 @@
 #include "Animation.hpp"
+#include "../Utility.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-Animation::Animation(const sf::Texture& texture, sf::Vector2i frameSize)
+Animation::Animation(const sf::Texture& texture)
 : nSprite(texture)
-, nFrameSize(frameSize)
 , nElapsedTime(sf::Time::Zero)
 , nCurrentFrame(0)
 , nCurrentAnimation(nullptr)
@@ -23,11 +23,9 @@ bool Animation::isFlipped() const
 	return nFlipped;
 }
 
-
-
-void Animation::addAnimationState(int ID, std::size_t row, std::size_t numFrames, sf::Time duration, bool repeat)
+void Animation::addAnimationState(int ID, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat)
 {
-	nAnimations[ID] = new AnimationState(row, numFrames, duration, repeat);
+	nAnimations[ID] = new AnimationState(row, numFrames, duration, frameSize, repeat);
 }
 
 
@@ -60,7 +58,9 @@ void Animation::setAnimationState(int ID)
 
 sf::Vector2i Animation::getFrameSize() const
 {
-	return nFrameSize;
+	if (nCurrentAnimation == nullptr)
+		return sf::Vector2i(32, 32);
+	return nCurrentAnimation->nFrameSize;
 }
 
 bool Animation::isFinished() const
@@ -73,7 +73,7 @@ bool Animation::isFinished() const
 
 sf::FloatRect Animation::getLocalBounds() const
 {
-	return sf::FloatRect(getOrigin(), static_cast<sf::Vector2f>(getFrameSize()));
+	return sf::FloatRect(sf::Vector2f(0.f, 0.f), static_cast<sf::Vector2f>(getFrameSize()));
 }
 
 sf::FloatRect Animation::getGlobalBounds() const
@@ -89,6 +89,7 @@ void Animation::update(sf::Time dt)
 	std::size_t nNumFrames = nCurrentAnimation->nNumFrames;
 	sf::Time nDuration = nCurrentAnimation->nDuration;
 	std::size_t nRow = nCurrentAnimation->nRow;
+	sf::Vector2i nFrameSize = nCurrentAnimation->nFrameSize;
 
 	sf::Time timePerFrame = nDuration / static_cast<float>(nNumFrames);
 	nElapsedTime += dt;

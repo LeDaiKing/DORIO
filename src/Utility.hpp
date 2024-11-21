@@ -2,7 +2,7 @@
 
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/System/Vector2.hpp>
-
+#include <SFML/Graphics/Rect.hpp>
 #include <sstream>
 
 
@@ -10,6 +10,18 @@ namespace sf
 {
 	class Sprite;
 	class Text;
+}
+
+namespace collision
+{
+	enum Side
+	{
+		None,
+		Top,
+		Bottom,
+		Left,
+		Right,
+	};
 }
 
 class Animation;
@@ -39,4 +51,10 @@ float			length(sf::Vector2f vector);
 sf::Vector2f	unitVector(sf::Vector2f vector);
 
 
+// Check Collision
+bool checkCollision(const sf::FloatRect rect1, const sf::FloatRect rect2);
+collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRect rect2);
+// bool checkCollisionLC(const sf::FloatRect rect1, const sf::FloatRect rect2);
+// bool checkCollisionRC(const sf::FloatRect rect1, const sf::FloatRect rect2);
 #include "Utility.inl"
+
