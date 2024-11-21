@@ -12,8 +12,8 @@ World::World(sf::RenderWindow& window)
 , nTextures() 
 , nSceneGraph()
 , nSceneLayers()
-, nWorldBounds(0.f, 0.f, nWorldView.getSize().x, 2000.f)
-, nSpawnPosition(nWorldView.getSize().x / 2.f, nWorldBounds.height - nWorldView.getSize().y / 2.f)
+, nWorldBounds(0.f, 0.f, 2000, nWorldView.getSize().y)
+, nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
 , nGravity(512)
 {
@@ -22,9 +22,10 @@ World::World(sf::RenderWindow& window)
 
 	// Prepare the view
 	//zoom(0.5f);
-	// nWorldView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+	nWorldView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+	// nWorldBounds = sf::FloatRect(0.f, 0.f, 10, 10000.f);
+	nWorldView.setCenter(nWorldView.getSize().x / 4.f, nWorldView.getSize().y / 2.f);
 	nWorldView.zoom(0.5f);
-	nWorldView.setCenter(nSpawnPosition);
 }
 
 void World::update(sf::Time dt)
@@ -47,7 +48,9 @@ void World::update(sf::Time dt)
 
 	nSceneGraph.update(dt);
 	// Regular update step, adapt position (correct if outside view)
-	adaptPlayerPosition();
+	// adaptPlayerPosition();
+
+	adaptCameraPosition();
 }
 
 void World::draw()
@@ -64,7 +67,8 @@ CommandQueue& World::getCommandQueue()
 void World::loadTextures()
 {
 	nTextures.load(Textures::normal, "res/Dough/tile001.png");
-    nTextures.load(Textures::Sky, "res/Background/sky.png");
+    nTextures.load(Textures::Sky, "res/Background/Blue.png");
+
 }
 
 void World::buildScene()
@@ -143,4 +147,20 @@ void World::applyGravity()
 	});
 	
 	nCommandQueue.push(applyGravity);
+}
+
+void World::adaptCameraPosition()
+{
+	sf::Vector2f postiion = nPlayerDough->getPosition();
+
+	if (postiion.x > nWorldView.getCenter().x + nWorldView.getSize().x / 4.f)
+	{
+		nWorldView.move(postiion.x - nWorldView.getCenter().x - nWorldView.getSize().x / 4.f, 0);
+	}
+	else if (postiion.x < nWorldView.getCenter().x - nWorldView.getSize().x / 4.f - 50)
+	{
+		nWorldView.move(postiion.x - nWorldView.getCenter().x + nWorldView.getSize().x / 4.f + 50, 0);
+	}
+
+	// nWorldView.move(0.0001, 0);
 }

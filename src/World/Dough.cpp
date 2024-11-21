@@ -24,6 +24,7 @@ Dough::Dough(Type type, const TextureHolder& textures)
 	addAnimationState(State::Idle, 3, 11, sf::seconds(1.f), true);
 	addAnimationState(State::Walk, 5, 12, sf::seconds(0.6f), true);
 	addAnimationState(State::Jump, 4, 1, sf::seconds(0.6f));
+	addAnimationState(State::DoubleJump, 0, 6, sf::seconds(0.2f));
 
 	setAnimationState(State::Idle);
 
@@ -46,16 +47,32 @@ unsigned int Dough::getCategory() const
 	}
 }
 
-// void Dough::updateCurrent(sf::Time dt)
-// {
-// 	Entity::updateCurrent(dt);
-// }
+void Dough::updateCurrent(sf::Time dt)
+{
+	Entity::updateCurrent(dt);
+	if (nOnGround) stateJump = 0;
+}
 
 void Dough::setUpEntity()
 {
-	nSpeed = sf::Vector2f(512.f, 64.f);
-	nMaxVelocity = sf::Vector2f(200.f, 0.f);
+	nSpeed = sf::Vector2f(1024.f, 128.f);
+	nMaxVelocity = sf::Vector2f(200.f, 1024.f);
 	friction = sf::Vector2f(0.f, 0.f);
 	nJumpVelocitty = 250;
-	nJumpDistance = 100;
+}
+
+void Dough::jump()
+{
+	if (stateJump == 0)
+	{
+		Entity::jump();
+		stateJump++;
+	} 
+	else if (stateJump == 1)
+	{
+		setAnimationState(State::DoubleJump);
+		addVelocity(0.f, -getVelocity().y);
+		addVelocity(0.f, -nJumpVelocitty);
+		stateJump++;
+	} 
 }

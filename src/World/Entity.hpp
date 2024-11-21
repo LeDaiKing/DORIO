@@ -12,6 +12,7 @@ class Entity : public SceneNode
 			Idle,
 			Walk,
 			Jump,
+			DoubleJump,
 			Attack,
 			Dead,
 			StateCount
@@ -28,7 +29,7 @@ class Entity : public SceneNode
 		void accelerate(sf::Vector2f velocity);
 		void accelerate(float vx, float vy);
 		sf::Vector2f getVelocity() const;
-		virtual void Move(bool nDirection);
+		virtual void walk(bool nDirection);
 		virtual void jump();
 		void setAnimationState(State type);
 
@@ -43,14 +44,14 @@ class Entity : public SceneNode
 		sf::Vector2f nVelocity;
 		sf::Vector2f nAcceleration;
 		Animation nSprite;
-		State nCurrentState;
 		bool nDirection;
 
 	protected:
+		State nCurrentState;
 		sf::Vector2f nSpeed;
 		sf::Vector2f nMaxVelocity;
 		sf::Vector2f friction;
 		int nJumpVelocitty;
-		int nJumpDistance;
+		bool nOnGround;
 };
 

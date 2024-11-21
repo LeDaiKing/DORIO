@@ -124,8 +124,7 @@ void Animation::update(sf::Time dt)
 
 	if (isFinished())
 	{
-		nCurrentFrame = nNumFrames - 1;
-		textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nRow * nFrameSize.y, nFrameSize.x, nFrameSize.y);
+		textureRect = sf::IntRect((nNumFrames - 1) * nFrameSize.x, nRow * nFrameSize.y, nFrameSize.x, nFrameSize.y);
 	}
 
 	if (nFlipped)

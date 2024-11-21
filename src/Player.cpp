@@ -16,7 +16,7 @@ struct DoughMover
 
 	void operator() (Dough& Dough, sf::Time) const
 	{
-		Dough.Move(nDirection);
+		Dough.walk(nDirection);
 	}
 	bool nDirection;
 };
@@ -73,7 +73,9 @@ void Player::handleRealtimeInput(CommandQueue& commands)
 	{
 		// If key is pressed, lookup action and trigger corresponding command
 		if (sf::Keyboard::isKeyPressed(pair.first) && isRealtimeAction(pair.second))
+		{
 			commands.push(nActionBinding[pair.second]);
+		}
 	}
 }
 

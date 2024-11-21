@@ -15,17 +15,22 @@ class Dough : public Entity
 			normal,
 		};
 
+		using Entity::State;
+
 	public:
 		Dough(Type type, const TextureHolder& textures);
 		virtual unsigned int getCategory() const;
 
 		virtual void setUpEntity();
+		virtual void jump();
 
 	private:
-		// virtual void updateCurrent(sf::Time dt);
+		virtual void updateCurrent(sf::Time dt);
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 
 	private:
 		Type nType;
+		int stateJump = 0;
+
 };
