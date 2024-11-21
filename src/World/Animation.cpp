@@ -3,43 +3,14 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-
-Animation::Animation()
-: nSprite()
-, nFrameSize()
-, nElapsedTime(sf::Time::Zero)
-, nAnimationID(0)
-, nFlipped(false)
-{
-}
-
-Animation::Animation(const sf::Texture& texture)
+Animation::Animation(const sf::Texture& texture, sf::Vector2i frameSize)
 : nSprite(texture)
-, nFrameSize()
+, nFrameSize(frameSize)
 , nElapsedTime(sf::Time::Zero)
-, nAnimationID(0)
+, nCurrentFrame(0)
+, nCurrentAnimation(nullptr)
 , nFlipped(false)
 {
-}
-
-void Animation::setTexture(const sf::Texture& texture)
-{
-	nSprite.setTexture(texture);
-}
-
-const sf::Texture* Animation::getTexture() const
-{
-	return nSprite.getTexture();
-}
-
-void Animation::setFrameSize(sf::Vector2i frameSize)
-{
-	nFrameSize = frameSize;
-}
-
-sf::Vector2i Animation::getFrameSize() const
-{
-	return nFrameSize;
 }
 
 void Animation::setFlipped(bool flag)
@@ -52,15 +23,21 @@ bool Animation::isFlipped() const
 	return nFlipped;
 }
 
-void Animation::addTypeAnimation(std::size_t numFrames, sf::Time duration, bool repeat)
+
+
+void Animation::addAnimationState(int ID, std::size_t row, std::size_t numFrames, sf::Time duration, bool repeat)
 {
-	nTypeAnimations.push_back(AnimationType(numFrames, duration, repeat));
+	nAnimations[ID] = new AnimationState(row, numFrames, duration, repeat);
 }
 
-void Animation::setAnimationID(std::size_t type)
+
+void Animation::setAnimationState(int ID)
 {
-	nAnimationID = type;
+	nCurrentAnimation = nAnimations[ID];
+	nCurrentFrame = 0;
+	nElapsedTime = sf::Time::Zero;
 }
+
 // void Animation::setNumFrames(std::size_t numFrames)
 // {
 // 	nNumFrames = numFrames;
@@ -81,24 +58,17 @@ void Animation::setAnimationID(std::size_t type)
 // 	return nDuration;
 // }
 
-void Animation::setRepeating(bool flag)
+sf::Vector2i Animation::getFrameSize() const
 {
-	nTypeAnimations[nAnimationID].nRepeat = flag;
-}
-
-bool Animation::isRepeating() const
-{
-	return nTypeAnimations[nAnimationID].nRepeat;
-}
-
-void Animation::restart()
-{
-	nTypeAnimations[nAnimationID].nCurrentFrame = 0;
+	return nFrameSize;
 }
 
 bool Animation::isFinished() const
 {
-	return nTypeAnimations[nAnimationID].nCurrentFrame >= nTypeAnimations[nAnimationID].nNumFrames;
+	if (nCurrentAnimation == nullptr)
+		return false;
+
+	return nCurrentFrame >= nCurrentAnimation->nNumFrames;
 }
 
 sf::FloatRect Animation::getLocalBounds() const
@@ -113,9 +83,12 @@ sf::FloatRect Animation::getGlobalBounds() const
 
 void Animation::update(sf::Time dt)
 {
-	std::size_t nNumFrames = nTypeAnimations[nAnimationID].nNumFrames;
-	sf::Time nDuration = nTypeAnimations[nAnimationID].nDuration;
-	std::size_t &nCurrentFrame = nTypeAnimations[nAnimationID].nCurrentFrame;
+	if (nCurrentAnimation == nullptr)
+		return;
+
+	std::size_t nNumFrames = nCurrentAnimation->nNumFrames;
+	sf::Time nDuration = nCurrentAnimation->nDuration;
+	std::size_t nRow = nCurrentAnimation->nRow;
 
 	sf::Time timePerFrame = nDuration / static_cast<float>(nNumFrames);
 	nElapsedTime += dt;
@@ -123,11 +96,11 @@ void Animation::update(sf::Time dt)
 	// sf::Vector2i textureBounds(nSprite.getTexture()->getSize());
 	sf::IntRect textureRect = nSprite.getTextureRect();
 
-	textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nAnimationID * nFrameSize.y, nFrameSize.x, nFrameSize.y);
+	textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nRow * nFrameSize.y, nFrameSize.x, nFrameSize.y);
 
 	
 	// While we have a frame to process
-	while (nElapsedTime >= timePerFrame && (nCurrentFrame <= nNumFrames || nTypeAnimations[nAnimationID].nRepeat))
+	while (nElapsedTime >= timePerFrame && (nCurrentFrame < nNumFrames || nCurrentAnimation->nRepeat))
 	{
 		// Move the texture rect left
 		textureRect.left += textureRect.width;
@@ -136,17 +109,23 @@ void Animation::update(sf::Time dt)
 
 		// And progress to next frame
 		nElapsedTime -= timePerFrame;
-		if (nTypeAnimations[nAnimationID].nRepeat)
+		if (nCurrentAnimation->nRepeat)
 		{
 			nCurrentFrame = (nCurrentFrame + 1) % nNumFrames;
 
 			if (nCurrentFrame == 0)
-				textureRect = sf::IntRect(0, nAnimationID *  nFrameSize.y, nFrameSize.x, nFrameSize.y);
+				textureRect = sf::IntRect(0, nRow *  nFrameSize.y, nFrameSize.x, nFrameSize.y);
 		}
 		else
 		{
 			nCurrentFrame++;
 		}
+	}
+
+	if (isFinished())
+	{
+		nCurrentFrame = nNumFrames - 1;
+		textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nRow * nFrameSize.y, nFrameSize.x, nFrameSize.y);
 	}
 
 	if (nFlipped)
@@ -161,4 +140,12 @@ void Animation::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(nSprite, states);
+}
+
+Animation::~Animation()
+{
+	for (auto pair : nAnimations)
+	{
+		delete pair.second;
+	}
 }

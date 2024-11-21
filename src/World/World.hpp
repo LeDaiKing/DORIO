@@ -36,7 +36,7 @@ class World : private sf::NonCopyable
 		void loadTextures();
 		void buildScene();
 		void adaptPlayerPosition();
-		void adaptPlayerVelocity();
+		void applyGravity();
 
 
 	private:
@@ -55,10 +55,13 @@ class World : private sf::NonCopyable
 
 		SceneNode nSceneGraph;
 		std::array<SceneNode*, LayerCount>	nSceneLayers;
+		unsigned int nCategoryLayers[LayerCount];
 		CommandQueue nCommandQueue;
 
 		sf::FloatRect nWorldBounds;
 		sf::Vector2f nSpawnPosition;
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
+
+		int nGravity;
 };

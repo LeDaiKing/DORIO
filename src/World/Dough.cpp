@@ -19,23 +19,20 @@ Textures::ID toTextureID(Dough::Type type)
 
 Dough::Dough(Type type, const TextureHolder& textures)
 : nType(type)
-, nSprite(textures.get(toTextureID(type)))
+, Entity(textures.get(toTextureID(type)))
 {
-	centerOrigin(nSprite);
+	addAnimationState(State::Idle, 3, 11, sf::seconds(1.f), true);
+	addAnimationState(State::Walk, 5, 12, sf::seconds(0.6f), true);
+	addAnimationState(State::Jump, 4, 1, sf::seconds(0.6f));
 
-	nSprite.setFrameSize(sf::Vector2i(48, 48));
-	nSprite.addTypeAnimation(12, sf::seconds(1.f), true);
-	nSprite.addTypeAnimation(12, sf::seconds(1.f), true);
-	nSprite.addTypeAnimation(6, sf::seconds(0.8f), true);
-	nSprite.addTypeAnimation(6, sf::seconds(0.8f), true);
+	setAnimationState(State::Idle);
 
-
+	setUpEntity();
 }
 
-void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(nSprite, states);
-}
+// void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
+// {
+// }
 
 unsigned int Dough::getCategory() const
 {
@@ -49,23 +46,16 @@ unsigned int Dough::getCategory() const
 	}
 }
 
-void Dough::updateCurrent(sf::Time dt)
-{
-	nSprite.update(dt);
-	Entity::updateCurrent(dt);
-}
+// void Dough::updateCurrent(sf::Time dt)
+// {
+// 	Entity::updateCurrent(dt);
+// }
 
-void Dough::setAnimationID(std::size_t type)
+void Dough::setUpEntity()
 {
-	nSprite.setAnimationID(type);
-}
-
-void Dough::turnLeft()
-{
-	nSprite.setFlipped(true);
-}
-
-void Dough::turnRight()
-{
-	nSprite.setFlipped(false);
+	nSpeed = sf::Vector2f(512.f, 64.f);
+	nMaxVelocity = sf::Vector2f(200.f, 0.f);
+	friction = sf::Vector2f(0.f, 0.f);
+	nJumpVelocitty = 250;
+	nJumpDistance = 100;
 }

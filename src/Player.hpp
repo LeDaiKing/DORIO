@@ -13,13 +13,9 @@ class Player
 	public:
 		enum Action
 		{
-			Idle,
 			MoveLeft,
 			MoveRight,
 			MoveUp,
-			MoveDown,
-			TurnLeft,
-			TurnRight,
 			Jump,
 			ActionCount
 		};

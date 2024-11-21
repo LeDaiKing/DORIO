@@ -9,45 +9,33 @@
 
 struct DoughMover
 {
-	DoughMover(float vx, float vy)
-	: velocity(vx, vy)
+	DoughMover(bool nDirection)
+	: nDirection(nDirection)
 	{
 	}
 
 	void operator() (Dough& Dough, sf::Time) const
 	{
-		Dough.accelerate(velocity);
-		Dough.setAnimationID(2);
+		Dough.Move(nDirection);
 	}
-
-	sf::Vector2f velocity;
+	bool nDirection;
 };
 
-struct DoughTurner
+
+struct DougJump
 {
-	DoughTurner(bool left)
-	: nLeft(left)
+	DougJump()
 	{
 	}
 
 	void operator() (Dough& Dough, sf::Time) const
 	{
-		if (nLeft)
-			Dough.turnLeft();
-		else
-			Dough.turnRight();
+		Dough.jump();
 	}
 
-	bool nLeft;
 };
 
-struct DoughStopper
-{
-	void operator() (Dough& Dough, sf::Time) const
-	{
-		Dough.setAnimationID(0);
-	}
-};
+
 
 Player::Player()
 {
@@ -55,7 +43,6 @@ Player::Player()
 	nKeyBinding[sf::Keyboard::Left] = MoveLeft;
 	nKeyBinding[sf::Keyboard::Right] = MoveRight;
 	nKeyBinding[sf::Keyboard::Up] = MoveUp;
-	nKeyBinding[sf::Keyboard::Down] = MoveDown;
 
 	
 
@@ -75,21 +62,8 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 		auto found = nKeyBinding.find(event.key.code);
 		if (found != nKeyBinding.end() && !isRealtimeAction(found->second))
 			commands.push(nActionBinding[found->second]);
-
-		if (event.key.code == sf::Keyboard::Left)
-			commands.push(nActionBinding[TurnLeft]);
-
-		if (event.key.code == sf::Keyboard::Right)
-			commands.push(nActionBinding[TurnRight]);
 	}
 
-	if (event.type == sf::Event::KeyReleased)
-	{
-		// Check if released key appears in key binding, trigger command if so
-		auto found = nKeyBinding.find(event.key.code);
-		if (found != nKeyBinding.end())
-			commands.push(nActionBinding[Idle]);
-	}
 }
 
 void Player::handleRealtimeInput(CommandQueue& commands)
@@ -131,15 +105,11 @@ sf::Keyboard::Key Player::getAssignedKey(Action action) const
 
 void Player::initializeActions()
 {
-	const float playerSpeed = 150.f;
+	const float playerSpeed = 512.f;
 
-	nActionBinding[Idle].action		= derivedAction<Dough>(DoughStopper());
-	nActionBinding[MoveLeft].action	 = derivedAction<Dough>(DoughMover(-playerSpeed, 0.f));
-	nActionBinding[MoveRight].action = derivedAction<Dough>(DoughMover(+playerSpeed, 0.f));
-	nActionBinding[MoveUp].action    = derivedAction<Dough>(DoughMover(0.f, -playerSpeed));
-	nActionBinding[MoveDown].action  = derivedAction<Dough>(DoughMover(0.f, +playerSpeed));
-	nActionBinding[TurnLeft].action  = derivedAction<Dough>(DoughTurner(true));
-	nActionBinding[TurnRight].action = derivedAction<Dough>(DoughTurner(false));
+	nActionBinding[MoveLeft].action	 = derivedAction<Dough>(DoughMover(true));
+	nActionBinding[MoveRight].action = derivedAction<Dough>(DoughMover(false));
+	nActionBinding[MoveUp].action    = derivedAction<Dough>(DougJump());
 
 }
 
@@ -151,8 +121,7 @@ bool Player::isRealtimeAction(Action action)
 	{
 		case MoveLeft:
 		case MoveRight:
-		case MoveDown:
-		case MoveUp:
+		// case MoveUp:
 			return true;
 
 		default:

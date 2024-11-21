@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity.hpp"
-#include "Animation.hpp"
+
 
 #include  "../Holder/ResourceIdentifiers.hpp"
 
@@ -18,17 +18,14 @@ class Dough : public Entity
 	public:
 		Dough(Type type, const TextureHolder& textures);
 		virtual unsigned int getCategory() const;
-		void setAnimationID(std::size_t type);
-		void turnLeft();
-		void turnRight();
 
+		virtual void setUpEntity();
 
 	private:
-		virtual void updateCurrent(sf::Time dt);
-		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+		// virtual void updateCurrent(sf::Time dt);
+		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 
 	private:
 		Type nType;
-		Animation nSprite;
 };

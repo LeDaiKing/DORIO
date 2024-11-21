@@ -3,15 +3,15 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 
-struct AnimationType
+struct AnimationState
 {
-	std::size_t nCurrentFrame;
+	std::size_t nRow;
 	std::size_t nNumFrames;
 	sf::Time nDuration;
 	bool nRepeat;
 
-	AnimationType(std::size_t nNumFrames, sf::Time nDuration, bool nRepeat = false)
-	: nCurrentFrame(0), nNumFrames(nNumFrames), nDuration(nDuration), nRepeat(nRepeat)
+	AnimationState(std::size_t nRow, std::size_t nNumFrames, sf::Time nDuration, bool nRepeat = false)
+	: nRow(nRow), nNumFrames(nNumFrames), nDuration(nDuration), nRepeat(nRepeat)
 	{
 	}
 };
@@ -20,13 +20,11 @@ struct AnimationType
 class Animation : public sf::Drawable, public sf::Transformable
 {
 	public:
-		Animation();
-		explicit Animation(const sf::Texture& texture);
+		explicit Animation(const sf::Texture& texture, sf::Vector2i frameSize);
 
-		void setTexture(const sf::Texture& texture);
-		const sf::Texture* getTexture() const;
+		// deconstructor
+		~Animation();
 
-		void setFrameSize(sf::Vector2i nFrameSize);
 		sf::Vector2i getFrameSize() const;
 
 		// void setNumFrames(std::size_t numFrames);
@@ -35,17 +33,13 @@ class Animation : public sf::Drawable, public sf::Transformable
 		// void setDuration(sf::Time duration);
 		// sf::Time getDuration() const;
 
-		void setRepeating(bool flag);
-		bool isRepeating() const;
-
 		void setFlipped(bool flag);
 		bool isFlipped() const;
 
-		void addTypeAnimation(std::size_t numFrames, sf::Time duration, bool repeat = false);
+		void addAnimationState(int ID, std::size_t row, ::size_t numFrames, sf::Time duration, bool repeat = false);
 
-		void setAnimationID(std::size_t type);
+		void setAnimationState(int ID);
 
-		void restart();
 		bool isFinished() const;
 
 		sf::FloatRect getLocalBounds() const;
@@ -61,8 +55,9 @@ class Animation : public sf::Drawable, public sf::Transformable
 	private:
 		sf::Sprite nSprite;
 		sf::Vector2i nFrameSize;
-		std::size_t nAnimationID;
-		std::vector<AnimationType> nTypeAnimations;
+		std::size_t nCurrentFrame;
+		AnimationState* nCurrentAnimation;
+		std::unordered_map<int, AnimationState*> nAnimations;
 		sf::Time nElapsedTime;
 		bool nFlipped;
 };
