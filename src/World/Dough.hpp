@@ -12,7 +12,8 @@ class Dough : public Entity
 	public:
 		enum Type
 		{
-			normal,
+			Dough1,
+			Dough2,
 		};
 
 		using Entity::State;

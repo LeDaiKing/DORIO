@@ -96,15 +96,18 @@ void Entity::updateCurrent(sf::Time dt)
 			nVelocity.y = 0;
 	}
 
-	if ((nCurrentState == State::Jump || nCurrentState == State::DoubleJump)&& nVelocity.y == 0)
-		setAnimationState(State::Idle);
+	// if ((nCurrentState == State::Jump || nCurrentState == State::DoubleJump)&& nVelocity.y == 0)
+	// 	setAnimationState(State::Idle);
+
+	if (!nOnGround && nVelocity.y > 0)
+		setAnimationState(State::Fall);
 
 	if (nVelocity.x == 0.f && nOnGround)
 		setAnimationState(State::Idle);
 
 
-	if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
-		setAnimationState(State::Jump);
+	// if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
+	// 	setAnimationState(State::Jump);
 
 	nSprite.update(dt);
 }
@@ -120,7 +123,7 @@ void Entity::setAnimationState(State type)
 
 void Entity::walk(bool nDirection)
 {
-	if (nCurrentState != State::Jump && nCurrentState != State::DoubleJump) 
+	if (nOnGround) 
 		setAnimationState(State::Walk);
 
 	// if (nCurrentState == State::Walk && this -> nDirection != nDirection)
@@ -159,7 +162,7 @@ void Entity::addAnimationState(State state, std::size_t row, std::size_t numFram
 
 void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	sf::FloatRect bounds = getBoundingRect();
+	sf::FloatRect bounds = getHitBox();
 	sf::RectangleShape rect(sf::Vector2f(bounds.width, bounds.height));
 	rect.setPosition(bounds.left, bounds.top);
 	rect.setFillColor(sf::Color(255, 255, 255, 0));
@@ -172,6 +175,15 @@ void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) cons
 sf::FloatRect Entity::getBoundingRect() const
 {
 	return getWorldTransform().transformRect(nSprite.getGlobalBounds());
+}
+
+sf::FloatRect Entity::getHitBox() const
+{
+	sf::FloatRect bound = getBoundingRect();
+	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
+	sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height / 2 - nHitBox.y / 2};
+
+	return sf::FloatRect(pos, nHitBox);
 }
 
 unsigned int Entity::getCategory() const

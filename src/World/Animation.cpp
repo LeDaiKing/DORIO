@@ -31,9 +31,13 @@ void Animation::addAnimationState(int ID, std::size_t row, std::size_t numFrames
 
 void Animation::setAnimationState(int ID)
 {
+	if (nAnimations.find(ID) == nAnimations.end())
+		return;
 	nCurrentAnimation = nAnimations[ID];
 	nCurrentFrame = 0;
 	nElapsedTime = sf::Time::Zero;
+	centerOrigin(*this);
+	nSprite.setTextureRect(sf::IntRect(0, nCurrentAnimation->nRow, nCurrentAnimation->nFrameSize.x, nCurrentAnimation->nFrameSize.y));
 }
 
 // void Animation::setNumFrames(std::size_t numFrames)
@@ -97,7 +101,7 @@ void Animation::update(sf::Time dt)
 	// sf::Vector2i textureBounds(nSprite.getTexture()->getSize());
 	sf::IntRect textureRect = nSprite.getTextureRect();
 
-	textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nRow * nFrameSize.y, nFrameSize.x, nFrameSize.y);
+	textureRect = sf::IntRect(nCurrentFrame * nFrameSize.x, nRow, nFrameSize.x, nFrameSize.y);
 
 	
 	// While we have a frame to process
@@ -115,7 +119,7 @@ void Animation::update(sf::Time dt)
 			nCurrentFrame = (nCurrentFrame + 1) % nNumFrames;
 
 			if (nCurrentFrame == 0)
-				textureRect = sf::IntRect(0, nRow *  nFrameSize.y, nFrameSize.x, nFrameSize.y);
+				textureRect = sf::IntRect(0, nRow, nFrameSize.x, nFrameSize.y);
 		}
 		else
 		{
@@ -125,7 +129,7 @@ void Animation::update(sf::Time dt)
 
 	if (isFinished())
 	{
-		textureRect = sf::IntRect((nNumFrames - 1) * nFrameSize.x, nRow * nFrameSize.y, nFrameSize.x, nFrameSize.y);
+		textureRect = sf::IntRect((nNumFrames - 1) * nFrameSize.x, nRow, nFrameSize.x, nFrameSize.y);
 	}
 
 	if (nFlipped)

@@ -36,7 +36,6 @@ class World : private sf::NonCopyable
 	private:
 		void loadTextures();
 		void buildScene();
-		void adaptPlayerPosition();
 		void applyGravity();
 		void applyNormal();
 		void adaptCameraPosition();

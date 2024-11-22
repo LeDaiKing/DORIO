@@ -13,6 +13,7 @@ class Entity : public SceneNode
 			Walk,
 			Jump,
 			DoubleJump,
+			Fall,
 			Attack,
 			Dead,
 			StateCount
@@ -39,6 +40,8 @@ class Entity : public SceneNode
 		virtual sf::FloatRect getBoundingRect() const;
 		virtual unsigned int getCategory() const;
 
+		virtual sf::FloatRect getHitBox() const;
+
 
 	protected:
 		virtual void updateCurrent(sf::Time dt);
@@ -54,6 +57,7 @@ class Entity : public SceneNode
 
 	protected:
 		State nCurrentState;
+		sf::Vector2f nHitBox;
 		sf::Vector2f nSpeed;
 		sf::Vector2f nMaxVelocity;
 		sf::Vector2f friction;

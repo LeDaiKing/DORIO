@@ -25,30 +25,33 @@ void Block::applyNormal(SceneNode& graph)
         assert(dynamic_cast<Entity*>(&graph) != nullptr);
         Entity& entity = static_cast<Entity&>(graph);
 
-        collision::Side side = checkCollisionSide(graph.getBoundingRect(), getBoundingRect());
+        sf::FloatRect entityHitBox = entity.getHitBox();
+        sf::FloatRect bound = getBoundingRect();
+
+        collision::Side side = checkCollisionSide(entityHitBox, bound);
 
         if (side == collision::Top && entity.getVelocity().y > 0)
         {
-            entity.setPosition(entity.getPosition().x, getBoundingRect().top - entity.getBoundingRect().height / 2);
+            entity.setPosition(entity.getPosition().x, bound.top - entityHitBox.height / 2);
             entity.setVelocity(entity.getVelocity().x, 0.f);
             entity.accelerate(0.f, -512);
             entity.setOnGround(true);
         }
         else if (side == collision::Bottom && entity.getVelocity().y < 0)
         {
-            entity.setPosition(entity.getPosition().x, getBoundingRect().top + getBoundingRect().height + entity.getBoundingRect().height / 2);
+            entity.setPosition(entity.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
             entity.setVelocity(entity.getVelocity().x, 0.f);
             entity.accelerate(0.f, -512);
 
         }
         else if (side == collision::Left && entity.getVelocity().x > 0)
         {
-            entity.setPosition(getBoundingRect().left - entity.getBoundingRect().width / 2, entity.getPosition().y);
+            entity.setPosition(bound.left - entityHitBox.width / 2, entity.getPosition().y);
             entity.setVelocity(0.f, entity.getVelocity().y);
         }
         else if (side == collision::Right && entity.getVelocity().x < 0)
         {
-            entity.setPosition(getBoundingRect().left + getBoundingRect().width + entity.getBoundingRect().width / 2, entity.getPosition().y);
+            entity.setPosition(bound.left + bound.width + entityHitBox.width / 2, entity.getPosition().y);
             entity.setVelocity(0.f, entity.getVelocity().y);
         }
 

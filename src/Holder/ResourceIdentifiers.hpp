@@ -11,7 +11,8 @@ namespace Textures
 	enum ID
 	{
         // Add an entry for each new texture
-		normal,
+		Dough1,
+		Dough2,
 		Sky,
 		Dirt,
 	};

@@ -30,9 +30,7 @@ World::World(sf::RenderWindow& window)
 
 void World::update(sf::Time dt)
 {
-	// Scroll the world, reset player velocity
-	// nWorldView.move(0.f, mScrollSpeed * dt.asSeconds());	
-	// nPlayerDough->setVelocity(0.f, 0.f);
+	
 	applyNormal();
 	applyGravity();
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
@@ -45,11 +43,9 @@ void World::update(sf::Time dt)
 				nSceneLayers[i]->onCommand(command, dt);
 		}
 	}
-	// adaptPlayerVelocity();
 
 	nSceneGraph.update(dt);
 	// Regular update step, adapt position (correct if outside view)
-	// adaptPlayerPosition();
 
 	adaptCameraPosition();
 }
@@ -67,9 +63,10 @@ CommandQueue& World::getCommandQueue()
 
 void World::loadTextures()
 {
-	nTextures.load(Textures::normal, "res/Dough/tile001.png");
+	nTextures.load(Textures::Dough2, "res/Dough/tile001.png");
     nTextures.load(Textures::Sky, "res/Background/Blue.png");
 	nTextures.load(Textures::Dirt, "res/Background/Dirt.png");
+	nTextures.load(Textures::Dough1, "res/Dough/DoughSheet.png");
 
 }
 
@@ -89,30 +86,14 @@ void World::buildScene()
 
 
 	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::normal, nTextures));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2, nTextures));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Air]->attachChild(std::move(leader));
 	nCategoryLayers[Air] |= Category::Entity;
 }
 
-void World::adaptPlayerPosition()
-{
-	// Keep player's position inside the screen bounds, at least borderDistance units from the border
-	sf::FloatRect viewBounds(nWorldView.getCenter() - nWorldView.getSize() / 2.f, nWorldView.getSize());
-	const float borderDistance = 40.f;
 
-	sf::Vector2f position = nPlayerDough->getPosition();
-	// position.x = std::max(position.x, viewBounds.left + borderDistance);
-	// position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
-	// position.y = std::max(position.y, viewBounds.top + borderDistance);
-	// position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
-	// if (position.y > viewBounds.top + viewBounds.height - borderDistance)
-	// {
-	// 	nPlayerDough->accelerate(0.f, -nGravity);
-	// 	// nPlayerDough->setPosition(position.x, viewBounds.top + viewBounds.height - borderDistance - 16);
-	// }
-}
 
 void World::applyGravity()
 {
