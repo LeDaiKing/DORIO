@@ -15,6 +15,7 @@ class Entity : public SceneNode
 			DoubleJump,
 			Fall,
 			Attack,
+			Hit,
 			Dead,
 			StateCount
 		};
@@ -31,16 +32,20 @@ class Entity : public SceneNode
 		void accelerate(float vx, float vy);
 
 		sf::Vector2f getVelocity() const;
+		bool getDirection() const;
 
 		void setOnGround(bool flag);
 		virtual void walk(bool nDirection);
 		virtual void jump();
+
 		void setAnimationState(State type);
 
 		virtual sf::FloatRect getBoundingRect() const;
 		virtual unsigned int getCategory() const;
 
 		virtual sf::FloatRect getHitBox() const;
+
+		// virtual void attack() = 0;
 
 
 	protected:

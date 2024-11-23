@@ -87,6 +87,8 @@ void SceneNode::onCommand(const Command& command, sf::Time dt)
 	// Command current node, if category matches
 	if (command.category & getCategory())
 		command.action(*this, dt);
+	// else if (command.category != Category::Scene)
+	// 	return;
 
 	// Command children
 	for(Ptr& child : nChildren)

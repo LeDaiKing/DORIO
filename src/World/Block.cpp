@@ -1,13 +1,15 @@
 #include "Block.hpp"
 #include "Entity.hpp"
 #include "../Holder/ResourceHolder.hpp"
+#include  "../Holder/ResourceIdentifiers.hpp"
 #include "../Utility.hpp"
 #include <iostream>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
-Block::Block(const sf::Texture& texture, sf::Vector2f position)
-: SpriteNode(texture)
+
+Block::Block(sf::Vector2f position)
+: SpriteNode(TextureHolder::getInstance().get(Textures::Dirt))
 {
     centerOrigin(nSprite);
     nSprite.setPosition(position);
@@ -29,6 +31,7 @@ void Block::applyNormal(SceneNode& graph)
         sf::FloatRect bound = getBoundingRect();
 
         collision::Side side = checkCollisionSide(entityHitBox, bound);
+
 
         if (side == collision::Top && entity.getVelocity().y > 0)
         {

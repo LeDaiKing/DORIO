@@ -61,8 +61,6 @@ void Entity::accelerate(float vx, float vy)
 
 void Entity::updateCurrent(sf::Time dt)
 {
-	
-
 	addVelocity(nAcceleration * dt.asSeconds());
 	move(nVelocity * dt.asSeconds());
 	nAcceleration = sf::Vector2f(0.f, 0.f);
@@ -99,13 +97,16 @@ void Entity::updateCurrent(sf::Time dt)
 	// if ((nCurrentState == State::Jump || nCurrentState == State::DoubleJump)&& nVelocity.y == 0)
 	// 	setAnimationState(State::Idle);
 
-	if (!nOnGround && nVelocity.y > 0)
+	// if (nVelocity.y != 0.f) nOnGround = false;s
+
+	if (!nOnGround && nVelocity.y > 0 && nCurrentState != State::Hit)
 		setAnimationState(State::Fall);
 
-	if (nVelocity.x == 0.f && nOnGround)
+	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit)
 		setAnimationState(State::Idle);
 
-
+	if (abs(nVelocity.y) > 10.f) nOnGround = false;
+	// nOnGround = false;
 	// if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
 	// 	setAnimationState(State::Jump);
 
@@ -123,7 +124,7 @@ void Entity::setAnimationState(State type)
 
 void Entity::walk(bool nDirection)
 {
-	if (nOnGround) 
+	if (nOnGround && nCurrentState != State::Hit) 
 		setAnimationState(State::Walk);
 
 	// if (nCurrentState == State::Walk && this -> nDirection != nDirection)
@@ -149,8 +150,10 @@ void Entity::jump()
 	if (!nOnGround)
 		return;
 
+	if (nCurrentState != State::Hit)
+		setAnimationState(State::Jump);
+
 	nOnGround = false;
-	setAnimationState(State::Jump);
 	addVelocity(0.f, -nJumpVelocitty);
 }
 
@@ -194,4 +197,9 @@ unsigned int Entity::getCategory() const
 void Entity::setOnGround(bool flag)
 {
 	nOnGround = flag;
+}
+
+bool Entity::getDirection() const
+{
+	return nDirection;
 }

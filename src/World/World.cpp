@@ -9,7 +9,6 @@
 World::World(sf::RenderWindow& window)
 : nWindow(window)
 , nWorldView(window.getDefaultView())
-, nTextures() 
 , nSceneGraph()
 , nSceneLayers()
 , nWorldBounds(0.f, 0.f, 5000, nWorldView.getSize().y)
@@ -33,6 +32,7 @@ void World::update(sf::Time dt)
 	
 	applyNormal();
 	applyGravity();
+	enemiesAttackPlayer();
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!nCommandQueue.isEmpty())
 	{
@@ -63,10 +63,11 @@ CommandQueue& World::getCommandQueue()
 
 void World::loadTextures()
 {
-	nTextures.load(Textures::Dough2, "res/Dough/tile001.png");
-    nTextures.load(Textures::Sky, "res/Background/Blue.png");
-	nTextures.load(Textures::Dirt, "res/Background/Dirt.png");
-	nTextures.load(Textures::Dough1, "res/Dough/DoughSheet.png");
+	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
+	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/DoughSheet.png");
+	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
+	TextureHolder::getInstance().load(Textures::Sky, "res/Background/Blue.png");
+	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
 
 }
 
@@ -86,11 +87,15 @@ void World::buildScene()
 
 
 	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2, nTextures));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
-	nSceneLayers[Air]->attachChild(std::move(leader));
-	nCategoryLayers[Air] |= Category::Entity;
+	nSceneLayers[Player]->attachChild(std::move(leader));
+	nCategoryLayers[Player] |= Category::PlayerDough;
+	
+	std::unique_ptr<Enemy> leader1(new Enemy(nSpawnPosition + sf::Vector2f(100, 0)));
+	nSceneLayers[Enemies]->attachChild(std::move(leader1));
+	nCategoryLayers[Enemies] |= Category::Enemy;
 }
 
 
@@ -126,7 +131,7 @@ void World::adaptCameraPosition()
 void World::loadMap()
 {
 	// Prepare the tiled background
-	sf::Texture& texture = nTextures.get(Textures::Sky);
+	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
 
@@ -138,21 +143,20 @@ void World::loadMap()
 
 
 	// Add the dirt sprite to the scene
-	sf::Texture& dirtTexture = nTextures.get(Textures::Dirt);
 	for (int i = 0; i < 60; i++)
 	{
-		std::unique_ptr<Block> block(new Block(dirtTexture, sf::Vector2f(48 * i, nSpawnPosition.y + 128)));
+		std::unique_ptr<Block> block(new Block(sf::Vector2f(48 * i, nSpawnPosition.y + 128)));
 		nSceneLayers[Map]->attachChild(std::move(block));
 
 		if (i == 8)
 		{
-			std::unique_ptr<Block> block(new Block(dirtTexture, sf::Vector2f(48 * i, nSpawnPosition.y + 80)));
+			std::unique_ptr<Block> block(new Block(sf::Vector2f(48 * i, nSpawnPosition.y + 80)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 
 		if (i == 5)
 		{
-			std::unique_ptr<Block> block(new Block(dirtTexture, sf::Vector2f(48 * i, nSpawnPosition.y + -18)));
+			std::unique_ptr<Block> block(new Block(sf::Vector2f(48 * i, nSpawnPosition.y + -18)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 	}
@@ -167,8 +171,21 @@ void World::applyNormal()
 	applyNormal.category = Category::Block;
 	applyNormal.action = derivedAction<Block>([this] (Block& block, sf::Time)
 	{
-		block.applyNormal(nSceneGraph);
+		block.applyNormal(*nSceneLayers[Player]);
+		block.applyNormal(*nSceneLayers[Enemies]);
 	});
 	
 	nCommandQueue.push(applyNormal);
+}
+
+void World::enemiesAttackPlayer()
+{
+	Command attackPlayer;
+	attackPlayer.category = Category::Enemy;
+	attackPlayer.action = derivedAction<Enemy>([this] (Enemy& enemy, sf::Time)
+	{
+		enemy.attackPlayer(*nPlayerDough);
+	});
+	
+	nCommandQueue.push(attackPlayer);
 }

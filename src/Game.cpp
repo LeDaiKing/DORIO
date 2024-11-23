@@ -1,7 +1,8 @@
 #include "Game.hpp"
 
+const int numFrames = 60;
 
-const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
+const sf::Time Game::TimePerFrame = sf::seconds(1.f/numFrames);
 
 Game::Game()
 : nWindow(sf::VideoMode(800, 600), "Input", sf::Style::Close)
@@ -20,7 +21,7 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	nWindow.setFramerateLimit(60);
+	nWindow.setFramerateLimit(numFrames);
 	while (nWindow.isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();

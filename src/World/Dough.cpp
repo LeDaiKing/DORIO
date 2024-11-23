@@ -19,35 +19,12 @@ Textures::ID toTextureID(Dough::Type type)
 	return Textures::Dough1;
 }
 
-Dough::Dough(Type type, const TextureHolder& textures)
+Dough::Dough(Type type)
 : nType(type)
-, Entity(textures.get(toTextureID(type)))
+, Entity(TextureHolder::getInstance().get(toTextureID(type)))
 {
-	switch (type)
-	{
-	case Dough1:
-		addAnimationState(State::Idle, 48, 12, sf::seconds(1.f), sf::Vector2i(42, 42), true);
-		addAnimationState(State::Walk, 164, 4, sf::seconds(0.5f), sf::Vector2i(48, 48), true);
-		addAnimationState(State::Jump, 90, 14, sf::seconds(1.f), sf::Vector2i(58, 74), false);
-		addAnimationState(State::DoubleJump, 90, 14, sf::seconds(0.6f), sf::Vector2i(58, 74), false);
-		break;
-	case Dough2:
-		addAnimationState(State::Idle, 96, 11, sf::seconds(1.f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Walk, 160, 12, sf::seconds(0.6f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Jump, 128, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::DoubleJump, 0, 6, sf::seconds(0.1f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Fall, 32, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
-		break;
-	
-	default:
-
-		break;
-	}
-	
-
-	setAnimationState(State::Idle);
-
 	setUpEntity();
+	setAnimationState(State::Idle);
 }
 
 // void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
@@ -69,8 +46,18 @@ unsigned int Dough::getCategory() const
 
 void Dough::updateCurrent(sf::Time dt)
 {
-	Entity::updateCurrent(dt);
 	if (nOnGround) stateJump = 0;
+	
+	if (nTimeDamage > sf::Time::Zero)
+	{
+		nTimeDamage -= dt;
+		if (nTimeDamage <= sf::Time::Zero)
+		{
+			setAnimationState(State::Idle);
+		}
+	}
+	
+	Entity::updateCurrent(dt);
 }
 
 void Dough::setUpEntity()
@@ -89,6 +76,28 @@ void Dough::setUpEntity()
 	default:
 		break;
 	}
+
+	switch (nType)
+	{
+	case Dough1:
+		addAnimationState(State::Idle, 48, 12, sf::seconds(1.f), sf::Vector2i(42, 42), true);
+		addAnimationState(State::Walk, 164, 4, sf::seconds(0.5f), sf::Vector2i(48, 48), true);
+		addAnimationState(State::Jump, 90, 14, sf::seconds(1.f), sf::Vector2i(58, 74), false);
+		addAnimationState(State::DoubleJump, 90, 14, sf::seconds(0.6f), sf::Vector2i(58, 74), false);
+		break;
+	case Dough2:
+		addAnimationState(State::Idle, 96, 11, sf::seconds(1.f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Walk, 160, 12, sf::seconds(0.6f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Jump, 128, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::DoubleJump, 0, 6, sf::seconds(0.1f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Fall, 32, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::Hit, 64, 7, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
+		break;
+	
+	default:
+
+		break;
+	}
 	
 }
 
@@ -101,9 +110,21 @@ void Dough::jump()
 	} 
 	else if (stateJump == 1)
 	{
-		setAnimationState(State::DoubleJump);
+		if (nCurrentState != State::Hit)
+			setAnimationState(State::DoubleJump);
 		addVelocity(0.f, -getVelocity().y);
 		addVelocity(0.f, -nJumpVelocitty);
 		stateJump++;
 	} 
+}
+
+void Dough::attack()
+{
+	
+}
+
+void Dough::getDamage()
+{
+	setAnimationState(State::Hit);
+	nTimeDamage = sf::seconds(0.35f);
 }

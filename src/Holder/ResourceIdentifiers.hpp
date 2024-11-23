@@ -13,6 +13,7 @@ namespace Textures
         // Add an entry for each new texture
 		Dough1,
 		Dough2,
+		Enemy,
 		Sky,
 		Dirt,
 	};

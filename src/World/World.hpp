@@ -6,6 +6,7 @@
 #include "SpriteNode.hpp"
 #include "Block.hpp"
 #include "Dough.hpp"
+#include "Enemy.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
 
@@ -41,13 +42,15 @@ class World : private sf::NonCopyable
 		void adaptCameraPosition();
 		void loadMap();
 
+		void enemiesAttackPlayer();
 
 	private:
 		enum Layer
 		{
 			Background,
 			Map,
-			Air,
+			Enemies,
+			Player,
 			LayerCount
 		};
 
@@ -55,7 +58,6 @@ class World : private sf::NonCopyable
 	private:
 		sf::RenderWindow& nWindow;
 		sf::View nWorldView;
-		TextureHolder nTextures;
 
 		SceneNode nSceneGraph;
 		std::array<SceneNode*, LayerCount>	nSceneLayers;

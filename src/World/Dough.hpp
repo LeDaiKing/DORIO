@@ -19,12 +19,13 @@ class Dough : public Entity
 		using Entity::State;
 
 	public:
-		Dough(Type type, const TextureHolder& textures);
+		Dough(Type type);
 		virtual unsigned int getCategory() const;
 
 		virtual void setUpEntity();
 		virtual void jump();
-
+		virtual void attack();
+		void getDamage();
 	private:
 		virtual void updateCurrent(sf::Time dt);
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -33,5 +34,6 @@ class Dough : public Entity
 	private:
 		Type nType;
 		int stateJump = 0;
+		sf::Time nTimeDamage = sf::Time::Zero;
 
 };

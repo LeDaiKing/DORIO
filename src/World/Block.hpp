@@ -11,7 +11,7 @@ class Block : public SpriteNode
 {
 
     public:
-        Block(const sf::Texture& texture, sf::Vector2f position);
+        Block(sf::Vector2f position);
         virtual unsigned int getCategory() const;
 
         void applyNormal(SceneNode& graph);
