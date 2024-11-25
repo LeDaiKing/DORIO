@@ -80,10 +80,11 @@ void Dough::setUpEntity()
 	switch (nType)
 	{
 	case Dough1:
-		addAnimationState(State::Idle, 48, 12, sf::seconds(1.f), sf::Vector2i(42, 42), true);
-		addAnimationState(State::Walk, 164, 4, sf::seconds(0.5f), sf::Vector2i(48, 48), true);
-		addAnimationState(State::Jump, 90, 14, sf::seconds(1.f), sf::Vector2i(58, 74), false);
-		addAnimationState(State::DoubleJump, 90, 14, sf::seconds(0.6f), sf::Vector2i(58, 74), false);
+		addAnimationState(State::Idle, 64, 12, sf::seconds(1.f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Walk, 0, 4, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Jump, 32, 14, sf::seconds(1.f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::DoubleJump, 32, 14, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::Hit, 96, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
 		break;
 	case Dough2:
 		addAnimationState(State::Idle, 96, 11, sf::seconds(1.f), sf::Vector2i(32, 32), true);
@@ -105,6 +106,14 @@ void Dough::jump()
 {
 	if (stateJump == 0)
 	{
+		if (nCurrentState == State::Fall)
+		{
+			setAnimationState(State::DoubleJump);
+			addVelocity(0.f, -getVelocity().y);
+			addVelocity(0.f, -nJumpVelocitty);
+			stateJump = 2;
+			return;
+		}
 		Entity::jump();
 		stateJump++;
 	} 

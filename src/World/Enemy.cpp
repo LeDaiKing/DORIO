@@ -50,18 +50,18 @@ void Enemy::attackPlayer(Dough& player)
     }
     if (side == collision::Left)
     {
-        player.addVelocity(-256, 0.f);
+        player.setVelocity(-256, 0.f);
     }
     else if (side == collision::Right)
     {
-        player.addVelocity(256, 0.f);
+        player.setVelocity(256, 0.f);
     }
     else if (side == collision::Top)
     {
         if (player.getPosition().x < getPosition().x)
-            player.addVelocity(-256, -100);
+            player.setVelocity(-256, -100);
         else
-            player.addVelocity(256, -100);
+            player.setVelocity(256, -100);
     }
     else if (side == collision::Bottom)
     {

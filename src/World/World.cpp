@@ -64,7 +64,7 @@ CommandQueue& World::getCommandQueue()
 void World::loadTextures()
 {
 	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
-	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/DoughSheet.png");
+	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
 	TextureHolder::getInstance().load(Textures::Sky, "res/Background/Blue.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
@@ -116,13 +116,13 @@ void World::adaptCameraPosition()
 {
 	sf::Vector2f postiion = nPlayerDough->getPosition();
 
-	if (postiion.x > nWorldView.getCenter().x + nWorldView.getSize().x / 4.f)
+	if (postiion.x > nWorldView.getCenter().x + nWorldView.getSize().x / 5.f)
 	{
-		nWorldView.move(postiion.x - nWorldView.getCenter().x - nWorldView.getSize().x / 4.f, 0);
+		nWorldView.move(postiion.x - nWorldView.getCenter().x - nWorldView.getSize().x / 5.f, 0);
 	}
-	else if (postiion.x < nWorldView.getCenter().x - nWorldView.getSize().x / 4.f - 50)
+	else if (postiion.x < nWorldView.getCenter().x - nWorldView.getSize().x / 5.f)
 	{
-		nWorldView.move(postiion.x - nWorldView.getCenter().x + nWorldView.getSize().x / 4.f + 50, 0);
+		nWorldView.move(postiion.x - nWorldView.getCenter().x + nWorldView.getSize().x / 5.f, 0);
 	}
 
 	// nWorldView.move(0.0001, 0);
