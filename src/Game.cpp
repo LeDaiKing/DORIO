@@ -1,5 +1,5 @@
 #include "Game.hpp"
-
+#include <iostream>
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
@@ -7,13 +7,22 @@ Game::Game()
 : nWindow(sf::VideoMode(800, 600), "Input", sf::Style::Close)
 , nWorld(nWindow)
 , nPlayer()
+, nTextures()
+, nFonts()
+, nGameStateStack(State::Context(nWindow, nTextures, nFonts, nPlayer))
+, nStatisticsText()
+, nStatisticsUpdateTime()
 {
 	nWindow.setKeyRepeatEnabled(false);
-
+	nTextures.load(Textures::ID::TitleScreen, "res/Background/title.png");
+	nFonts.load(Fonts::Main, "res/Fonts/Sansation.ttf");
 	// mFont.loadFromFile("Media/Sansation.ttf");
 	// mStatisticsText.setFont(mFont);
 	// mStatisticsText.setPosition(5.f, 5.f);
 	// mStatisticsText.setCharacterSize(10);
+
+	registerStates();
+	nGameStateStack.pushState(States::ID::Title);
 }
 
 void Game::run()
@@ -31,6 +40,9 @@ void Game::run()
 
 			processInput();
 			update(TimePerFrame);
+
+			if (nGameStateStack.isEmpty())
+				nWindow.close();
 		}
 		updateStatistics(elapsedTime);
 		render();
@@ -39,32 +51,27 @@ void Game::run()
 
 void Game::processInput()
 {
-	CommandQueue& commands = nWorld.getCommandQueue();
-
 	sf::Event event;
 	while (nWindow.pollEvent(event))
 	{
-		nPlayer.handleEvent(event, commands);
+		nGameStateStack.handleEvent(event);
 
 		if (event.type == sf::Event::Closed)
 			nWindow.close();
 	}
-
-	nPlayer.handleRealtimeInput(commands);
 }
 
 void Game::update(sf::Time elapsedTime)
 {
-	nWorld.update(elapsedTime);
+	nGameStateStack.update(elapsedTime);
 }
 
 void Game::render()
 {
 	nWindow.clear();	
-	nWorld.draw();
-
+	nGameStateStack.draw();
 	nWindow.setView(nWindow.getDefaultView());
-	// nWindow.draw(mStatisticsText);
+	// nWindow.draw(nStatisticsText);
 	nWindow.display();
 }
 
@@ -82,4 +89,10 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	// 	mStatisticsUpdateTime -= sf::seconds(1.0f);
 	// 	mStatisticsNumFrames = 0;
 	// }
+}
+
+void Game::registerStates() {
+	nGameStateStack.registerState<TitleState>(States::ID::Title);
+	nGameStateStack.registerState<GameState>(States::ID::Game);
+	nGameStateStack.registerState<PauseState>(States::ID::Pause);
 }

@@ -1,6 +1,15 @@
 #pragma once
 #include "World/World.hpp"
 #include "Player.hpp"
+#include "StateStack/State.hpp"
+#include "StateStack/StateStack.hpp"
+#include "Holder/ResourceHolder.hpp"
+#include "Holder/ResourceIdentifiers.hpp"
+#include "StateStack/TitleState.hpp"
+#include "StateStack/GameState.hpp"
+#include "StateStack/PauseState.hpp"
+
+
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
@@ -23,12 +32,18 @@ class Game : private sf::NonCopyable
         void render();
 
         void updateStatistics(sf::Time elapsedTime);
+        void registerStates();
 
     private:
         static const sf::Time TimePerFrame;
 
         sf::RenderWindow nWindow;
-        
+        TextureHolder nTextures;
+        FontHolder nFonts;
+        StateStack nGameStateStack;
+
+        sf::Text nStatisticsText;
+        sf::Time nStatisticsUpdateTime;
         World nWorld;
 		Player nPlayer;
 
