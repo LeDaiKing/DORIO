@@ -1,5 +1,7 @@
 #pragma once
 
+#include<unordered_map>
+
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 
