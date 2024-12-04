@@ -7,6 +7,7 @@
 #include "Entity.hpp"
 #include "World.hpp"
 #include <iostream>
+#include "Dough.hpp"
 
 BreakableBlock::BreakableBlock(sf::Vector2f position)
 : Block(Type::Breakable, position)
@@ -49,47 +50,63 @@ void BreakableBlock::applyNormal(SceneNode& graph)
     if (nIsBroken)
         return;
 
-    if (graph.getCategory() & Category::Entity)
+    if (graph.getCategory() != Category::PlayerDough)
     {
-        assert(dynamic_cast<Entity*>(&graph) != nullptr);
-        Entity& entity = static_cast<Entity&>(graph);
+        Block::applyNormal(graph);
+        return;
+    }
 
-        sf::FloatRect entityHitBox = entity.getBoundingRect();
-        sf::FloatRect bound = getBoundingRect();
+    assert(dynamic_cast<Dough*>(&graph) != nullptr);
+    Entity& entity = static_cast<Dough&>(graph);
 
-        collision::Side side = checkCollisionSide(entityHitBox, bound);
-        int gravity = World::getGravity();
+    sf::FloatRect entityHitBox = entity.getBoundingRect();
+    sf::FloatRect bound = getBoundingRect();
 
-        if (side == collision::Top && entity.getVelocity().y > 0)
-        {
-            entity.setPosition(entity.getPosition().x, bound.top - entityHitBox.height / 2);
-            entity.setVelocity(entity.getVelocity().x, 0.f);
-            entity.accelerate(0.f, -gravity);
-            entity.setOnGround(true);
-        }
-        else if (side == collision::Bottom && entity.getVelocity().y < 0)
-        {
-            entity.setPosition(entity.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
-            entity.setVelocity(entity.getVelocity().x, 30.f);
-            nIsBroken = true;
-            // entity.accelerate(0.f, -gravity);
+    collision::Side side = checkCollisionSide(entityHitBox, bound);
+    int gravity = World::getGravity();
 
-        }
-        else if (side == collision::Left && entity.getVelocity().x > 0)
-        {
-            entity.setPosition(bound.left - entityHitBox.width / 2, entity.getPosition().y);
-            entity.setVelocity(0.f, entity.getVelocity().y);
-        }
-        else if (side == collision::Right && entity.getVelocity().x < 0)
-        {
-            entity.setPosition(bound.left + bound.width + entityHitBox.width / 2, entity.getPosition().y);
-            entity.setVelocity(0.f, entity.getVelocity().y);
-        }
+    if (side == collision::Top && entity.getVelocity().y > 0)
+    {
+        entity.setPosition(entity.getPosition().x, bound.top - entityHitBox.height / 2);
+        entity.setVelocity(entity.getVelocity().x, 0.f);
+        entity.accelerate(0.f, -gravity);
+        entity.setOnGround(true);
+    }
+    else if (side == collision::Bottom && entity.getVelocity().y < 0)
+    {
+        entity.setPosition(entity.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
+        entity.setVelocity(entity.getVelocity().x, 30.f);
+        nIsBroken = true;
+        entity.accelerate(0.f, -gravity);
+        // breakBlock(&entity);
 
     }
+    else if (side == collision::Left && entity.getVelocity().x > 0)
+    {
+        entity.setPosition(bound.left - entityHitBox.width / 2, entity.getPosition().y);
+        entity.setVelocity(0.f, entity.getVelocity().y);
+    }
+    else if (side == collision::Right && entity.getVelocity().x < 0)
+    {
+        entity.setPosition(bound.left + bound.width + entityHitBox.width / 2, entity.getPosition().y);
+        entity.setVelocity(0.f, entity.getVelocity().y);
+    }
+
+    
 
     for (Ptr& child : graph.getChildren())
     {
         applyNormal(*child);
+    }
+}
+
+
+void BreakableBlock::breakBlock(Dough& player)
+{
+    if (player.getVelocity().y > 150.f)
+    {
+        nIsBroken = true;
+        nBreakAnimation.setAnimationState(0);
+
     }
 }

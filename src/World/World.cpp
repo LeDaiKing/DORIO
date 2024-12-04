@@ -4,6 +4,7 @@
 #include "BreakableBlock.hpp"
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 int World::nGravity = 512;
 
@@ -13,7 +14,7 @@ World::World(sf::RenderWindow& window)
 , nSceneGraph()
 , nSceneLayers()
 , nWorldBounds(0.f, 0.f, 5000, nWorldView.getSize().y)
-, nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
+, nSpawnPosition(300, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
 {
 	loadTextures();
@@ -90,7 +91,7 @@ void World::buildScene()
 
 
 	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
@@ -139,51 +140,76 @@ void World::adaptCameraPosition()
 
 void World::loadMap()
 {
+	nCategoryLayers[Map] |= Category::Block;
+
 	// Prepare the tiled background
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
+	sf::Image map; map.loadFromFile("res/Background/map1_3.png");
+	for (int x = 0; x < map.getSize().x; x += 32)
+	for (int y = 0; y < map.getSize().y; y += 32)
+	{
+		sf::Color color = map.getPixel(x + 5,y + 5);
+		// std::cout << color.toInteger() << std::endl;s
+		if (color == sf::Color::Black || color == sf::Color::Blue)
+		{
+			// std::cout << x << " " << y << std::endl;
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(x, y)));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+		else if (color == sf::Color::Red)
+		{
+			std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(x, y)));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
 
-	// Add the background sprite to the scene
+	}
+
+	// // Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
 	backgroundSprite->setPosition(nWorldBounds.left, nWorldBounds.top);
 	nSceneLayers[Background]->attachChild(std::move(backgroundSprite));
 	nCategoryLayers[Background] |= Category::Scene;
+	return;
 
 
 	// Add the dirt sprite to the scene
 	for (int i = 0; i < 60; i++)
 	{
-		std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(32 * i, nSpawnPosition.y + 128)));
+		std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(32 * i, nSpawnPosition.y + 96)));
+		nSceneLayers[Map]->attachChild(std::move(block));
+		block.reset(new Block(Block::Dirt, sf::Vector2f(32 * i, nSpawnPosition.y + 128)));
 		nSceneLayers[Map]->attachChild(std::move(block));
 
 		if (i == 8)
 		{
-			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + 80)));
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + 48)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 
 		if (i == 5)
 		{
-			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + -18)));
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + -50)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 
 		if (i == 10)
 		{
-			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + 32)));
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 	}
 
-	std::unique_ptr<Block> breakable(new BreakableBlock(sf::Vector2f(32 * 20, nSpawnPosition.y + 32)));
+	std::unique_ptr<Block> breakable(new BreakableBlock(sf::Vector2f(32 * 20, nSpawnPosition.y)));
 	nSceneLayers[Map]->attachChild(std::move(breakable));
-	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 21, nSpawnPosition.y + 32)));
+	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 21, nSpawnPosition.y)));
 	nSceneLayers[Map]->attachChild(std::move(breakable));
-	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 22, nSpawnPosition.y + 32)));
+	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 22, nSpawnPosition.y)));
 	nSceneLayers[Map]->attachChild(std::move(breakable));
 	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 23, nSpawnPosition.y + 32)));
 	nSceneLayers[Map]->attachChild(std::move(breakable));
+
 	
 
 	nCategoryLayers[Map] |= Category::Block;

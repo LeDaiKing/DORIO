@@ -1,7 +1,7 @@
 #pragma once
 #include "Block.hpp"
 #include "Animation.hpp"
-
+class Dough;
 class BreakableBlock : public Block
 {
     public:
@@ -14,7 +14,7 @@ class BreakableBlock : public Block
     public:
         virtual void applyNormal(SceneNode& graph);
 
-        // void breakBlock();
+        void breakBlock(Dough& player);
 
     private:
         bool nIsBroken;
