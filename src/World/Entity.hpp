@@ -71,7 +71,7 @@ class Entity : public SceneNode
 		sf::Vector2f nSpeed;
 		sf::Vector2f nMaxVelocity;
 		// sf::Vector2f friction;
-		int nJumpVelocitty;
+		int nJumpVelocity;
 		bool nOnGround;
 		int nHitPoints = 1;
 };

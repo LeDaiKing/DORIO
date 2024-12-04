@@ -19,5 +19,9 @@ class BreakableBlock : public Block
     private:
         bool nIsBroken;
         Animation nBreakAnimation;
+        int nStateMove;
+        float nMoveSpeed;
+        sf::Vector2f nOriginPosition;
+        sf::Vector2f nDestination;
 
 };

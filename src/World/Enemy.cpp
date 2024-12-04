@@ -31,7 +31,7 @@ void Enemy::setUpEntity()
     nHitBox = sf::Vector2f(35.f, 25.f);
     nSpeed = sf::Vector2f(128.f, 0.f);
     nMaxVelocity = sf::Vector2f(128.f, 0.f);
-    nJumpVelocitty = 0;
+    nJumpVelocity = 0;
 }
 
 unsigned int Enemy::getCategory() const

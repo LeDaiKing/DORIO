@@ -72,7 +72,7 @@ void Dough::setUpEntity()
 		nSpeed = sf::Vector2f(1024.f, 128.f);
 		nMaxVelocity = sf::Vector2f(200.f, 1024.f);
 		// friction = sf::Vector2f(0.f, 0.f);
-		nJumpVelocitty = 270;
+		nJumpVelocity = 320;
 		break;
 	
 	default:
@@ -112,7 +112,7 @@ void Dough::jump()
 		{
 			setAnimationState(State::DoubleJump);
 			addVelocity(0.f, -getVelocity().y);
-			addVelocity(0.f, -nJumpVelocitty);
+			addVelocity(0.f, -nJumpVelocity);
 			stateJump = 2;
 			return;
 		}
@@ -124,7 +124,7 @@ void Dough::jump()
 		if (nCurrentState != State::Hit)
 			setAnimationState(State::DoubleJump);
 		addVelocity(0.f, -getVelocity().y);
-		addVelocity(0.f, -nJumpVelocitty);
+		addVelocity(0.f, -nJumpVelocity2);
 		stateJump++;
 	} 
 }

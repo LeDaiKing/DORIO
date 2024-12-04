@@ -37,5 +37,6 @@ class Dough : public Entity
 	private:
 		Type nType;
 		int stateJump = 0;
+		int nJumpVelocity2 = 260;
 		sf::Time nTimeDamage = sf::Time::Zero;
 };
