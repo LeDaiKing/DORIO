@@ -1,7 +1,7 @@
 #include "Dough.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "Category.hpp"
-#include "../Utility.hpp"
+#include "Enemy.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -46,16 +46,18 @@ unsigned int Dough::getCategory() const
 
 void Dough::updateCurrent(sf::Time dt)
 {
-	if (nOnGround) stateJump = 0;
-	
 	if (nTimeDamage > sf::Time::Zero)
 	{
 		nTimeDamage -= dt;
 		if (nTimeDamage <= sf::Time::Zero)
 		{
-			setAnimationState(State::Idle);
+			if (nCurrentState == State::Hit)
+				setAnimationState(State::Idle);
 		}
 	}
+
+	if (nOnGround) stateJump = 0;
+	
 	
 	Entity::updateCurrent(dt);
 }
@@ -69,7 +71,7 @@ void Dough::setUpEntity()
 		nHitBox = sf::Vector2f(25.f, 28.f);
 		nSpeed = sf::Vector2f(1024.f, 128.f);
 		nMaxVelocity = sf::Vector2f(200.f, 1024.f);
-		friction = sf::Vector2f(0.f, 0.f);
+		// friction = sf::Vector2f(0.f, 0.f);
 		nJumpVelocitty = 270;
 		break;
 	
@@ -127,13 +129,40 @@ void Dough::jump()
 	} 
 }
 
-void Dough::attack()
+void Dough::attackEnemy(Enemy& enemy)
 {
-	
+	enemy.getDamage();
 }
 
 void Dough::getDamage()
 {
 	setAnimationState(State::Hit);
 	nTimeDamage = sf::seconds(0.35f);
+}
+
+void Dough::handleCollisionEnemies(SceneNode& graph)
+{
+	if (nCurrentState == State::Hit)
+		return;
+	
+	if (graph.getCategory() & Category::Enemy)
+	{
+		Enemy& enemy = static_cast<Enemy&>(graph);
+		sf::FloatRect bound = getBoundingRect();
+		sf::FloatRect enemyBound = enemy.getBoundingRect();
+		collision::Side side = checkCollisionSide(bound, enemyBound);
+		if (side == collision::Side::Top)
+		{
+			attackEnemy(enemy);
+		}
+		else if (side != collision::Side::None)
+		{
+			enemy.attackPlayer(*this);
+		}
+	}
+
+	for (Ptr& child : graph.getChildren())
+    {
+        handleCollisionEnemies(*child);
+    }
 }

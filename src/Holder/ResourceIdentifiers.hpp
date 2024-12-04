@@ -16,6 +16,8 @@ namespace Textures
 		Enemy,
 		Sky,
 		Dirt,
+		Breakable,
+		BreakAnimation,
 	};
 }
 

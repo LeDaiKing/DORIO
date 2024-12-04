@@ -26,6 +26,8 @@ void Enemy::setUpEntity()
 {
     addAnimationState(State::Idle, 30, 10, sf::seconds(1), sf::Vector2i(44, 30), true);
     addAnimationState(State::Walk, 30, 10, sf::seconds(1), sf::Vector2i(44, 30), true);
+    addAnimationState(State::Hit, 0, 5, sf::seconds(0.8), sf::Vector2i(44, 30), false);
+    addAnimationState(State::Dead, 0, 5, sf::seconds(0.8), sf::Vector2i(44, 30), false);
     nHitBox = sf::Vector2f(35.f, 25.f);
     nSpeed = sf::Vector2f(128.f, 0.f);
     nMaxVelocity = sf::Vector2f(128.f, 0.f);
@@ -39,32 +41,33 @@ unsigned int Enemy::getCategory() const
 
 void Enemy::attackPlayer(Dough& player)
 {
-    sf::FloatRect playerHitBox = player.getHitBox();
-    sf::FloatRect enemyHitBox = getHitBox();
+    if (nCurrentState == State::Dead)
+        return;
+    player.getDamage();
+    if (player.getPosition().x < getPosition().x)
+    {
+        player.setVelocity(-512.f, 0);
+    }
+    else
+    {
+        player.setVelocity(512.f, 0);
+    }
+}
 
-    collision::Side side = checkCollisionSide(playerHitBox, enemyHitBox);
+void Enemy::getDamage()
+{
+	if (nCurrentState == State::Hit || nCurrentState == State::Dead)
+		return;
 
-    if (side != collision::None)
-    {
-        player.getDamage();
-    }
-    if (side == collision::Left)
-    {
-        player.setVelocity(-256, 0.f);
-    }
-    else if (side == collision::Right)
-    {
-        player.setVelocity(256, 0.f);
-    }
-    else if (side == collision::Top)
-    {
-        if (player.getPosition().x < getPosition().x)
-            player.setVelocity(-256, -100);
-        else
-            player.setVelocity(256, -100);
-    }
-    else if (side == collision::Bottom)
-    {
-        player.addVelocity(0.f, 256);
-    }
+    // nTimeDamage = sf::seconds(0.5f);
+	nHitPoints--;
+	if (nHitPoints <= 0)
+	{
+		setAnimationState(State::Dead);
+		// std::cout << "Dead" << std::endl;
+	}
+	else
+	{
+		setAnimationState(State::Hit);
+	}
 }

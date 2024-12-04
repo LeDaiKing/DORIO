@@ -5,7 +5,7 @@ const int numFrames = 60;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/numFrames);
 
 Game::Game()
-: nWindow(sf::VideoMode(800, 600), "Input", sf::Style::Close)
+: nWindow(sf::VideoMode(900, 500), "Input", sf::Style::Close)
 , nWorld(nWindow)
 , nPlayer()
 {

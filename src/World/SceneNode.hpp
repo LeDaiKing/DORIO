@@ -49,5 +49,6 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 
 	private:
 		std::vector<Ptr> nChildren;
+	protected:
 		SceneNode* nParent;
 };

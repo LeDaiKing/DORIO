@@ -1,10 +1,11 @@
 #include "World.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
-
+#include "BreakableBlock.hpp"
 #include <algorithm>
 #include <cmath>
 
+int World::nGravity = 512;
 
 World::World(sf::RenderWindow& window)
 : nWindow(window)
@@ -14,7 +15,6 @@ World::World(sf::RenderWindow& window)
 , nWorldBounds(0.f, 0.f, 5000, nWorldView.getSize().y)
 , nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
-, nGravity(512)
 {
 	loadTextures();
 	buildScene();
@@ -32,7 +32,7 @@ void World::update(sf::Time dt)
 	
 	applyNormal();
 	applyGravity();
-	enemiesAttackPlayer();
+	// enemiesAttackPlayer();
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!nCommandQueue.isEmpty())
 	{
@@ -43,6 +43,8 @@ void World::update(sf::Time dt)
 				nSceneLayers[i]->onCommand(command, dt);
 		}
 	}
+	handleCollisions();
+	removeEntities();
 
 	nSceneGraph.update(dt);
 	// Regular update step, adapt position (correct if outside view)
@@ -68,7 +70,8 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
 	TextureHolder::getInstance().load(Textures::Sky, "res/Background/Blue.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
-
+	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
+	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
 }
 
 void World::buildScene()
@@ -93,9 +96,15 @@ void World::buildScene()
 	nSceneLayers[Player]->attachChild(std::move(leader));
 	nCategoryLayers[Player] |= Category::PlayerDough;
 	
+	nCategoryLayers[Enemies] |= Category::Enemy;
 	std::unique_ptr<Enemy> leader1(new Enemy(nSpawnPosition + sf::Vector2f(100, 0)));
 	nSceneLayers[Enemies]->attachChild(std::move(leader1));
-	nCategoryLayers[Enemies] |= Category::Enemy;
+	leader1.reset(new Enemy(nSpawnPosition + sf::Vector2f(200, 0)));
+	nSceneLayers[Enemies]->attachChild(std::move(leader1));
+	leader1.reset(new Enemy(nSpawnPosition + sf::Vector2f(300, 0)));
+	nSceneLayers[Enemies]->attachChild(std::move(leader1));
+	leader1.reset(new Enemy(nSpawnPosition + sf::Vector2f(400, 0)));
+	nSceneLayers[Enemies]->attachChild(std::move(leader1));
 }
 
 
@@ -116,9 +125,9 @@ void World::adaptCameraPosition()
 {
 	sf::Vector2f postiion = nPlayerDough->getPosition();
 
-	if (postiion.x > nWorldView.getCenter().x + nWorldView.getSize().x / 5.f)
+	if (postiion.x > nWorldView.getCenter().x)
 	{
-		nWorldView.move(postiion.x - nWorldView.getCenter().x - nWorldView.getSize().x / 5.f, 0);
+		nWorldView.move(postiion.x - nWorldView.getCenter().x, 0);
 	}
 	else if (postiion.x < nWorldView.getCenter().x - nWorldView.getSize().x / 5.f)
 	{
@@ -145,21 +154,36 @@ void World::loadMap()
 	// Add the dirt sprite to the scene
 	for (int i = 0; i < 60; i++)
 	{
-		std::unique_ptr<Block> block(new Block(sf::Vector2f(48 * i, nSpawnPosition.y + 128)));
+		std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(32 * i, nSpawnPosition.y + 128)));
 		nSceneLayers[Map]->attachChild(std::move(block));
 
 		if (i == 8)
 		{
-			std::unique_ptr<Block> block(new Block(sf::Vector2f(48 * i, nSpawnPosition.y + 80)));
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + 80)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 
 		if (i == 5)
 		{
-			std::unique_ptr<Block> block(new Block(sf::Vector2f(48 * i, nSpawnPosition.y + -18)));
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + -18)));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+
+		if (i == 10)
+		{
+			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(48 * i, nSpawnPosition.y + 32)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 	}
+
+	std::unique_ptr<Block> breakable(new BreakableBlock(sf::Vector2f(32 * 20, nSpawnPosition.y + 32)));
+	nSceneLayers[Map]->attachChild(std::move(breakable));
+	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 21, nSpawnPosition.y + 32)));
+	nSceneLayers[Map]->attachChild(std::move(breakable));
+	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 22, nSpawnPosition.y + 32)));
+	nSceneLayers[Map]->attachChild(std::move(breakable));
+	breakable.reset(new BreakableBlock(sf::Vector2f(32 * 23, nSpawnPosition.y + 32)));
+	nSceneLayers[Map]->attachChild(std::move(breakable));
 	
 
 	nCategoryLayers[Map] |= Category::Block;
@@ -178,14 +202,38 @@ void World::applyNormal()
 	nCommandQueue.push(applyNormal);
 }
 
-void World::enemiesAttackPlayer()
+void World::handleCollisions()
 {
-	Command attackPlayer;
-	attackPlayer.category = Category::Enemy;
-	attackPlayer.action = derivedAction<Enemy>([this] (Enemy& enemy, sf::Time)
+	Command handleCollisions;
+	handleCollisions.category = Category::PlayerDough;
+	handleCollisions.action = derivedAction<Dough>([this] (Dough& player, sf::Time)
 	{
-		enemy.attackPlayer(*nPlayerDough);
+		player.handleCollisionEnemies(*nSceneLayers[Enemies]);
 	});
 	
-	nCommandQueue.push(attackPlayer);
+	nCommandQueue.push(handleCollisions);
+}
+
+int World::getGravity()
+{
+	return nGravity;
+}
+
+void World::removeEntities()
+{
+	std::vector<SceneNode::Ptr>& children = nSceneLayers[Enemies]->getChildren();
+	std::vector<Enemy*> enemies;
+	for (SceneNode::Ptr& child : children)
+	{
+		Enemy& enemy = static_cast<Enemy&>(*child);
+		if (enemy.isDead())
+		{
+			enemies.push_back(&enemy);
+		}
+	}
+
+	for (Enemy* enemy : enemies)
+	{
+		enemy->remove();
+	}
 }

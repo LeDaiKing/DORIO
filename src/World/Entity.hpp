@@ -21,6 +21,7 @@ class Entity : public SceneNode
 		};
 
 		Entity(const sf::Texture& texture);
+		// virtual ~Entity();
 
 		virtual void setUpEntity() = 0;
 
@@ -34,6 +35,9 @@ class Entity : public SceneNode
 		sf::Vector2f getVelocity() const;
 		bool getDirection() const;
 
+		bool isDead() const;
+		void remove();
+
 		void setOnGround(bool flag);
 		virtual void walk(bool nDirection);
 		virtual void jump();
@@ -43,8 +47,9 @@ class Entity : public SceneNode
 		virtual sf::FloatRect getBoundingRect() const;
 		virtual unsigned int getCategory() const;
 
-		virtual sf::FloatRect getHitBox() const;
-
+		// virtual sf::FloatRect getHitBox() const;
+		
+		virtual void getDamage() = 0;
 		// virtual void attack() = 0;
 
 
@@ -65,8 +70,9 @@ class Entity : public SceneNode
 		sf::Vector2f nHitBox;
 		sf::Vector2f nSpeed;
 		sf::Vector2f nMaxVelocity;
-		sf::Vector2f friction;
+		// sf::Vector2f friction;
 		int nJumpVelocitty;
 		bool nOnGround;
+		int nHitPoints = 1;
 };
 

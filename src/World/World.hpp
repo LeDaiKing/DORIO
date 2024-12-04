@@ -33,6 +33,7 @@ class World : private sf::NonCopyable
 		
 		CommandQueue& getCommandQueue();
 
+		static int getGravity();
 
 	private:
 		void loadTextures();
@@ -42,7 +43,8 @@ class World : private sf::NonCopyable
 		void adaptCameraPosition();
 		void loadMap();
 
-		void enemiesAttackPlayer();
+		void handleCollisions();
+		void removeEntities();
 
 	private:
 		enum Layer
@@ -69,5 +71,5 @@ class World : private sf::NonCopyable
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
 
-		int nGravity;
+		static int nGravity;
 };

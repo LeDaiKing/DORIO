@@ -1,11 +1,11 @@
 #pragma once
 #include "Entity.hpp"
-
-
+#include "../Utility.hpp"
 #include  "../Holder/ResourceIdentifiers.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 
+class Enemy;
 
 class Dough : public Entity
 {
@@ -24,8 +24,11 @@ class Dough : public Entity
 
 		virtual void setUpEntity();
 		virtual void jump();
-		virtual void attack();
-		void getDamage();
+		virtual void attackEnemy(Enemy& enemy);
+		virtual void getDamage();
+
+		void handleCollisionEnemies(SceneNode& graph);
+		// void handleCollisionItems(SceneNode& graph);
 	private:
 		virtual void updateCurrent(sf::Time dt);
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -35,5 +38,4 @@ class Dough : public Entity
 		Type nType;
 		int stateJump = 0;
 		sf::Time nTimeDamage = sf::Time::Zero;
-
 };

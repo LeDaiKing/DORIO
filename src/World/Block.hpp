@@ -11,10 +11,18 @@ class Block : public SpriteNode
 {
 
     public:
-        Block(sf::Vector2f position);
+        enum Type
+        {
+            Dirt,
+            Breakable,
+        };
+
+    public:
+
+        Block(Type type, sf::Vector2f position);
         virtual unsigned int getCategory() const;
 
-        void applyNormal(SceneNode& graph);
+        virtual void applyNormal(SceneNode& graph);
 
         virtual sf::FloatRect getBoundingRect() const;
 

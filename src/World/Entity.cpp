@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <iostream>
 
 Entity::Entity(const sf::Texture& texture)
 : nSprite(texture), nCurrentState(State::None)
@@ -61,6 +62,8 @@ void Entity::accelerate(float vx, float vy)
 
 void Entity::updateCurrent(sf::Time dt)
 {
+
+
 	addVelocity(nAcceleration * dt.asSeconds());
 	move(nVelocity * dt.asSeconds());
 	nAcceleration = sf::Vector2f(0.f, 0.f);
@@ -99,10 +102,10 @@ void Entity::updateCurrent(sf::Time dt)
 
 	// if (nVelocity.y != 0.f) nOnGround = false;s
 
-	if (!nOnGround && nVelocity.y > 0 && nCurrentState != State::Hit)
+	if (!nOnGround && nVelocity.y > 0 && nCurrentState != State::Hit && nCurrentState != State::Dead)
 		setAnimationState(State::Fall);
 
-	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit)
+	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit && nCurrentState != State::Dead)
 		setAnimationState(State::Idle);
 
 	if (abs(nVelocity.y) > 10.f) nOnGround = false;
@@ -165,7 +168,7 @@ void Entity::addAnimationState(State state, std::size_t row, std::size_t numFram
 
 void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	sf::FloatRect bounds = getHitBox();
+	sf::FloatRect bounds = getBoundingRect();
 	sf::RectangleShape rect(sf::Vector2f(bounds.width, bounds.height));
 	rect.setPosition(bounds.left, bounds.top);
 	rect.setFillColor(sf::Color(255, 255, 255, 0));
@@ -177,17 +180,22 @@ void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) cons
 
 sf::FloatRect Entity::getBoundingRect() const
 {
-	return getWorldTransform().transformRect(nSprite.getGlobalBounds());
-}
-
-sf::FloatRect Entity::getHitBox() const
-{
-	sf::FloatRect bound = getBoundingRect();
+	// return getWorldTransform().transformRect(nSprite.getGlobalBounds());
+	sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
 	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
-	sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height / 2 - nHitBox.y / 2};
+	sf::Vector2f pos = getPosition() - sf::Vector2f(nHitBox.x / 2, nHitBox.y / 2);
 
 	return sf::FloatRect(pos, nHitBox);
 }
+
+// sf::FloatRect Entity::getHitBox() const
+// {
+// 	sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
+// 	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
+// 	sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height / 2 - nHitBox.y / 2};
+
+// 	return sf::FloatRect(pos, nHitBox);
+// }
 
 unsigned int Entity::getCategory() const
 {
@@ -202,4 +210,14 @@ void Entity::setOnGround(bool flag)
 bool Entity::getDirection() const
 {
 	return nDirection;
+}
+
+bool Entity::isDead() const
+{
+	return nCurrentState == State::Dead && nSprite.isFinished();
+}
+
+void Entity::remove()
+{
+	nParent->detachChild(*this);
 }
