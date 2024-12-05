@@ -93,12 +93,13 @@ void BreakableBlock::applyNormal(SceneNode& graph)
     }
     else if (side == collision::Bottom && entity.getVelocity().y < 0)
     {
+        // breakBlock(entity);
         // entity.setPosition(entity.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
         // entity.setVelocity(entity.getVelocity().x, 30.f);
+
         // nIsBroken = true;
         // entity.accelerate(0.f, -gravity);
-        breakBlock(entity);
-
+        entity.updateCloestBlock(this);
     }
     else if (side == collision::Left && entity.getVelocity().x > 0)
     {
@@ -122,7 +123,7 @@ void BreakableBlock::applyNormal(SceneNode& graph)
 
 void BreakableBlock::breakBlock(Dough& player)
 {
-    if (player.getVelocity().y < -200.f)
+    if (player.getVelocity().y < -220.f)
     {
         nIsBroken = true;
         nBreakAnimation.setAnimationState(0);
@@ -130,10 +131,17 @@ void BreakableBlock::breakBlock(Dough& player)
     }
     else
     {
-        sf::FloatRect entityHitBox = player.getBoundingRect();
-        sf::FloatRect bound = getBoundingRect();
-        player.setPosition(player.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
-        player.setVelocity(player.getVelocity().x, 30.f);
         nStateMove = 1;
     }
+
+    sf::FloatRect entityHitBox = player.getBoundingRect();
+    sf::FloatRect bound = getBoundingRect();
+
+    player.setPosition(player.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
+    player.setVelocity(player.getVelocity().x, 30.f);
+}
+
+bool BreakableBlock::isMarkedForRemoval() const
+{
+    return nIsBroken && nBreakAnimation.isFinished();
 }

@@ -18,6 +18,8 @@ namespace Textures
 		Dirt,
 		Breakable,
 		BreakAnimation,
+		Coin,
+
 	};
 }
 

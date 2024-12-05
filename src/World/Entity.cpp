@@ -212,12 +212,12 @@ bool Entity::getDirection() const
 	return nDirection;
 }
 
-bool Entity::isDead() const
+bool Entity::isMarkedForRemoval() const
 {
 	return nCurrentState == State::Dead && nSprite.isFinished();
 }
 
-void Entity::remove()
-{
-	nParent->detachChild(*this);
-}
+// void Entity::remove()
+// {
+// 	nParent->detachChild(*this);
+// }

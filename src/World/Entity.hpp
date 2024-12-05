@@ -35,8 +35,8 @@ class Entity : public SceneNode
 		sf::Vector2f getVelocity() const;
 		bool getDirection() const;
 
-		bool isDead() const;
-		void remove();
+		virtual bool isMarkedForRemoval() const;
+		// void remove();
 
 		void setOnGround(bool flag);
 		virtual void walk(bool nDirection);

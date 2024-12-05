@@ -7,6 +7,7 @@
 #include "Block.hpp"
 #include "Dough.hpp"
 #include "Enemy.hpp"
+#include "Item.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
 
@@ -44,7 +45,7 @@ class World : private sf::NonCopyable
 		void loadMap();
 
 		void handleCollisions();
-		void removeEntities();
+		void removeSceneNode();
 
 	private:
 		enum Layer
@@ -52,6 +53,7 @@ class World : private sf::NonCopyable
 			Background,
 			Map,
 			Enemies,
+			Items,
 			Player,
 			LayerCount
 		};

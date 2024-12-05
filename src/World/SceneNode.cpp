@@ -109,3 +109,13 @@ std::vector<SceneNode::Ptr>& SceneNode::getChildren()
 {
 	return nChildren;
 }
+
+void SceneNode::remove()
+{
+	nParent->detachChild(*this);
+}
+
+bool SceneNode::isMarkedForRemoval() const
+{
+	return false;
+}

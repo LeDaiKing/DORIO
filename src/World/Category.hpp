@@ -9,6 +9,8 @@ namespace Category
 		PlayerDough			= 1 << 1,
 		Enemy 				= 1 << 2,
 		Block 				= 1 << 3,
+		Item 				= 1 << 4,
 		Entity				= PlayerDough | Enemy,
+		ALL 				= 0xFFFFFFFF,
 	};
 }

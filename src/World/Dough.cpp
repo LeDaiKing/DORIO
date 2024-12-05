@@ -2,7 +2,8 @@
 #include "../Holder/ResourceHolder.hpp"
 #include "Category.hpp"
 #include "Enemy.hpp"
-
+#include "Item.hpp"
+#include "BreakableBlock.hpp"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
@@ -46,6 +47,12 @@ unsigned int Dough::getCategory() const
 
 void Dough::updateCurrent(sf::Time dt)
 {
+	if (nCloestBlock != nullptr)
+	{
+		nCloestBlock->breakBlock(*this);
+		nCloestBlock = nullptr;
+	}
+
 	if (nTimeDamage > sf::Time::Zero)
 	{
 		nTimeDamage -= dt;
@@ -73,6 +80,7 @@ void Dough::setUpEntity()
 		nMaxVelocity = sf::Vector2f(200.f, 1024.f);
 		// friction = sf::Vector2f(0.f, 0.f);
 		nJumpVelocity = 320;
+		nJumpVelocity2 = 260;
 		break;
 	
 	default:
@@ -165,4 +173,42 @@ void Dough::handleCollisionEnemies(SceneNode& graph)
     {
         handleCollisionEnemies(*child);
     }
+}
+
+void Dough::handleCollisionItems(SceneNode& graph)
+{
+	if (graph.getCategory() & Category::Item)
+	{
+		Item& item = static_cast<Item&>(graph);
+		sf::FloatRect bound = getBoundingRect();
+		sf::FloatRect itemBound = item.getBoundingRect();
+		collision::Side side = checkCollisionSide(bound, itemBound);
+		if (side != collision::Side::None)
+		{
+			item.collectedBy(*this);
+		}
+	}
+
+	for (Ptr& child : graph.getChildren())
+	{
+		handleCollisionItems(*child);
+	}
+}
+
+void Dough::updateCloestBlock(BreakableBlock* block)
+{
+	if (nCloestBlock == nullptr)
+	{
+		nCloestBlock = block;
+		return;
+	}
+
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f blockPos = block->getPosition();
+	sf::Vector2f cloestBlockPos = nCloestBlock->getPosition();
+
+	if (std::abs(pos.x - blockPos.x) < std::abs(pos.x - cloestBlockPos.x))
+	{
+		nCloestBlock = block;
+	}
 }

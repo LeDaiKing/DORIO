@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "BreakableBlock.hpp"
+#include "Coin.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -45,7 +46,7 @@ void World::update(sf::Time dt)
 		}
 	}
 	handleCollisions();
-	removeEntities();
+	removeSceneNode();
 
 	nSceneGraph.update(dt);
 	// Regular update step, adapt position (correct if outside view)
@@ -73,6 +74,7 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
 	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
 	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
+	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
 }
 
 void World::buildScene()
@@ -86,7 +88,11 @@ void World::buildScene()
 
 		nSceneGraph.attachChild(std::move(layer));
 	}
-
+	nCategoryLayers[Background] |= Category::Scene;
+	nCategoryLayers[Map] |= Category::Block;
+	nCategoryLayers[Enemies] |= Category::Enemy;
+	nCategoryLayers[Items] |= Category::Item;
+	nCategoryLayers[Player] |= Category::PlayerDough;
 	loadMap();
 
 
@@ -95,17 +101,7 @@ void World::buildScene()
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
-	nCategoryLayers[Player] |= Category::PlayerDough;
 	
-	nCategoryLayers[Enemies] |= Category::Enemy;
-	std::unique_ptr<Enemy> leader1(new Enemy(nSpawnPosition + sf::Vector2f(100, 0)));
-	nSceneLayers[Enemies]->attachChild(std::move(leader1));
-	leader1.reset(new Enemy(nSpawnPosition + sf::Vector2f(200, 0)));
-	nSceneLayers[Enemies]->attachChild(std::move(leader1));
-	leader1.reset(new Enemy(nSpawnPosition + sf::Vector2f(300, 0)));
-	nSceneLayers[Enemies]->attachChild(std::move(leader1));
-	leader1.reset(new Enemy(nSpawnPosition + sf::Vector2f(400, 0)));
-	nSceneLayers[Enemies]->attachChild(std::move(leader1));
 }
 
 
@@ -126,14 +122,29 @@ void World::adaptCameraPosition()
 {
 	sf::Vector2f postiion = nPlayerDough->getPosition();
 
-	if (postiion.x > nWorldView.getCenter().x && nWorldView.getCenter().x  < nWorldBounds.width - nWorldView.getSize().x / 2.f)
+	// Camera move to the right
+	if (postiion.x > nWorldView.getCenter().x)
 	{
-		nWorldView.move(postiion.x - nWorldView.getCenter().x, 0);
+		float distance = std::min(postiion.x - nWorldView.getCenter().x, nWorldBounds.width - nWorldView.getSize().x / 2.f - nWorldView.getCenter().x);
+		nWorldView.move(distance, 0);
 	}
 	
-	if (postiion.x < nWorldView.getCenter().x - nWorldView.getSize().x / 5.f && nWorldView.getCenter().x > nWorldView.getSize().x / 2.f)
+	if (postiion.x < nWorldView.getCenter().x - 50)
 	{
-		nWorldView.move(postiion.x - nWorldView.getCenter().x + nWorldView.getSize().x / 5.f, 0);
+		float distance = std::max(postiion.x - nWorldView.getCenter().x + 50, -nWorldView.getCenter().x + nWorldView.getSize().x / 2.f);
+		nWorldView.move(distance, 0);
+	}
+
+	if (postiion.y  < nWorldView.getCenter().y - 60)
+	{
+		float distance = std::max(postiion.y - nWorldView.getCenter().y + 60, -nWorldView.getCenter().y + nWorldView.getSize().y / 2.f);
+		nWorldView.move(0, distance);
+	}
+
+	if (postiion.y > nWorldView.getCenter().y - 60 && nWorldView.getCenter().y < nWorldBounds.height - nWorldView.getSize().y / 2.f - 200)
+	{
+		float distance = std::min(postiion.y - nWorldView.getCenter().y + 60, nWorldBounds.height - nWorldView.getSize().y / 2.f - 200 - nWorldView.getCenter().y);
+		nWorldView.move(0, distance);
 	}
 
 	if (postiion.x < 10) nPlayerDough->setPosition(10, postiion.y);
@@ -142,7 +153,7 @@ void World::adaptCameraPosition()
 
 void World::loadMap()
 {
-	nCategoryLayers[Map] |= Category::Block;
+	
 
 	// Prepare the tiled background
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
@@ -155,27 +166,36 @@ void World::loadMap()
 	{
 		sf::Color color = map.getPixel(x + 5,y + 5);
 		// std::cout << color.toInteger() << std::endl;
-		if (color == sf::Color::Black || color == sf::Color::Blue)
+		if (color.toInteger() == 0x000000 + 255)
 		{
 			// std::cout << x << " " << y << std::endl;
 			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
-		else if (color == sf::Color::Red)
+		else if (color.toInteger() == 0xFF000000 + 255)
 		{
-			std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(x + 16, y -32 + 16)));
+			std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+		else if (color.toInteger() == 0x0DFF0000 + 255)
+		{
+			std::unique_ptr<Enemy> leader1(new Enemy(sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Enemies]->attachChild(std::move(leader1));
+		}
+		else if (color.toInteger() == 0xFFFC0000 + 255)
+		{
+			std::unique_ptr<Coin> coin(new Coin(sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
 
 	}
-	std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(4 * 32 + 16, 15 * 32 + 16)));
-	nSceneLayers[Map]->attachChild(std::move(block));
+	// std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(4 * 32 + 16, 14 * 32 + 16)));
+	// nSceneLayers[Map]->attachChild(std::move(block));
 
 	// // Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
 	backgroundSprite->setPosition(nWorldBounds.left, nWorldBounds.top);
 	nSceneLayers[Background]->attachChild(std::move(backgroundSprite));
-	nCategoryLayers[Background] |= Category::Scene;
 
 }
 
@@ -199,6 +219,7 @@ void World::handleCollisions()
 	handleCollisions.action = derivedAction<Dough>([this] (Dough& player, sf::Time)
 	{
 		player.handleCollisionEnemies(*nSceneLayers[Enemies]);
+		player.handleCollisionItems(*nSceneLayers[Items]);
 	});
 	
 	nCommandQueue.push(handleCollisions);
@@ -209,21 +230,24 @@ int World::getGravity()
 	return nGravity;
 }
 
-void World::removeEntities()
+void World::removeSceneNode()
 {
-	std::vector<SceneNode::Ptr>& children = nSceneLayers[Enemies]->getChildren();
-	std::vector<Enemy*> enemies;
-	for (SceneNode::Ptr& child : children)
+	Command removeSceneNode;
+	removeSceneNode.category = Category::ALL;
+	std::vector<SceneNode*> nodes;
+	removeSceneNode.action = derivedAction<SceneNode>([this, &nodes] (SceneNode& node, sf::Time)
 	{
-		Enemy& enemy = static_cast<Enemy&>(*child);
-		if (enemy.isDead())
+		if (node.isMarkedForRemoval())
 		{
-			enemies.push_back(&enemy);
+			nodes.push_back(&node);
 		}
-	}
-
-	for (Enemy* enemy : enemies)
+	});
+	for (std::size_t i = 0; i < LayerCount; ++i)
 	{
-		enemy->remove();
+		nSceneLayers[i]->onCommand(removeSceneNode, sf::Time::Zero);
+	}
+	for (SceneNode* node : nodes)
+	{
+		node->remove();
 	}
 }

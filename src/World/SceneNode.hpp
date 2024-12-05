@@ -35,6 +35,9 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 
 		virtual sf::FloatRect getBoundingRect() const;
 
+		virtual bool isMarkedForRemoval() const;
+		void remove();
+
 	public:
 		std::vector<Ptr>& getChildren();
 

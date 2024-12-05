@@ -16,6 +16,8 @@ class BreakableBlock : public Block
 
         void breakBlock(Dough& player);
 
+        virtual bool isMarkedForRemoval() const;
+
     private:
         bool nIsBroken;
         Animation nBreakAnimation;
