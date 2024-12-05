@@ -33,3 +33,4 @@ class Game : private sf::NonCopyable
 		Player nPlayer;
 
 };
+

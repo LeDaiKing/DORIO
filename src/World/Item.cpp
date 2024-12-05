@@ -17,14 +17,13 @@ Textures::ID toTextureID(Item::Type type)
     return Textures::Coin;
 }
 
-Item::Item(Type type, sf::Vector2i frameSize, std::size_t numFrames, sf::Time duration)
+Item::Item(Type type, sf::Vector2f position)
 : nAnimation(TextureHolder::getInstance().get(toTextureID(type)))
 , nType(type)
 , nIsCollected(false)
 {
     centerOrigin(nAnimation);
-    nAnimation.addAnimationState(0, 0, numFrames, duration, frameSize, true);
-    nAnimation.setAnimationState(0);
+    setPosition(position);
 }
 
 unsigned int Item::getCategory() const

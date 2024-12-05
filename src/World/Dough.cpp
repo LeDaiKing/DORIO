@@ -212,3 +212,8 @@ void Dough::updateCloestBlock(BreakableBlock* block)
 		nCloestBlock = block;
 	}
 }
+
+int Dough::getStateJump() const
+{
+	return stateJump;
+}

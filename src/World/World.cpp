@@ -2,7 +2,9 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "BreakableBlock.hpp"
+#include "StaticBlock.hpp"
 #include "Coin.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -169,12 +171,12 @@ void World::loadMap()
 		if (color.toInteger() == 0x000000 + 255)
 		{
 			// std::cout << x << " " << y << std::endl;
-			std::unique_ptr<Block> block(new Block(Block::Dirt, sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Dirt, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0xFF000000 + 255)
 		{
-			std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Block> block(new BreakableBlock(BreakableBlock::Breakable, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0x0DFF0000 + 255)
@@ -184,7 +186,7 @@ void World::loadMap()
 		}
 		else if (color.toInteger() == 0xFFFC0000 + 255)
 		{
-			std::unique_ptr<Coin> coin(new Coin(sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Coin> coin(new Coin(Item::Coin, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
 

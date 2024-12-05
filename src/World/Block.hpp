@@ -22,11 +22,12 @@ class Block : public SpriteNode
         Block(Type type, sf::Vector2f position);
         virtual unsigned int getCategory() const;
 
-        virtual void applyNormal(SceneNode& graph);
+        virtual void applyNormal(SceneNode& graph) = 0;
 
         virtual sf::FloatRect getBoundingRect() const;
 
     private:
+        Type nType;
         // virtual void updateCurrent(sf::Time dt);
         // virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 };

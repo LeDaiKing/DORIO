@@ -1,11 +1,11 @@
 #pragma once
-#include "Block.hpp"
+#include "BouncingBlock.hpp"
 #include "Animation.hpp"
 class Dough;
-class BreakableBlock : public Block
+class BreakableBlock : public BouncingBlock
 {
     public:
-        BreakableBlock(sf::Vector2f position);
+        BreakableBlock(Type type, sf::Vector2f position);
         // virtual ~BreakableBlock();
     protected:
         virtual void updateCurrent(sf::Time dt);
@@ -21,9 +21,4 @@ class BreakableBlock : public Block
     private:
         bool nIsBroken;
         Animation nBreakAnimation;
-        int nStateMove;
-        float nMoveSpeed;
-        sf::Vector2f nOriginPosition;
-        sf::Vector2f nDestination;
-
 };

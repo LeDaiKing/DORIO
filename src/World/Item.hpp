@@ -18,7 +18,7 @@ class Item : public SceneNode
             Heart,
         };
     public:
-        Item(Type type, sf::Vector2i frameSize, std::size_t numFrames = 1, sf::Time duration = sf::Time::Zero);
+        Item(Type type, sf::Vector2f position);
         virtual unsigned int getCategory() const;
         virtual sf::FloatRect getBoundingRect() const;
         virtual void collectedBy(Dough& player) = 0;
@@ -30,6 +30,5 @@ class Item : public SceneNode
     protected:
         Type nType;
         bool nIsCollected;
-    private:
         Animation nAnimation;
 };
