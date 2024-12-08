@@ -70,13 +70,21 @@ CommandQueue& World::getCommandQueue()
 void World::loadTextures()
 {
 	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
+	TextureHolder::getInstance().load(Textures::Stone, "res/Background/Stone.png");
+	TextureHolder::getInstance().load(Textures::UnderDirt, "res/Background/UnderDirt.png");
+	TextureHolder::getInstance().load(Textures::Gold, "res/Background/Gold.png");
+	TextureHolder::getInstance().load(Textures::Chimney, "res/Background/Chimney.png");
+	TextureHolder::getInstance().load(Textures::Wonder, "res/Background/Wonder.png");
+	TextureHolder::getInstance().load(Textures::Loxo, "res/Background/loxo.png");
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
-	TextureHolder::getInstance().load(Textures::Sky, "res/Background/Blue.png");
+	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bng.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
 	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
 	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
 	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
+
+
 }
 
 void World::buildScene()
@@ -99,7 +107,7 @@ void World::buildScene()
 
 
 	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
@@ -161,7 +169,7 @@ void World::loadMap()
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
-	sf::Image map; map.loadFromFile("res/Background/map.png");
+	sf::Image map; map.loadFromFile("res/Background/map1_16.png");
 	nWorldBounds.width = map.getSize().x;
 	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
@@ -188,6 +196,30 @@ void World::loadMap()
 		{
 			std::unique_ptr<Coin> coin(new Coin(Item::Coin, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Items]->attachChild(std::move(coin));
+		}
+		else if (color.toInteger() == 0x00B2B200 + 255) {
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::UnderDirt, sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Map]->attachChild(std::move(block));		
+		}
+		else if (color.toInteger() == 0xA53A0000 + 255) {
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Stone, sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Map]->attachChild(std::move(block));		
+		}
+		else if (color.toInteger() == 0xF600FF00 + 255) {
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Wonder, sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Map]->attachChild(std::move(block));		
+		}
+		else if (color.toInteger() == 0x1D602500 + 255 || color.toInteger() == 0x3AD05200 + 255) {
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Chimney, sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Map]->attachChild(std::move(block));		
+		}
+		else if (color.toInteger() == 0xE2CB3600 + 255) {
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Gold, sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Map]->attachChild(std::move(block));		
+		} 
+		else if (color.toInteger() == 0xAA34A000 + 255) {
+			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Loxo, sf::Vector2f(x + 16, y + 16)));
+			nSceneLayers[Map]->attachChild(std::move(block));		
 		}
 
 	}

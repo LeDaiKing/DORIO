@@ -15,6 +15,14 @@ class Block : public SpriteNode
         {
             Dirt,
             Breakable,
+            Stone,
+            UnderDirt,
+            Gold,
+            Chimney,
+            Wonder,
+            Move,
+            Break,
+            Loxo
         };
 
     public:

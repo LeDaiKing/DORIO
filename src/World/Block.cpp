@@ -16,6 +16,24 @@ Textures::ID toTextureID(Block::Type type)
             return Textures::Dirt;
         case Block::Breakable:
             return Textures::Breakable;
+        case Block::Stone:
+            return Textures::Stone;
+        case Block::UnderDirt:
+            return Textures::UnderDirt;
+        case Block::Gold:
+            return Textures::Gold;
+        case Block::Chimney:
+            return Textures::Chimney;
+        case Block::Wonder:
+            return Textures::Wonder;
+        case Block::Move:
+            return Textures::Move;
+        case Block::Break:
+            return Textures::Break;
+        case Block::Loxo:
+            return Textures::Loxo;
+
+        
     }
     return Textures::Dirt;
 }
