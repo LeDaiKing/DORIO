@@ -19,7 +19,14 @@ namespace Textures
 		Breakable,
 		BreakAnimation,
 		Coin,
-
+		Stone,
+		UnderDirt,
+		Gold,
+		Chimney,
+		Wonder,
+		Move,
+		Break,
+		Loxo
 	};
 }
 
