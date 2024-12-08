@@ -6,7 +6,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 
 class Enemy;
-class BreakableBlock;
+class Block;
 class Dough : public Entity
 {
 	public:
@@ -29,15 +29,15 @@ class Dough : public Entity
 
 		void handleCollisionEnemies(SceneNode& graph);
 		void handleCollisionItems(SceneNode& graph);
-		void updateCloestBlock(BreakableBlock* block);
+		void updateCloestBlock(Block* block);
 		int getStateJump() const;
 	private:
-		virtual void updateCurrent(sf::Time dt);
+		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 
 	private:
-		BreakableBlock* nCloestBlock = nullptr;
+		Block* nCloestBlock = nullptr;
 		Type nType;
 		int stateJump = 0;
 		int nJumpVelocity2;

@@ -40,26 +40,6 @@ void Animation::setAnimationState(int ID)
 	nSprite.setTextureRect(sf::IntRect(0, nCurrentAnimation->nRow, nCurrentAnimation->nFrameSize.x, nCurrentAnimation->nFrameSize.y));
 }
 
-// void Animation::setNumFrames(std::size_t numFrames)
-// {
-// 	nNumFrames = numFrames;
-// }
-
-// std::size_t Animation::getNumFrames() const
-// {
-// 	return nNumFrames;
-// }
-
-// void Animation::setDuration(sf::Time duration)
-// {
-// 	nDuration = duration;
-// }
-
-// sf::Time Animation::getDuration() const
-// {
-// 	return nDuration;
-// }
-
 sf::Vector2i Animation::getFrameSize() const
 {
 	if (nCurrentAnimation == nullptr)

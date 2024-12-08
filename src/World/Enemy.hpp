@@ -19,7 +19,7 @@ class Enemy : public Entity
 		virtual void getDamage();
 
 	private:
-		// virtual void updateCurrent(sf::Time dt);
+		// virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 

@@ -4,7 +4,9 @@
 #include "BreakableBlock.hpp"
 #include "StaticBlock.hpp"
 #include "Coin.hpp"
-
+#include "LuckyBlock.hpp"
+#include "SlideBlock.hpp"
+#include "JumpyBlock.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -50,7 +52,7 @@ void World::update(sf::Time dt)
 	handleCollisions();
 	removeSceneNode();
 
-	nSceneGraph.update(dt);
+	nSceneGraph.update(dt, nCommandQueue);
 	// Regular update step, adapt position (correct if outside view)
 
 	adaptCameraPosition();
@@ -72,11 +74,18 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
-	TextureHolder::getInstance().load(Textures::Sky, "res/Background/Blue.png");
+	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg1.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
 	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
 	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
+	TextureHolder::getInstance().load(Textures::LuckyBlock, "res/Background/LuckyBlock/LuckyBlock.png");
+	TextureHolder::getInstance().load(Textures::StaticLuckyBlock, "res/Background/LuckyBlock/StaticLuckyBlock.png");
+	TextureHolder::getInstance().load(Textures::JumpyBlock, "res/Background/JumpyBlock/JumpyBlock.png");
 	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
+	TextureHolder::getInstance().load(Textures::CoinAnimation, "res/Item/CoinAnimation.png");
+	TextureHolder::getInstance().load(Textures::Heart, "res/Item/Star.png");
+	TextureHolder::getInstance().load(Textures::HeartAnimation, "res/Item/StarAnimation.png");
+
 }
 
 void World::buildScene()
@@ -84,6 +93,14 @@ void World::buildScene()
 	// Initialize the different layers
 	for (std::size_t i = 0; i < LayerCount; ++i)
 	{
+		if (i == Items)
+		{
+			std::unique_ptr<SceneNode> layer(new SceneNode(Category::ItemScene));
+			nSceneLayers[i] = layer.get();
+			nCategoryLayers[i] = Category::ItemScene;
+			nSceneGraph.attachChild(std::move(layer));
+			continue;
+		}
 		SceneNode::Ptr layer(new SceneNode());
 		nSceneLayers[i] = layer.get();
 		nCategoryLayers[i] = Category::None;
@@ -189,10 +206,28 @@ void World::loadMap()
 			std::unique_ptr<Coin> coin(new Coin(Item::Coin, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
+		else if (color.toInteger() == 0x0000FF00 + 255)
+		{
+			std::unique_ptr<LuckyBlock> block(new LuckyBlock(Block::LuckyBlock, sf::Vector2f(x + 16, y + 16)));
+			block->addItem(Item::Heart);
+			block->addItem(Item::Coin);
+			block->addItem(Item::Coin);
+			block->addItem(Item::Coin);
+			block->addItem(Item::Coin);
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
 
 	}
 	// std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(4 * 32 + 16, 14 * 32 + 16)));
 	// nSceneLayers[Map]->attachChild(std::move(block));
+	std::unique_ptr<SlideBlock> block(new SlideBlock(Block::Dirt, sf::Vector2f(22 * 32 + 16, 9 * 32 + 16)));
+	block->addPath(sf::Vector2f(32 * 5, 0));
+	block->addPath(sf::Vector2f(-32 * 5, 0));
+	block->addPath(sf::Vector2f(0, 32 * 3));
+	nSceneLayers[Map]->attachChild(std::move(block));
+
+	std::unique_ptr<JumpyBlock> block1(new JumpyBlock(Block::JumpyBlock, sf::Vector2f(32 * 13 + 16, 32 * 14 + 16)));
+	nSceneLayers[Map]->attachChild(std::move(block1));
 
 	// // Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));

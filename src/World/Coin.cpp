@@ -9,7 +9,7 @@ Coin::Coin(Type type, sf::Vector2f position)
     nAnimation.setAnimationState(0);
 }
 
-void Coin::collectedBy(Dough& player)
+void Coin::activate(Entity& player)
 {
     nIsCollected = true;
 }

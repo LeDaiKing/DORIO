@@ -18,7 +18,13 @@ namespace Textures
 		Dirt,
 		Breakable,
 		BreakAnimation,
+		LuckyBlock,
+		StaticLuckyBlock,
+		JumpyBlock,
 		Coin,
+		CoinAnimation,
+		Heart,
+		HeartAnimation,
 
 	};
 }

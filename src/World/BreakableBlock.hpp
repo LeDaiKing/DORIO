@@ -8,13 +8,13 @@ class BreakableBlock : public BouncingBlock
         BreakableBlock(Type type, sf::Vector2f position);
         // virtual ~BreakableBlock();
     protected:
-        virtual void updateCurrent(sf::Time dt);
+        virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         
     public:
-        virtual void applyNormal(SceneNode& graph);
+        virtual void handleBottomCollision(Dough& player);
 
-        void breakBlock(Dough& player);
+        // void breakBlock(Dough& player);
 
         virtual bool isMarkedForRemoval() const;
 

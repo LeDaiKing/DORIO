@@ -1,27 +1,34 @@
-// #pragma once
-// #include "BouncingBlock.hpp"
-// #include "StaticBlock.hpp"
-// #include "Animation.hpp"
-// #include <SFML/Graphics/Sprite.hpp>
-// #include <stack>
-// #include "Animation.hpp"
+#pragma once
+#include "BouncingBlock.hpp"
+#include "StaticBlock.hpp"
+#include "Animation.hpp"
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <stack>
+#include "Item.hpp"
+// #include "../Comman
 
-// class Item;
-// class LuckyBlock : virtual public BouncingBlock, virtual public StaticBlock
-// {
-//     public:
-//         LuckyBlock(Type type, sf::Vector2f position);
-//         virtual void applyNormal(SceneNode& graph);
-//         virtual sf::FloatRect getBoundingRect() const;
-//         // void dropItem(Item* item);
+class Dough;
+class Item;
+class LuckyBlock :  public BouncingBlock
+{
+    public:
+        typedef std::pair<Command, std::unique_ptr<Animation>> ItemPair;
+    public:
+        LuckyBlock(Type type, sf::Vector2f position);
+        virtual void handleBottomCollision(Dough& player);
+        void dropItem();
+        void addItem(Item::Type type);
 
-//     protected:
-//         virtual void updateCurrent(sf::Time dt);
-//         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+    protected:
+        virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
+        virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         
 
-//     private:
-//         bool nIsEmpty;
-//         sf::Sprite nStaticSprite;
-//         std::stack<Item*> nItems;
-// };
+    private:
+        bool nIsEmpty;
+        sf::Texture nTexture;
+        std::stack<ItemPair> nItems;
+        bool nIsDropping;
+        std::vector<ItemPair> nQueueItems;
+};

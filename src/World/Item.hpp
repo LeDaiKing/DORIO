@@ -8,7 +8,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include "Animation.hpp"
 
-class Dough;
+class Entity;
 class Item : public SceneNode
 {
     public:
@@ -16,15 +16,16 @@ class Item : public SceneNode
         {
             Coin,
             Heart,
+            Projectile,
         };
     public:
         Item(Type type, sf::Vector2f position);
         virtual unsigned int getCategory() const;
         virtual sf::FloatRect getBoundingRect() const;
-        virtual void collectedBy(Dough& player) = 0;
+        virtual void activate(Entity& player) = 0;
         virtual bool isMarkedForRemoval() const;
     protected:
-        virtual void updateCurrent(sf::Time dt);
+        virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
     protected:

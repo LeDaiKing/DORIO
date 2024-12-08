@@ -11,8 +11,8 @@ Textures::ID toTextureID(Item::Type type)
     {
         case Item::Coin:
             return Textures::Coin;
-        // case Item::Heart:
-        //     return Textures::Heart;
+        case Item::Heart:
+            return Textures::Heart;
     }
     return Textures::Coin;
 }
@@ -41,7 +41,7 @@ bool Item::isMarkedForRemoval() const
     return nIsCollected;
 }
 
-void Item::updateCurrent(sf::Time dt)
+void Item::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (!nIsCollected)
     {

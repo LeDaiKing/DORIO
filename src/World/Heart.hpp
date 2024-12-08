@@ -2,9 +2,9 @@
 #include "Item.hpp"
 class Dough;
 
-class Coin : public Item
+class Heart : public Item
 {
     public:
-        Coin(Type type, sf::Vector2f position);
+        Heart(Type type, sf::Vector2f position);
         virtual void activate(Entity& player) override;
 };

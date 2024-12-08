@@ -3,7 +3,7 @@
 #include "Category.hpp"
 #include "Enemy.hpp"
 #include "Item.hpp"
-#include "BreakableBlock.hpp"
+#include "Block.hpp"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
@@ -45,11 +45,11 @@ unsigned int Dough::getCategory() const
 	}
 }
 
-void Dough::updateCurrent(sf::Time dt)
+void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
 	if (nCloestBlock != nullptr)
 	{
-		nCloestBlock->breakBlock(*this);
+		nCloestBlock->handleBottomCollision(*this);
 		nCloestBlock = nullptr;
 	}
 
@@ -66,7 +66,7 @@ void Dough::updateCurrent(sf::Time dt)
 	if (nOnGround) stateJump = 0;
 	
 	
-	Entity::updateCurrent(dt);
+	Entity::updateCurrent(dt, commands);
 }
 
 void Dough::setUpEntity()
@@ -185,7 +185,7 @@ void Dough::handleCollisionItems(SceneNode& graph)
 		collision::Side side = checkCollisionSide(bound, itemBound);
 		if (side != collision::Side::None)
 		{
-			item.collectedBy(*this);
+			item.activate(*this);
 		}
 	}
 
@@ -195,7 +195,7 @@ void Dough::handleCollisionItems(SceneNode& graph)
 	}
 }
 
-void Dough::updateCloestBlock(BreakableBlock* block)
+void Dough::updateCloestBlock(Block* block)
 {
 	if (nCloestBlock == nullptr)
 	{

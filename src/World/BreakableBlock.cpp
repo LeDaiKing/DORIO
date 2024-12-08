@@ -19,7 +19,7 @@ BreakableBlock::BreakableBlock(Type type, sf::Vector2f position)
     nBreakAnimation.setAnimationState(0);
 }
 
-void BreakableBlock::updateCurrent(sf::Time dt)
+void BreakableBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (nIsBroken)
     {
@@ -27,7 +27,7 @@ void BreakableBlock::updateCurrent(sf::Time dt)
     }
     else
     {
-        BouncingBlock::updateCurrent(dt);
+        BouncingBlock::updateCurrent(dt, commands);
     }
 }
 
@@ -44,55 +44,67 @@ void BreakableBlock::drawCurrent(sf::RenderTarget& target, sf::RenderStates stat
     }
 }
 
-void BreakableBlock::applyNormal(SceneNode& graph)
+// void BreakableBlock::applyNormal(SceneNode& graph)
+// {
+//     if (nIsBroken)
+//         return;
+
+//     if (graph.getCategory() != Category::PlayerDough)
+//     {
+//         BouncingBlock::applyNormal(graph);
+//         return;
+//     }
+
+//     assert(dynamic_cast<Dough*>(&graph) != nullptr);
+//     Dough& player = static_cast<Dough&>(graph);
+
+//     sf::FloatRect entityHitBox = player.getBoundingRect();
+//     sf::FloatRect bound = getBoundingRect();
+
+//     collision::Side side = checkCollisionSide(entityHitBox, bound);
+//     if (side != collision::Bottom)
+//     {
+//         BouncingBlock::applyNormal(graph);
+//         return;
+//     }
+
+//     player.updateCloestBlock(this);
+//     // player.setPosition(player.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
+//     // player.setVelocity(player.getVelocity().x, 30.f);
+//     // nStateBounce = 1;
+
+//     for(Ptr& child : getChildren())
+//     {
+//         applyNormal(*child);
+//     }
+
+// }
+
+// void BreakableBlock::handleBottomCollision(Dough& player)
+// {
+//     if (nIsBroken)
+//         return;
+
+//     player.updateCloestBlock(this);
+// }
+
+
+void BreakableBlock::handleBottomCollision(Dough& player)
 {
     if (nIsBroken)
         return;
-
-    if (graph.getCategory() != Category::PlayerDough)
-    {
-        BouncingBlock::applyNormal(graph);
-        return;
-    }
-
-    assert(dynamic_cast<Dough*>(&graph) != nullptr);
-    Dough& player = static_cast<Dough&>(graph);
-
-    sf::FloatRect entityHitBox = player.getBoundingRect();
-    sf::FloatRect bound = getBoundingRect();
-
-    collision::Side side = checkCollisionSide(entityHitBox, bound);
-    if (side != collision::Bottom)
-    {
-        BouncingBlock::applyNormal(graph);
-        return;
-    }
-
-    player.updateCloestBlock(this);
-    // player.setPosition(player.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
-    // player.setVelocity(player.getVelocity().x, 30.f);
-    // nStateBounce = 1;
-
-    for(Ptr& child : getChildren())
-    {
-        applyNormal(*child);
-    }
-
-}
-
-
-void BreakableBlock::breakBlock(Dough& player)
-{
     if (player.getVelocity().y < -220.f && player.getStateJump() == 1)
     {
         nIsBroken = true;
         nBreakAnimation.setAnimationState(0);
     }
-    else nStateBounce = 1;
+    BouncingBlock::handleBottomCollision(player);
 
-    sf::FloatRect bound = getBoundingRect();
-    player.setPosition(player.getPosition().x, bound.top + bound.height + player.getBoundingRect().height / 2);
-    player.setVelocity(player.getVelocity().x, 30.f);
+    // else nStateBounce = 1;
+
+    // sf::FloatRect bound = getBoundingRect();
+    // player.setPosition(player.getPosition().x, bound.top + bound.height + player.getBoundingRect().height / 2);
+    // player.setVelocity(player.getVelocity().x, 30.f);
 }
 
 bool BreakableBlock::isMarkedForRemoval() const

@@ -36,6 +36,8 @@ class Animation : public sf::Drawable, public sf::Transformable
 		// void setDuration(sf::Time duration);
 		// sf::Time getDuration() const;
 
+		// void setPosition(float x, float y);
+
 		void setFlipped(bool flag);
 		bool isFlipped() const;
 

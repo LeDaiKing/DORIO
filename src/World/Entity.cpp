@@ -60,7 +60,7 @@ void Entity::accelerate(float vx, float vy)
 	nAcceleration.y += vy;
 }
 
-void Entity::updateCurrent(sf::Time dt)
+void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
 
 
@@ -174,7 +174,7 @@ void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) cons
 	rect.setFillColor(sf::Color(255, 255, 255, 0));
 	rect.setOutlineColor(sf::Color::Red);
 	rect.setOutlineThickness(1.f);
-	target.draw(rect);
+	// target.draw(rect);
 	target.draw(nSprite, states);
 }
 
@@ -221,3 +221,4 @@ bool Entity::isMarkedForRemoval() const
 // {
 // 	nParent->detachChild(*this);
 // }
+

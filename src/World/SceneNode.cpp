@@ -5,12 +5,13 @@
 #include <algorithm>
 #include <cassert>
 
-
-SceneNode::SceneNode()
+SceneNode::SceneNode(unsigned int category)
 : nChildren()
 , nParent(nullptr)
+, nDefaultCategory(category)
 {
 }
+
 
 void SceneNode::attachChild(Ptr child)
 {
@@ -29,21 +30,21 @@ SceneNode::Ptr SceneNode::detachChild(const SceneNode& node)
 	return result;
 }
 
-void SceneNode::update(sf::Time dt)
+void SceneNode::update(sf::Time dt, CommandQueue& commands)
 {
-	updateCurrent(dt);
-	updateChildren(dt);
+	updateCurrent(dt, commands);
+	updateChildren(dt, commands);
 }
 
-void SceneNode::updateCurrent(sf::Time)
+void SceneNode::updateCurrent(sf::Time, CommandQueue&)
 {
 	// Do nothing by default
 }
 
-void SceneNode::updateChildren(sf::Time dt)
+void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands)
 {
 	for(Ptr& child : nChildren)
-		child->update(dt);
+		child->update(dt, commands);
 }
 
 void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -97,7 +98,7 @@ void SceneNode::onCommand(const Command& command, sf::Time dt)
 
 unsigned int SceneNode::getCategory() const
 {
-	return Category::Scene;
+	return nDefaultCategory;
 }
 
 sf::FloatRect SceneNode::getBoundingRect() const

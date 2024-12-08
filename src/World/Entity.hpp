@@ -31,7 +31,7 @@ class Entity : public SceneNode
 		void addVelocity(float vx, float vy);
 		void accelerate(sf::Vector2f velocity);
 		void accelerate(float vx, float vy);
-
+		// void applyFriction(sf::Vector2f friction);
 		sf::Vector2f getVelocity() const;
 		bool getDirection() const;
 
@@ -54,7 +54,7 @@ class Entity : public SceneNode
 
 
 	protected:
-		virtual void updateCurrent(sf::Time dt);
+		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 		void addAnimationState(State, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat = false);
@@ -70,7 +70,7 @@ class Entity : public SceneNode
 		sf::Vector2f nHitBox;
 		sf::Vector2f nSpeed;
 		sf::Vector2f nMaxVelocity;
-		// sf::Vector2f friction;
+		// sf::Vector2f nFriction;
 		int nJumpVelocity;
 		bool nOnGround;
 		int nHitPoints = 1;
