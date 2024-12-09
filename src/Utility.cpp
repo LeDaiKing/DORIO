@@ -207,3 +207,8 @@ collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRec
 
 	return collision::None;
 }
+
+float getAngle(sf::Vector2f vector)
+{
+	return std::atan2(vector.y, vector.x) * 180.f / PI;
+}

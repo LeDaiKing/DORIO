@@ -8,7 +8,7 @@
 #include "Item.hpp"
 // #include "../Comman
 
-class Dough;
+class Entity;
 class Item;
 class LuckyBlock :  public BouncingBlock
 {
@@ -16,7 +16,7 @@ class LuckyBlock :  public BouncingBlock
         typedef std::pair<Command, std::unique_ptr<Animation>> ItemPair;
     public:
         LuckyBlock(Type type, sf::Vector2f position);
-        virtual void handleBottomCollision(Dough& player);
+        virtual void handleBottomCollision(Entity& player);
         void dropItem();
         void addItem(Item::Type type);
 

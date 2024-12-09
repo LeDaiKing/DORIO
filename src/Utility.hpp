@@ -24,6 +24,8 @@ namespace collision
 	};
 }
 
+const float		PI = 3.14159265358979f;
+
 class Animation;
 
 // Since std::to_string doesn't work on MinGW we have to implement
@@ -43,6 +45,7 @@ void			centerOrigin(Animation& animation);
 float			toDegree(float radian);
 float			toRadian(float degree);
 
+float    		getAngle(sf::Vector2f vector);
 // Random number generation
 int				randomInt(int exclusiveMax);
 

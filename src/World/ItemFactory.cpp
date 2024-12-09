@@ -12,6 +12,8 @@ std::unique_ptr<Item> ItemFactory::createItem(Item::Type type, sf::Vector2f posi
             return std::make_unique<Coin>(type, position);
         case Item::Heart:
             return std::make_unique<Heart>(type, position);
+        default:
+            break;
     }
     return nullptr;
 }
@@ -31,6 +33,8 @@ std::unique_ptr<Animation> ItemFactory::createAppearAnimation(Item::Type type)
             animation->addAnimationState(0, 0, 4, sf::seconds(0.6), sf::Vector2i(25, 64), false);
             animation->setAnimationState(0);
             return animation;
+        default:
+            break;
     }
     return nullptr;
 }

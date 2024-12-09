@@ -89,14 +89,18 @@ void BreakableBlock::drawCurrent(sf::RenderTarget& target, sf::RenderStates stat
 // }
 
 
-void BreakableBlock::handleBottomCollision(Dough& player)
+void BreakableBlock::handleBottomCollision(Entity& player)
 {
     if (nIsBroken)
         return;
-    if (player.getVelocity().y < -220.f && player.getStateJump() == 1)
+    if (player.getCategory() & Category::PlayerDough)
     {
-        nIsBroken = true;
-        nBreakAnimation.setAnimationState(0);
+        Dough& player1 = static_cast<Dough&>(player);
+        if (player1.getVelocity().y < -220.f && player1.getStateJump() == 1)
+        {
+            nIsBroken = true;
+            nBreakAnimation.setAnimationState(0);
+        }
     }
     BouncingBlock::handleBottomCollision(player);
 

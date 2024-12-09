@@ -1,7 +1,7 @@
 #pragma once
 #include "BouncingBlock.hpp"
 #include "Animation.hpp"
-class Dough;
+class Entity;
 class BreakableBlock : public BouncingBlock
 {
     public:
@@ -12,7 +12,7 @@ class BreakableBlock : public BouncingBlock
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         
     public:
-        virtual void handleBottomCollision(Dough& player);
+        virtual void handleBottomCollision(Entity& player);
 
         // void breakBlock(Dough& player);
 

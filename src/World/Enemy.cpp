@@ -6,68 +6,158 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
-
-Enemy::Enemy()
-: Entity(TextureHolder::getInstance().get(Textures::Enemy))
+#include <iostream>
+Textures::ID toTextureID(Enemy::Type type)
 {
-    setUpEntity();
-    setAnimationState(State::Idle);
+    switch (type)
+    {
+        case Enemy::CockRoach:
+            return Textures::Enemy;
+        case Enemy::Ghost:
+            return Textures::Ghost;
+    }
+    return Textures::Enemy;
 }
 
-Enemy::Enemy(sf::Vector2f position)
-: Entity(TextureHolder::getInstance().get(Textures::Enemy))
+Enemy::Enemy(Type type, sf::Vector2f position)
+: Entity(TextureHolder::getInstance().get(toTextureID(type)))
+, nType(type)
+, nAIState(None)
+, nCurBehavior(0)
+, nDestination(position)
+, nDirLoop(1)
 {
-    setUpEntity();
-    setAnimationState(State::Idle);
     setPosition(position);
 }
 
-void Enemy::setUpEntity()
-{
-    addAnimationState(State::Idle, 30, 10, sf::seconds(1), sf::Vector2i(44, 30), true);
-    addAnimationState(State::Walk, 30, 10, sf::seconds(1), sf::Vector2i(44, 30), true);
-    addAnimationState(State::Hit, 0, 5, sf::seconds(0.8), sf::Vector2i(44, 30), false);
-    addAnimationState(State::Dead, 0, 5, sf::seconds(0.8), sf::Vector2i(44, 30), false);
-    nHitBox = sf::Vector2f(35.f, 25.f);
-    nSpeed = sf::Vector2f(128.f, 0.f);
-    nMaxVelocity = sf::Vector2f(128.f, 0.f);
-    nJumpVelocity = 0;
-}
 
 unsigned int Enemy::getCategory() const
 {
     return Category::Enemy;
 }
 
-void Enemy::attackPlayer(Dough& player)
+
+Enemy::Type Enemy::getType()
 {
-    if (nCurrentState == State::Dead)
-        return;
-    player.getDamage();
-    if (player.getPosition().x < getPosition().x)
+    return nType;
+}
+
+void Enemy::setAIState(AIState state)
+{
+    nAIState = state;
+}
+
+void Enemy::updateCurrent(sf::Time dt, CommandQueue& commands)
+{
+    Entity::updateCurrent(dt, commands);
+
+    // if (nCurrentState == State::Dead)
+    // {
+    //     return;
+    // }
+
+    switch (nAIState)
     {
-        player.setVelocity(-512.f, 0);
-    }
-    else
-    {
-        player.setVelocity(512.f, 0);
+    case Patrolling:
+        moveToPosition(dt);
+        break;
+    case Turning:
+        turn();
+        break;
+    case Waiting:
+        wait(dt);
+        break;
+    
+    default:
+        if (nBehaviors.size() == 0) break;
+
+        nBehaviors[nCurBehavior]();
+        nCurBehavior += nDirLoop;
+        if (nCurBehavior == nBehaviors.size())
+        {
+            nCurBehavior = nBehaviors.size() - 1;
+            nDirLoop = -1;
+        }
+        else if (nCurBehavior == -1)
+        {
+            nCurBehavior = 0;
+            nDirLoop = 1;
+        }
     }
 }
 
-void Enemy::getDamage()
+void Enemy::addMoveBehavior(sf::Vector2f offset)
 {
-	if (nCurrentState == State::Hit || nCurrentState == State::Dead)
-		return;
+    // sf::Vector2f temp = nDestination + offset;
+    nBehaviors.push_back([this, offset] ()
+    {
+        sf::Vector2f noffset = offset;
+        noffset.x *= nDirLoop;
+        noffset.y *= nDirLoop;
+        nDestination = getPosition() + noffset;
+        setAIState(Patrolling);
+    });
+    // nDestination = temp;
+}
 
-    // nTimeDamage = sf::seconds(0.5f);
-	nHitPoints--;
-	if (nHitPoints <= 0)
-	{
-		setAnimationState(State::Dead);
-		// std::cout << "Dead" << std::endl;
-	}
-	else
-	{
-		setAnimationState(State::Hit);
-	}
+void Enemy::addWaitBehavior(sf::Time time)
+{
+    nBehaviors.push_back([this, time] ()
+    {
+        nWaitingTime = time;
+        setAIState(Waiting);
+    });
+}
+
+void Enemy::addTurnBehavior()
+{
+    nBehaviors.push_back([this] ()
+    {
+        setAIState(Turning);
+    });
+}
+
+void Enemy::moveToPosition(sf::Time dt)
+{   
+    // std::cout << length(nDestination - getPosition()) << std::endl;
+    // int sign = nDestination.x < getPosition().x ? -1 : 1;
+
+    if (length(nDestination - getPosition()) < 3.f)
+    {
+        setVelocity(0.f, 0.f);
+        setPosition(nDestination);
+        setAIState(None);
+        return;
+    }
+    
+    float velocity = length(getVelocity());
+    float firtion = length(0.8f * nSpeed);
+    
+    if (length(nDestination - getPosition()) > 0.5f * velocity * velocity / firtion)
+    {
+         if (nDestination.x < getPosition().x)  walk(true);
+         else walk(false);
+    }
+}
+
+void Enemy::wait(sf::Time time)
+{
+    nWaitingTime -= time;
+    if (nWaitingTime <= sf::Time::Zero)
+    {
+        nWaitingTime = sf::Time::Zero;
+        setAIState(None);
+    }
+}
+
+void Enemy::turn()
+{
+    nDirection = !nDirection;
+    nSprite.setFlipped(nDirection);
+    setAIState(None);
+}
+
+void Enemy::isTargetInRange(sf::Vector2f target)
+{
+    //
 }

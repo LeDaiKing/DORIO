@@ -21,6 +21,9 @@ Textures::ID toTextureID(Block::Type type)
         case Block::JumpyBlock:
             return Textures::JumpyBlock;
         case Block::SlideBlock:
+            return Textures::Dirt;
+        default:
+            return Textures::Dirt;
     }
     return Textures::Dirt;
 }
@@ -61,22 +64,13 @@ void Block::applyNormal(SceneNode& graph)
 
         if (side == collision::Top && entity.getVelocity().y > 0)
         {
-            handleTopCollision(entity);
+            entity.updateClosestTopBlock(this);
+            // handleTopCollision(entity);
         }
         else if (side == collision::Bottom && entity.getVelocity().y < 0)
         {
             // breakBlock(entity);
-            if (entity.getCategory() == Category::PlayerDough)
-            {
-                Dough& player = static_cast<Dough&>(entity);
-                player.updateCloestBlock(this);
-                // handleBottomCollision(player);
-            }
-            else
-            {
-                entity.setPosition(entity.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
-                entity.setVelocity(entity.getVelocity().x, 0.f);
-            }
+            entity.updateClosestBottomBlock(this);
             
         }
         else if (side == collision::Left && entity.getVelocity().x > 0)
@@ -98,3 +92,12 @@ void Block::applyNormal(SceneNode& graph)
         applyNormal(*child);
     }
 }
+
+// void Block::handleTopCollision(Entity& entity)
+// {
+//     sf::FloatRect bound = getBoundingRect();
+//     entity.setPosition(entity.getPosition().x, bound.top - entity.getBoundingRect().height / 2);
+//     entity.setVelocity(entity.getVelocity().x, 0.f);
+//     entity.accelerate(0.f, -World::getGravity());
+//     entity.setOnGround(true);
+// }

@@ -84,15 +84,19 @@ void LuckyBlock::addItem(Item::Type type)
     nItems.push(std::move(itemPair));
 }
 
-void LuckyBlock::handleBottomCollision(Dough& player)
+void LuckyBlock::handleBottomCollision(Entity& player)
 {
-    dropItem();
-    if (nIsEmpty)
+    if (player.getCategory() & Category::PlayerDough)
     {
-        sf::FloatRect bound = getBoundingRect();
-        player.setPosition(player.getPosition().x, bound.top + bound.height + player.getBoundingRect().height / 2);
-        player.setVelocity(player.getVelocity().x, 0);
-        return;
+        Dough& dough = static_cast<Dough&>(player);
+        dropItem();
+        if (nIsEmpty)
+        {
+            sf::FloatRect bound = getBoundingRect();
+            dough.setPosition(dough.getPosition().x, bound.top + bound.height + dough.getBoundingRect().height / 2);
+            dough.setVelocity(dough.getVelocity().x, 0);
+            return;
+        }
     }
     BouncingBlock::handleBottomCollision(player);
 

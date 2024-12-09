@@ -7,9 +7,12 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
+#include "Block.hpp"
 
 Entity::Entity(const sf::Texture& texture)
-: nSprite(texture), nCurrentState(State::None)
+: nSprite(texture)
+, nCurrentState(State::None)
+, nDirection(false)
 {
 	centerOrigin(nSprite);
 }
@@ -35,18 +38,14 @@ void Entity::addVelocity(sf::Vector2f velocity)
 	nVelocity += velocity;	
 	nVelocity.x = std::max(nVelocity.x, -nMaxVelocity.x);
 	nVelocity.x = std::min(nVelocity.x, nMaxVelocity.x);
-	// nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
-	// nVelocity.y = std::min(nVelocity.y, nMaxVelocity.y);
+	nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
+	nVelocity.y = std::min(nVelocity.y, nMaxVelocity.y);
 }
 
 void Entity::addVelocity(float vx, float vy)
 {
 	nVelocity.x += vx;
 	nVelocity.y += vy;
-	nVelocity.x = std::max(nVelocity.x, -nMaxVelocity.x);
-	nVelocity.x = std::min(nVelocity.x, nMaxVelocity.x);
-	// nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
-	// nVelocity.y = std::min(nVelocity.y, nMaxVelocity.y);
 }
 
 void Entity::accelerate(sf::Vector2f acceleration)
@@ -62,9 +61,26 @@ void Entity::accelerate(float vx, float vy)
 
 void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
+	
+	nSprite.update(dt);
+	if (nCurrentState == State::Dead) return;
+
+	if (nClosestBottomBlock != nullptr)
+	{
+		nClosestBottomBlock->handleBottomCollision(*this);
+		nClosestBottomBlock = nullptr;
+	}
+
+	if (nClosestTopBlock != nullptr)
+	{
+		nClosestTopBlock->handleTopCollision(*this);
+		nClosestTopBlock = nullptr;
+	}
 
 
 	addVelocity(nAcceleration * dt.asSeconds());
+
+
 	move(nVelocity * dt.asSeconds());
 	nAcceleration = sf::Vector2f(0.f, 0.f);
 	
@@ -102,10 +118,10 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 
 	// if (nVelocity.y != 0.f) nOnGround = false;s
 
-	if (!nOnGround && nVelocity.y > 0 && nCurrentState != State::Hit && nCurrentState != State::Dead)
+	if (!nOnGround && nVelocity.y > 0 && nCurrentState != State::Hit)
 		setAnimationState(State::Fall);
 
-	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit && nCurrentState != State::Dead)
+	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit)
 		setAnimationState(State::Idle);
 
 	if (abs(nVelocity.y) > 10.f) nOnGround = false;
@@ -113,7 +129,6 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 	// if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
 	// 	setAnimationState(State::Jump);
 
-	nSprite.update(dt);
 }
 
 void Entity::setAnimationState(State type)
@@ -222,3 +237,51 @@ bool Entity::isMarkedForRemoval() const
 // 	nParent->detachChild(*this);
 // }
 
+void Entity::getDamage(int damage)
+{
+	if (nCurrentState == State::Dead)
+		return;
+
+	nHitPoints -= damage;
+	if (nHitPoints <= 0)
+	{
+		setAnimationState(State::Dead);
+		nVelocity = sf::Vector2f(0.f, 0.f);
+	}
+	else
+	{
+		setAnimationState(State::Hit);
+	}
+}
+
+void Entity::updateClosestTopBlock(Block* block)
+{
+	if (nClosestTopBlock == nullptr)
+	{
+		nClosestTopBlock = block;
+		return;
+	}
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f blockPos = block->getPosition();
+	sf::Vector2f closestBlockPos = nClosestTopBlock->getPosition();
+	if (std::abs(pos.x - blockPos.x) < std::abs(pos.x - closestBlockPos.x))
+	{
+		nClosestTopBlock = block;
+	}
+}
+
+void Entity::updateClosestBottomBlock(Block* block)
+{
+	if (nClosestBottomBlock == nullptr)
+	{
+		nClosestBottomBlock = block;
+		return;
+	}
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f blockPos = block->getPosition();
+	sf::Vector2f closestBlockPos = nClosestBottomBlock->getPosition();
+	if (std::abs(pos.x - blockPos.x) < std::abs(pos.x - closestBlockPos.x))
+	{
+		nClosestBottomBlock = block;
+	}
+}

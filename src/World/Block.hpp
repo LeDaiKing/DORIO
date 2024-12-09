@@ -7,7 +7,7 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 
-class Dough;
+// class Dough;
 class Entity;
 
 class Block : public SpriteNode
@@ -29,7 +29,7 @@ class Block : public SpriteNode
         virtual unsigned int getCategory() const;
 
         virtual void applyNormal(SceneNode& graph);
-        virtual void handleBottomCollision(Dough& player) = 0;
+        virtual void handleBottomCollision(Entity& player) = 0;
         virtual void handleTopCollision(Entity& entity) = 0;
 
         virtual sf::FloatRect getBoundingRect() const;

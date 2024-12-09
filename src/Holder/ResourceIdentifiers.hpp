@@ -14,6 +14,7 @@ namespace Textures
 		Dough1,
 		Dough2,
 		Enemy,
+		Ghost,
 		Sky,
 		Dirt,
 		Breakable,
@@ -25,6 +26,7 @@ namespace Textures
 		CoinAnimation,
 		Heart,
 		HeartAnimation,
+		FireBall,
 
 	};
 }

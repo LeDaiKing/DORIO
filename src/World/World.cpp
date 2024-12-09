@@ -7,6 +7,8 @@
 #include "LuckyBlock.hpp"
 #include "SlideBlock.hpp"
 #include "JumpyBlock.hpp"
+#include "CockRoach.hpp"
+#include "Ghost.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -76,6 +78,7 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
 	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg1.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
+	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
 	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
 	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
 	TextureHolder::getInstance().load(Textures::LuckyBlock, "res/Background/LuckyBlock/LuckyBlock.png");
@@ -85,6 +88,7 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::CoinAnimation, "res/Item/CoinAnimation.png");
 	TextureHolder::getInstance().load(Textures::Heart, "res/Item/Star.png");
 	TextureHolder::getInstance().load(Textures::HeartAnimation, "res/Item/StarAnimation.png");
+	TextureHolder::getInstance().load(Textures::FireBall, "res/Item/Fireball.png");
 
 }
 
@@ -178,7 +182,7 @@ void World::loadMap()
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
-	sf::Image map; map.loadFromFile("res/Background/map.png");
+	sf::Image map; map.loadFromFile("res/Background/map4.png");
 	nWorldBounds.width = map.getSize().x;
 	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
@@ -198,7 +202,27 @@ void World::loadMap()
 		}
 		else if (color.toInteger() == 0x0DFF0000 + 255)
 		{
-			std::unique_ptr<Enemy> leader1(new Enemy(sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Enemy> leader1(new CockRoach(Enemy::CockRoach, sf::Vector2f(x + 16, y + 16)));
+		
+			if (x == 320)
+			{
+				std::cout << "Add behavior" << std::endl;
+				leader1->addWaitBehavior(sf::seconds(1));
+				leader1->addMoveBehavior(sf::Vector2f(32 * 4, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addTurnBehavior();
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addMoveBehavior(sf::Vector2f(32  * 2, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addTurnBehavior();
+				leader1->addWaitBehavior(sf::seconds(5));
+				leader1->addMoveBehavior(sf::Vector2f(-32 * 6, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addTurnBehavior();
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addMoveBehavior(sf::Vector2f(-32 * 2, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+			}
 			nSceneLayers[Enemies]->attachChild(std::move(leader1));
 		}
 		else if (color.toInteger() == 0xFFFC0000 + 255)
@@ -220,14 +244,29 @@ void World::loadMap()
 	}
 	// std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(4 * 32 + 16, 14 * 32 + 16)));
 	// nSceneLayers[Map]->attachChild(std::move(block));
-	std::unique_ptr<SlideBlock> block(new SlideBlock(Block::Dirt, sf::Vector2f(22 * 32 + 16, 9 * 32 + 16)));
+	std::unique_ptr<SlideBlock> block(new SlideBlock(Block::Dirt, sf::Vector2f(22 * 32 + 16, 12 * 32 + 16)));
+	block->addPath(sf::Vector2f(0, -32 * 3));
 	block->addPath(sf::Vector2f(32 * 5, 0));
-	block->addPath(sf::Vector2f(-32 * 5, 0));
-	block->addPath(sf::Vector2f(0, 32 * 3));
 	nSceneLayers[Map]->attachChild(std::move(block));
 
 	std::unique_ptr<JumpyBlock> block1(new JumpyBlock(Block::JumpyBlock, sf::Vector2f(32 * 13 + 16, 32 * 14 + 16)));
 	nSceneLayers[Map]->attachChild(std::move(block1));
+
+	std::unique_ptr<Ghost> enemy(new Ghost(Enemy::Ghost, sf::Vector2f(32 * 16 + 16, 32 * 7 + 16)));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(32 * 4, 0));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addTurnBehavior();
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(- 32 * 7, 32 * 5));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addTurnBehavior();
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(32 * 3, 0));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(0, -32 * 5));
+	enemy->addWaitBehavior(sf::seconds(1));
+	nSceneLayers[Enemies]->attachChild(std::move(enemy));
 
 	// // Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));

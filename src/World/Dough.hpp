@@ -22,22 +22,23 @@ class Dough : public Entity
 		Dough(Type type);
 		virtual unsigned int getCategory() const;
 
-		virtual void setUpEntity();
 		virtual void jump();
 		virtual void attackEnemy(Enemy& enemy);
-		virtual void getDamage();
+		virtual void getDamage(int damage);
 
 		void handleCollisionEnemies(SceneNode& graph);
 		void handleCollisionItems(SceneNode& graph);
-		void updateCloestBlock(Block* block);
 		int getStateJump() const;
-	private:
+		void setStateJump(int state);
+
+	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
+		virtual void setUpEntity() ;
+
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 
 	private:
-		Block* nCloestBlock = nullptr;
 		Type nType;
 		int stateJump = 0;
 		int nJumpVelocity2;

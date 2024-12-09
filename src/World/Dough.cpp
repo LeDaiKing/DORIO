@@ -47,11 +47,7 @@ unsigned int Dough::getCategory() const
 
 void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
-	if (nCloestBlock != nullptr)
-	{
-		nCloestBlock->handleBottomCollision(*this);
-		nCloestBlock = nullptr;
-	}
+
 
 	if (nTimeDamage > sf::Time::Zero)
 	{
@@ -77,7 +73,7 @@ void Dough::setUpEntity()
 	case Dough2:
 		nHitBox = sf::Vector2f(25.f, 28.f);
 		nSpeed = sf::Vector2f(1024.f, 128.f);
-		nMaxVelocity = sf::Vector2f(200.f, 1024.f);
+		nMaxVelocity = sf::Vector2f(200.f, 512.f);
 		// friction = sf::Vector2f(0.f, 0.f);
 		nJumpVelocity = 320;
 		nJumpVelocity2 = 260;
@@ -139,10 +135,10 @@ void Dough::jump()
 
 void Dough::attackEnemy(Enemy& enemy)
 {
-	enemy.getDamage();
+	enemy.getDamage(1);
 }
 
-void Dough::getDamage()
+void Dough::getDamage(int damage)
 {
 	setAnimationState(State::Hit);
 	nTimeDamage = sf::seconds(0.35f);
@@ -159,7 +155,7 @@ void Dough::handleCollisionEnemies(SceneNode& graph)
 		sf::FloatRect bound = getBoundingRect();
 		sf::FloatRect enemyBound = enemy.getBoundingRect();
 		collision::Side side = checkCollisionSide(bound, enemyBound);
-		if (side == collision::Side::Top)
+		if (side == collision::Side::Top && enemy.getType() == Enemy::Type::CockRoach)
 		{
 			attackEnemy(enemy);
 		}
@@ -167,6 +163,8 @@ void Dough::handleCollisionEnemies(SceneNode& graph)
 		{
 			enemy.attackPlayer(*this);
 		}
+
+		enemy.isTargetInRange(getPosition());
 	}
 
 	for (Ptr& child : graph.getChildren())
@@ -183,7 +181,7 @@ void Dough::handleCollisionItems(SceneNode& graph)
 		sf::FloatRect bound = getBoundingRect();
 		sf::FloatRect itemBound = item.getBoundingRect();
 		collision::Side side = checkCollisionSide(bound, itemBound);
-		if (side != collision::Side::None)
+		if (side != collision::Side::None && !item.isMarkedForRemoval())
 		{
 			item.activate(*this);
 		}
@@ -195,25 +193,13 @@ void Dough::handleCollisionItems(SceneNode& graph)
 	}
 }
 
-void Dough::updateCloestBlock(Block* block)
-{
-	if (nCloestBlock == nullptr)
-	{
-		nCloestBlock = block;
-		return;
-	}
-
-	sf::Vector2f pos = getPosition();
-	sf::Vector2f blockPos = block->getPosition();
-	sf::Vector2f cloestBlockPos = nCloestBlock->getPosition();
-
-	if (std::abs(pos.x - blockPos.x) < std::abs(pos.x - cloestBlockPos.x))
-	{
-		nCloestBlock = block;
-	}
-}
 
 int Dough::getStateJump() const
 {
 	return stateJump;
+}
+
+void Dough::setStateJump(int state)
+{
+	stateJump = state;
 }

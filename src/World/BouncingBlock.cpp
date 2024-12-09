@@ -4,6 +4,7 @@
 #include "World.hpp"
 #include <iostream>
 #include "Dough.hpp"
+#include "Category.hpp"
 
 
 BouncingBlock::BouncingBlock(Type type, sf::Vector2f position)
@@ -47,10 +48,13 @@ void BouncingBlock::handleTopCollision(Entity& entity)
     entity.setOnGround(true);
 }
 
-void BouncingBlock::handleBottomCollision(Dough& player)
+void BouncingBlock::handleBottomCollision(Entity& player)
 {
     sf::FloatRect bound = getBoundingRect();
     player.setPosition(player.getPosition().x, bound.top + bound.height + player.getBoundingRect().height / 2);
     player.setVelocity(player.getVelocity().x, 0.f);
-    nStateBounce = 1;
+    if (player.getCategory() & Category::PlayerDough)
+    {
+        nStateBounce = 1;
+    }
 }

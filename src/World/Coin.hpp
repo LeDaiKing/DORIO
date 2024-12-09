@@ -6,5 +6,5 @@ class Coin : public Item
 {
     public:
         Coin(Type type, sf::Vector2f position);
-        virtual void activate(Entity& player) override;
+        virtual void activate(Entity& player) ;
 };

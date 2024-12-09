@@ -31,6 +31,11 @@ void JumpyBlock::handleTopCollision(Entity& entity)
     entity.accelerate(0.f, -World::getGravity());
     entity.addVelocity(0.f, -nJumpForce);
     entity.setOnGround(true);
+    if (entity.getCategory() & Category::PlayerDough)
+    {
+        Dough& dough = static_cast<Dough&>(entity);
+        dough.setStateJump(1);
+    }
     if (!nIsPressed)
     {
         nSprite.setOrigin(nSprite.getOrigin().x, nSprite.getOrigin().y - 16.f);

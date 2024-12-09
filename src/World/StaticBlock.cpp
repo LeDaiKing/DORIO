@@ -64,7 +64,7 @@ void StaticBlock::handleTopCollision(Entity& entity)
     entity.setOnGround(true);
 }
 
-void StaticBlock::handleBottomCollision(Dough& player)
+void StaticBlock::handleBottomCollision(Entity& player)
 {
     sf::FloatRect bound = getBoundingRect();
     player.setPosition(player.getPosition().x, bound.top + bound.height + player.getBoundingRect().height / 2);
