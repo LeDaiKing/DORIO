@@ -4,22 +4,36 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+Animation::Animation()
+: nSprite()
+, nElapsedTime(sf::Time::Zero)
+, nCurrentFrame(0)
+, nCurrentAnimation(nullptr)
+, nFlipped(false)
+, nInverse(false)
+{
+}
+
 Animation::Animation(const sf::Texture& texture)
 : nSprite(texture)
 , nElapsedTime(sf::Time::Zero)
 , nCurrentFrame(0)
 , nCurrentAnimation(nullptr)
 , nFlipped(false)
+, nInverse(false)
 {
 }
 
 void Animation::setFlipped(bool flag)
 {
+	// if (flag) nFlipped = !nFlipped;
 	nFlipped = flag;
+	if (nInverse) nFlipped = !nFlipped;
 }
 
 bool Animation::isFlipped() const
 {
+	if (nInverse) return !nFlipped;
 	return nFlipped;
 }
 
@@ -134,4 +148,21 @@ Animation::~Animation()
 	{
 		delete pair.second;
 	}
+}
+
+
+void Animation::turnInverse()
+{
+	nInverse = true;
+	nFlipped = !nFlipped;
+}
+
+int Animation::getCurrentAnimationID() const
+{
+	for (auto pair : nAnimations)
+	{
+		if (pair.second == nCurrentAnimation)
+			return pair.first;
+	}
+	return -1;
 }

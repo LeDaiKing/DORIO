@@ -4,6 +4,7 @@
 #include  "../Holder/ResourceIdentifiers.hpp"
 #include "../Utility.hpp"
 #include "World.hpp"
+#include "SnailShell.hpp"
 #include <iostream>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -50,20 +51,33 @@ sf::FloatRect Block::getBoundingRect() const
 
 void Block::applyNormal(SceneNode& graph)
 {
-    if (graph.getCategory() & Category::Entity)
+    if (graph.getCategory() & Category::Entity && !graph.isMarkedForRemoval())
     {
         assert(dynamic_cast<Entity*>(&graph) != nullptr);
         Entity& entity = static_cast<Entity&>(graph);
 
         sf::FloatRect entityHitBox = entity.getBoundingRect();
         sf::FloatRect bound = getBoundingRect();
-        // bound.top -= 1.f;
+        // bound.top -= 5.f;
+
+        // if (checkCollisionSide(entityHitBox, bound) == collision::Top && entity.getVelocity().y > 0)
+        // {
+        //     entity.accelerate(0.f, -World::getGravity());
+        //     entity.setOnGround(true);
+        //     // entity.updateClosestTopBlock(this);
+        // }
+
+        // bound.top += 5.f;
+
 
         collision::Side side = checkCollisionSide(entityHitBox, bound);
         int gravity = World::getGravity();
 
         if (side == collision::Top && entity.getVelocity().y > 0)
         {
+            // entity.move(0.f, bound.top - entityHitBox.top - entityHitBox.height);
+            // entity.accelerate(0.f, -World::getGravity());
+            entity.setOnGround(true);
             entity.updateClosestTopBlock(this);
             // handleTopCollision(entity);
         }
@@ -75,13 +89,27 @@ void Block::applyNormal(SceneNode& graph)
         }
         else if (side == collision::Left && entity.getVelocity().x > 0)
         {
-            entity.setPosition(bound.left - entityHitBox.width / 2, entity.getPosition().y);
-            entity.setVelocity(0.f, entity.getVelocity().y);
+            entity.move(bound.left - entityHitBox.left - entityHitBox.width, 0.f);
+
+            if ((entity.getCategory() & Category::Enemy) && dynamic_cast<SnailShell*>(&entity) != nullptr)
+            {
+                SnailShell& enemy = static_cast<SnailShell&>(entity);
+                enemy.hitBlock();
+            }
+            else
+                entity.setVelocity(0.f, entity.getVelocity().y);
         }
         else if (side == collision::Right && entity.getVelocity().x < 0)
         {
-            entity.setPosition(bound.left + bound.width + entityHitBox.width / 2, entity.getPosition().y);
-            entity.setVelocity(0.f, entity.getVelocity().y);
+            entity.move(bound.left + bound.width - entityHitBox.left, 0.f);
+
+            if ((entity.getCategory() & Category::Enemy) && dynamic_cast<SnailShell*>(&entity) != nullptr)
+            {
+                SnailShell& enemy = static_cast<SnailShell&>(entity);
+                enemy.hitBlock();
+            }
+            else
+                entity.setVelocity(0.f, entity.getVelocity().y);
         }
 
         

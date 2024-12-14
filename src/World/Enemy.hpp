@@ -13,6 +13,9 @@ class Enemy : public Entity
 		{
 			CockRoach,
 			Ghost,
+			Chicken,
+			Snail,
+			SnailShell,
 		};
 
 		enum AIState
@@ -30,13 +33,14 @@ class Enemy : public Entity
         Enemy(Type type, sf::Vector2f position);
 		virtual unsigned int getCategory() const;
 
-        virtual void attackPlayer(Dough& player) = 0;
+        virtual void attackPlayer(Dough& player) ;
 		Type getType();
 		// virtual void getDamage(int damage) = 0;
 		virtual void addMoveBehavior(sf::Vector2f offset);
 		virtual void addWaitBehavior(sf::Time time);
 		virtual void addTurnBehavior();
-		virtual void isTargetInRange(sf::Vector2f target);
+		virtual void isTargetInRange(const sf::Vector2f& target);
+		virtual sf::FloatRect getBoundingRect() const;
 	protected:
 		void setAIState(AIState state);
 		virtual void moveToPosition(sf::Time dt);

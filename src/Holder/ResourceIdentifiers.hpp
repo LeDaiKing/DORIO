@@ -15,6 +15,10 @@ namespace Textures
 		Dough2,
 		Enemy,
 		Ghost,
+		Chicken,
+		CockRoach,
+		Snail,
+		SnailShell,
 		Sky,
 		Dirt,
 		Breakable,
@@ -26,7 +30,13 @@ namespace Textures
 		CoinAnimation,
 		Heart,
 		HeartAnimation,
+		BigItem,
+		BigItemAnimation,
+		FireBigItem,
+		FireBigItemAnimation,
 		FireBall,
+		BigDough,
+		FireBigDough,
 
 	};
 }

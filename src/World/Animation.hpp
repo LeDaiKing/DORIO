@@ -24,7 +24,7 @@ class Animation : public sf::Drawable, public sf::Transformable
 {
 	public:
 		explicit Animation(const sf::Texture& texture);
-
+		Animation();
 		// deconstructor
 		~Animation();
 
@@ -41,9 +41,13 @@ class Animation : public sf::Drawable, public sf::Transformable
 		void setFlipped(bool flag);
 		bool isFlipped() const;
 
+		void turnInverse();
+
 		void addAnimationState(int ID, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat = false);
 
 		void setAnimationState(int ID);
+
+		int getCurrentAnimationID() const;
 
 		bool isFinished() const;
 
@@ -64,4 +68,5 @@ class Animation : public sf::Drawable, public sf::Transformable
 		std::unordered_map<int, AnimationState*> nAnimations;
 		sf::Time nElapsedTime;
 		bool nFlipped;
+		bool nInverse;
 };

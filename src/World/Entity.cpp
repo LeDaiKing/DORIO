@@ -35,7 +35,8 @@ sf::Vector2f Entity::getVelocity() const
 
 void Entity::addVelocity(sf::Vector2f velocity)
 {
-	nVelocity += velocity;	
+	nVelocity += velocity;
+	if (nCurrentState == State::Dead) return;
 	nVelocity.x = std::max(nVelocity.x, -nMaxVelocity.x);
 	nVelocity.x = std::min(nVelocity.x, nMaxVelocity.x);
 	nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
@@ -46,6 +47,11 @@ void Entity::addVelocity(float vx, float vy)
 {
 	nVelocity.x += vx;
 	nVelocity.y += vy;
+	if (nCurrentState == State::Dead) return;
+	nVelocity.x = std::max(nVelocity.x, -nMaxVelocity.x);
+	nVelocity.x = std::min(nVelocity.x, nMaxVelocity.x);
+	nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
+	nVelocity.y = std::min(nVelocity.y, nMaxVelocity.y);
 }
 
 void Entity::accelerate(sf::Vector2f acceleration)
@@ -63,19 +69,27 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
 	
 	nSprite.update(dt);
-	if (nCurrentState == State::Dead) return;
-
-	if (nClosestBottomBlock != nullptr)
+	if (nCurrentState != State::Dead)
 	{
-		nClosestBottomBlock->handleBottomCollision(*this);
-		nClosestBottomBlock = nullptr;
+		// if (nCurrentState == State::Dead) return;
+
+		if (nClosestBottomBlock != nullptr)
+		{
+			nClosestBottomBlock->handleBottomCollision(*this);
+			nClosestBottomBlock = nullptr;
+		}
+
+		if (nClosestTopBlock != nullptr)
+		{
+			nClosestTopBlock->handleTopCollision(*this);
+			nClosestTopBlock = nullptr;
+		}
+	}
+	else
+	{
+		rotate(90 * dt.asSeconds());
 	}
 
-	if (nClosestTopBlock != nullptr)
-	{
-		nClosestTopBlock->handleTopCollision(*this);
-		nClosestTopBlock = nullptr;
-	}
 
 
 	addVelocity(nAcceleration * dt.asSeconds());
@@ -124,7 +138,11 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit)
 		setAnimationState(State::Idle);
 
-	if (abs(nVelocity.y) > 10.f) nOnGround = false;
+	if (abs(nVelocity.y) > 10.f) 
+	{
+		nOnGround = false;
+		// nClosestTopBlock = nullptr;
+	}
 	// nOnGround = false;
 	// if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
 	// 	setAnimationState(State::Jump);
@@ -133,6 +151,9 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 
 void Entity::setAnimationState(State type)
 {
+	if (nCurrentState == State::Dead)
+		return;
+
 	if (nCurrentState == type)
 		return;
 
@@ -172,7 +193,7 @@ void Entity::jump()
 		setAnimationState(State::Jump);
 
 	nOnGround = false;
-	addVelocity(0.f, -nJumpVelocity);
+	setVelocity(nVelocity.x, -nJumpVelocity);
 }
 
 void Entity::addAnimationState(State state, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat)
@@ -189,14 +210,14 @@ void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) cons
 	rect.setFillColor(sf::Color(255, 255, 255, 0));
 	rect.setOutlineColor(sf::Color::Red);
 	rect.setOutlineThickness(1.f);
-	// target.draw(rect);
+	target.draw(rect);
 	target.draw(nSprite, states);
 }
 
 sf::FloatRect Entity::getBoundingRect() const
 {
 	// return getWorldTransform().transformRect(nSprite.getGlobalBounds());
-	sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
+	// sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
 	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
 	sf::Vector2f pos = getPosition() - sf::Vector2f(nHitBox.x / 2, nHitBox.y / 2);
 
@@ -229,7 +250,7 @@ bool Entity::getDirection() const
 
 bool Entity::isMarkedForRemoval() const
 {
-	return nCurrentState == State::Dead && nSprite.isFinished();
+	return nCurrentState == State::Dead;
 }
 
 // void Entity::remove()
@@ -246,7 +267,7 @@ void Entity::getDamage(int damage)
 	if (nHitPoints <= 0)
 	{
 		setAnimationState(State::Dead);
-		nVelocity = sf::Vector2f(0.f, 0.f);
+		setVelocity(0.f, -180.f);
 	}
 	else
 	{

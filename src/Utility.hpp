@@ -25,6 +25,7 @@ namespace collision
 }
 
 const float		PI = 3.14159265358979f;
+// const float 	
 
 class Animation;
 

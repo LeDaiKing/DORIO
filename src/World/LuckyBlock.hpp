@@ -19,6 +19,7 @@ class LuckyBlock :  public BouncingBlock
         virtual void handleBottomCollision(Entity& player);
         void dropItem();
         void addItem(Item::Type type);
+        void randomItem(int num);
 
     protected:
         virtual void updateCurrent(sf::Time dt, CommandQueue& commands);

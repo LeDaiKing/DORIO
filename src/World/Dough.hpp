@@ -16,6 +16,13 @@ class Dough : public Entity
 			Dough2,
 		};
 
+		enum GrowUp
+		{
+			Small,
+			Big,
+			FireBig,
+		};
+
 		using Entity::State;
 
 	public:
@@ -30,17 +37,29 @@ class Dough : public Entity
 		void handleCollisionItems(SceneNode& graph);
 		int getStateJump() const;
 		void setStateJump(int state);
+		void sit();
+		void standUp();
+		virtual sf::FloatRect getBoundingRect() const;
+		void growUPBig();
+		void growUPFireBig();
+		void fire(CommandQueue& commands);
+		void addHitPoints(int points);
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 		virtual void setUpEntity() ;
+		// virtual void setAnimationState(State type);
 
-		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 
 	private:
 		Type nType;
+		GrowUp nGrowUp;
 		int stateJump = 0;
 		int nJumpVelocity2;
 		sf::Time nTimeDamage = sf::Time::Zero;
+		Animation nBig;
+		Animation nFireBig;
+		sf::Vector2f nBigHitBox;
 };

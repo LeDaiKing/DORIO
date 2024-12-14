@@ -9,11 +9,13 @@
 #include "JumpyBlock.hpp"
 #include "CockRoach.hpp"
 #include "Ghost.hpp"
+#include "Chicken.hpp"
+#include "Snail.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 
-int World::nGravity = 512;
+int World::nGravity = 700;
 
 World::World(sf::RenderWindow& window)
 : nWindow(window)
@@ -76,9 +78,14 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
+	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/BigDough.png");
 	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg1.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
 	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
+	TextureHolder::getInstance().load(Textures::Chicken, "res/Enemy/Chicken/Chicken.png");
+	TextureHolder::getInstance().load(Textures::CockRoach, "res/Enemy/CockRoach/CockRoach.png");
+	TextureHolder::getInstance().load(Textures::Snail, "res/Enemy/Snail/Snail.png");
+	TextureHolder::getInstance().load(Textures::SnailShell, "res/Enemy/Snail/SnailShell.png");
 	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
 	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
 	TextureHolder::getInstance().load(Textures::LuckyBlock, "res/Background/LuckyBlock/LuckyBlock.png");
@@ -105,6 +112,16 @@ void World::buildScene()
 			nSceneGraph.attachChild(std::move(layer));
 			continue;
 		}
+
+		if (i == Enemies)
+		{
+			std::unique_ptr<SceneNode> layer(new SceneNode(Category::EnemyScene));
+			nSceneLayers[i] = layer.get();
+			nCategoryLayers[i] = Category::EnemyScene;
+			nSceneGraph.attachChild(std::move(layer));
+			continue;
+		}
+
 		SceneNode::Ptr layer(new SceneNode());
 		nSceneLayers[i] = layer.get();
 		nCategoryLayers[i] = Category::None;
@@ -120,7 +137,7 @@ void World::buildScene()
 
 
 	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
@@ -177,19 +194,18 @@ void World::adaptCameraPosition()
 void World::loadMap()
 {
 	
-
 	// Prepare the tiled background
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
-	sf::Image map; map.loadFromFile("res/Background/map4.png");
+	sf::Image map; map.loadFromFile("res/Background/map2.png");
 	nWorldBounds.width = map.getSize().x;
 	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
 		sf::Color color = map.getPixel(x + 5,y + 5);
 		// std::cout << color.toInteger() << std::endl;
-		if (color.toInteger() == 0x000000 + 255)
+		if (color.toInteger() == 0x000000 + 255 || (x == 0 && y == 16 * 32))
 		{
 			// std::cout << x << " " << y << std::endl;
 			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Dirt, sf::Vector2f(x + 16, y + 16)));
@@ -206,19 +222,21 @@ void World::loadMap()
 		
 			if (x == 320)
 			{
-				std::cout << "Add behavior" << std::endl;
 				leader1->addWaitBehavior(sf::seconds(1));
 				leader1->addMoveBehavior(sf::Vector2f(32 * 4, 0));
 				leader1->addWaitBehavior(sf::seconds(2));
 				leader1->addTurnBehavior();
+
 				leader1->addWaitBehavior(sf::seconds(2));
 				leader1->addMoveBehavior(sf::Vector2f(32  * 2, 0));
 				leader1->addWaitBehavior(sf::seconds(2));
 				leader1->addTurnBehavior();
+
 				leader1->addWaitBehavior(sf::seconds(5));
 				leader1->addMoveBehavior(sf::Vector2f(-32 * 6, 0));
 				leader1->addWaitBehavior(sf::seconds(2));
 				leader1->addTurnBehavior();
+
 				leader1->addWaitBehavior(sf::seconds(2));
 				leader1->addMoveBehavior(sf::Vector2f(-32 * 2, 0));
 				leader1->addWaitBehavior(sf::seconds(2));
@@ -268,6 +286,13 @@ void World::loadMap()
 	enemy->addWaitBehavior(sf::seconds(1));
 	nSceneLayers[Enemies]->attachChild(std::move(enemy));
 
+	std::unique_ptr<Chicken> enemy1(new Chicken(Enemy::Chicken, sf::Vector2f(32 * 16 + 16, 32 * 16 + 16)));
+	// enemy1->addWaitBehavior(sf::seconds(2));
+	nSceneLayers[Enemies]->attachChild(std::move(enemy1));
+
+	std::unique_ptr<Snail> enemy2(new Snail(Enemy::Snail, sf::Vector2f(32 * 5 + 16, 32 * 16 + 16)));
+	nSceneLayers[Enemies]->attachChild(std::move(enemy2));
+
 	// // Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
 	backgroundSprite->setPosition(nWorldBounds.left, nWorldBounds.top);
@@ -315,6 +340,13 @@ void World::removeSceneNode()
 	{
 		if (node.isMarkedForRemoval())
 		{
+			if ((node.getCategory()  & Category::Entity))
+			{
+				// sf::FloatRect bound = 
+				if (!nWorldBounds.intersects(node.getBoundingRect()))
+					nodes.push_back(&node);
+			}
+			else
 			nodes.push_back(&node);
 		}
 	});

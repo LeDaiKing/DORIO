@@ -12,9 +12,15 @@ Textures::ID toTextureID(Enemy::Type type)
     switch (type)
     {
         case Enemy::CockRoach:
-            return Textures::Enemy;
+            return Textures::CockRoach;
         case Enemy::Ghost:
             return Textures::Ghost;
+        case Enemy::Chicken:
+            return Textures::Chicken;
+        case Enemy::Snail:
+            return Textures::Snail;
+        case Enemy::SnailShell:
+            return Textures::SnailShell;
     }
     return Textures::Enemy;
 }
@@ -51,10 +57,7 @@ void Enemy::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     Entity::updateCurrent(dt, commands);
 
-    // if (nCurrentState == State::Dead)
-    // {
-    //     return;
-    // }
+    if (nCurrentState == State::Dead) return;
 
     switch (nAIState)
     {
@@ -68,7 +71,7 @@ void Enemy::updateCurrent(sf::Time dt, CommandQueue& commands)
         wait(dt);
         break;
     
-    default:
+    case None:
         if (nBehaviors.size() == 0) break;
 
         nBehaviors[nCurBehavior]();
@@ -83,6 +86,9 @@ void Enemy::updateCurrent(sf::Time dt, CommandQueue& commands)
             nCurBehavior = 0;
             nDirLoop = 1;
         }
+        break;
+    default:
+        break;
     }
 }
 
@@ -157,7 +163,36 @@ void Enemy::turn()
     setAIState(None);
 }
 
-void Enemy::isTargetInRange(sf::Vector2f target)
+void Enemy::isTargetInRange(const sf::Vector2f& target)
 {
     //
+}
+
+void Enemy::attackPlayer(Dough& player)
+{
+    if (nCurrentState == State::Dead)
+        return;
+    player.getDamage(1);
+    if (player.getPosition().x < getPosition().x)
+    {
+        player.setVelocity(-512.f, 0);
+    }
+    else
+    {
+        player.setVelocity(512.f, 0);
+    }
+}
+
+
+sf::FloatRect Enemy::getBoundingRect() const
+{
+    sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
+	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
+	// sf::Vector2f pos = getPosition() - sf::Vector2f(nHitBox.x / 2, nHitBox.y / 2);
+    bound.top -= (nHitBox.y - bound.height);
+    bound.left -= (nHitBox.x - bound.width) / 2;
+    bound.height = nHitBox.y;
+    bound.width = nHitBox.x;
+
+	return bound;
 }

@@ -1,10 +1,12 @@
 #include "Projectile.hpp"
 #include "Entity.hpp"
 #include "Utility.hpp"
+#include "Enemy.hpp"
 #include <iostream>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+// #include "../Command/Command.hpp"
 
 Projectile::Projectile(Type type, sf::Vector2f position)
 : Item(type, position)
@@ -28,6 +30,7 @@ Projectile::Projectile(Type type, sf::Vector2f position)
 void Projectile::activate(Entity& player)
 {
     if (nIsCollected) return;
+    if (!(nTargetCategory & player.getCategory())) return;
     player.getDamage(nDamage);
     sf::Vector2f direction = player.getPosition() - getPosition();
     direction /= length(direction);
@@ -58,6 +61,12 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (!isMarkedForRemoval())
     {
+
+        if (nTargetCategory & Category::Enemy) 
+        {
+            handleEnemyCollision(commands);
+        }
+
         if (!nIsCollected)
         move(nVelocity * dt.asSeconds());
         nAnimation.update(dt);
@@ -133,4 +142,19 @@ sf::FloatRect Projectile::getBoundingRect() const
     sf::FloatRect bound = getWorldTransform().transformRect(nAnimation.getGlobalBounds());
 	sf::Vector2f pos = getPosition() - sf::Vector2f(nHitBox.x / 2, nHitBox.y / 2);
 	return sf::FloatRect(pos, nHitBox);
+}
+
+void Projectile::handleEnemyCollision(CommandQueue& commands)
+{
+    Command enemyHit;
+    enemyHit.category = Category::Enemy;
+    enemyHit.action = derivedAction<Enemy>([this] (Enemy& enemy, sf::Time)
+    {
+        if (enemy.getBoundingRect().intersects(getBoundingRect()))
+        {
+            // handleEnemyCollision(enemy);
+            activate(enemy);
+        }
+    });
+    commands.push(enemyHit);
 }

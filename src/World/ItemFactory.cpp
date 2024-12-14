@@ -1,6 +1,8 @@
 #include "ItemFactory.hpp"
 #include "Coin.hpp"
 #include "Heart.hpp"
+#include "BigItem.hpp"
+#include "FireBigItem.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include  "../Holder/ResourceIdentifiers.hpp"
 
@@ -12,6 +14,10 @@ std::unique_ptr<Item> ItemFactory::createItem(Item::Type type, sf::Vector2f posi
             return std::make_unique<Coin>(type, position);
         case Item::Heart:
             return std::make_unique<Heart>(type, position);
+        case Item::Big:
+            return std::make_unique<BigItem>(type, position);
+        case Item::FireBig:
+            return std::make_unique<FireBigItem>(type, position);
         default:
             break;
     }

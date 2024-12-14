@@ -12,11 +12,16 @@ class Entity : public SceneNode
 			Idle,
 			Walk,
 			Jump,
+			Sit,
 			DoubleJump,
 			Fall,
 			Attack,
 			Hit,
 			Dead,
+			Appear,
+			Disappear,
+			Invisible,
+			WithoutShell,
 			StateCount
 		};
 
@@ -37,10 +42,11 @@ class Entity : public SceneNode
 		// void remove();
 
 		void setOnGround(bool flag);
+		// bool isOnGround() const;
 		virtual void walk(bool nDirection);
 		virtual void jump();
 
-		void setAnimationState(State type);
+		virtual void setAnimationState(State type);
 
 		virtual sf::FloatRect getBoundingRect() const;
 		virtual unsigned int getCategory() const;

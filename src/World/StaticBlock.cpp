@@ -57,17 +57,15 @@ StaticBlock::StaticBlock(Type type, sf::Vector2f position)
 
 void StaticBlock::handleTopCollision(Entity& entity)
 {
-    sf::FloatRect bound = getBoundingRect();
-    entity.setPosition(entity.getPosition().x, bound.top - entity.getBoundingRect().height / 2);
-    entity.setVelocity(entity.getVelocity().x, 0.f);
+    entity.move(0.f, getBoundingRect().top - entity.getBoundingRect().top - entity.getBoundingRect().height);
     entity.accelerate(0.f, -World::getGravity());
-    entity.setOnGround(true);
+    entity.setVelocity(entity.getVelocity().x, 0.f);
 }
 
 void StaticBlock::handleBottomCollision(Entity& player)
 {
     sf::FloatRect bound = getBoundingRect();
-    player.setPosition(player.getPosition().x, bound.top + bound.height + player.getBoundingRect().height / 2);
+    player.move(0.f, bound.top + bound.height - player.getBoundingRect().top);
     player.setVelocity(player.getVelocity().x, 0.f);
     player.setOnGround(true);
 }

@@ -13,8 +13,14 @@ Textures::ID toTextureID(Item::Type type)
             return Textures::Coin;
         case Item::Heart:
             return Textures::Heart;
+        case Item::Big:
+            return Textures::BigItem;
+        case Item::FireBig:
+            return Textures::FireBigItem;
         case Item::FireBall:
             return Textures::FireBall;
+        default:
+            break;
     }
     return Textures::Coin;
 }

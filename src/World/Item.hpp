@@ -16,7 +16,10 @@ class Item : public SceneNode
         {
             Coin,
             Heart,
+            Big,
+            FireBig,
             FireBall,
+            Count,
         };
     public:
         Item(Type type, sf::Vector2f position);

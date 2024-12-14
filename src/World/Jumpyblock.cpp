@@ -19,8 +19,7 @@ JumpyBlock::JumpyBlock(Type type, sf::Vector2f position)
 
 void JumpyBlock::handleTopCollision(Entity& entity)
 {
-    sf::FloatRect bound = getBoundingRect();
-    entity.setPosition(entity.getPosition().x, bound.top - entity.getBoundingRect().height / 2);
+     entity.move(0.f, getBoundingRect().top - entity.getBoundingRect().top - entity.getBoundingRect().height);
     if (entity.getVelocity().y > 0)
     {
         entity.setVelocity(entity.getVelocity().x, - entity.getVelocity().y);
@@ -28,9 +27,7 @@ void JumpyBlock::handleTopCollision(Entity& entity)
     {
         entity.setVelocity(entity.getVelocity().x, 0.f);
     }
-    entity.accelerate(0.f, -World::getGravity());
     entity.addVelocity(0.f, -nJumpForce);
-    entity.setOnGround(true);
     if (entity.getCategory() & Category::PlayerDough)
     {
         Dough& dough = static_cast<Dough&>(entity);

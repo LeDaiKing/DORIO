@@ -93,7 +93,7 @@ void LuckyBlock::handleBottomCollision(Entity& player)
         if (nIsEmpty)
         {
             sf::FloatRect bound = getBoundingRect();
-            dough.setPosition(dough.getPosition().x, bound.top + bound.height + dough.getBoundingRect().height / 2);
+            dough.move(0.f, bound.top + bound.height - dough.getBoundingRect().top);
             dough.setVelocity(dough.getVelocity().x, 0);
             return;
         }
@@ -107,4 +107,13 @@ void LuckyBlock::dropItem()
     if (nIsEmpty || nStateBounce != 0 || nIsDropping)
         return;
     nIsDropping = true;
+}
+
+void LuckyBlock::randomItem(int num)
+{
+    while(num--)
+    {
+        Item::Type type = static_cast<Item::Type>(randomInt(Item::Count));
+        addItem(type);
+    }
 }

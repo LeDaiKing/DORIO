@@ -94,11 +94,8 @@ sf::Vector2f SlideBlock::getVelocity() const
 
 void SlideBlock::handleTopCollision(Entity& entity)
 {
-    sf::FloatRect bound = getBoundingRect();
-    entity.setPosition(entity.getPosition().x, bound.top - entity.getBoundingRect().height / 2);
+     entity.move(0.f, getBoundingRect().top - entity.getBoundingRect().top - entity.getBoundingRect().height);
     entity.setVelocity(entity.getVelocity().x, 0.f);
-    entity.accelerate(0.f, -World::getGravity());
-    entity.setOnGround(true);
     // entity.addVelocity(getVelocity());
     // entity.applyFriction(getVelocity());
     if (std::find(nEntities.begin(), nEntities.end(), &entity) == nEntities.end())
