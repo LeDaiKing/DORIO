@@ -277,7 +277,7 @@ void World::loadMap()
 			nSceneLayers[Map]->attachChild(std::move(block));		
 		} 
 		else if (color.toInteger() == 0xAA34A000 + 255) {
-			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Loxo, sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Block> block(new JumpyBlock(StaticBlock::JumpyBlock, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Map]->attachChild(std::move(block));	
 		}	
 		else if (color.toInteger() == 0x0000FF00 + 255)
@@ -318,11 +318,11 @@ void World::loadMap()
 	enemy->addWaitBehavior(sf::seconds(1));
 	nSceneLayers[Enemies]->attachChild(std::move(enemy));
 
-	std::unique_ptr<Chicken> enemy1(new Chicken(Enemy::Chicken, sf::Vector2f(32 * 17 + 16, 32 * 17 + 16)));
+	std::unique_ptr<Chicken> enemy1(new Chicken(Enemy::Chicken, sf::Vector2f(32 * 17 + 16, 32 * 15 + 16)));
 	// enemy1->addWaitBehavior(sf::seconds(2));
 	nSceneLayers[Enemies]->attachChild(std::move(enemy1));
 
-	std::unique_ptr<Snail> enemy2(new Snail(Enemy::Snail, sf::Vector2f(32 * 5 + 16, 32 * 17 + 16)));
+	std::unique_ptr<Snail> enemy2(new Snail(Enemy::Snail, sf::Vector2f(32 * 5 + 16, 32 * 15 + 16)));
 	nSceneLayers[Enemies]->attachChild(std::move(enemy2));
 
 	// // Add the background sprite to the scene
