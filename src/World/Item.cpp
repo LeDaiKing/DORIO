@@ -11,8 +11,16 @@ Textures::ID toTextureID(Item::Type type)
     {
         case Item::Coin:
             return Textures::Coin;
-        // case Item::Heart:
-        //     return Textures::Heart;
+        case Item::Heart:
+            return Textures::Heart;
+        case Item::Big:
+            return Textures::BigItem;
+        case Item::FireBig:
+            return Textures::FireBigItem;
+        case Item::FireBall:
+            return Textures::FireBall;
+        default:
+            break;
     }
     return Textures::Coin;
 }
@@ -41,9 +49,9 @@ bool Item::isMarkedForRemoval() const
     return nIsCollected;
 }
 
-void Item::updateCurrent(sf::Time dt)
+void Item::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
-    if (!nIsCollected)
+    if (!isMarkedForRemoval())
     {
         nAnimation.update(dt);
     }
@@ -51,7 +59,7 @@ void Item::updateCurrent(sf::Time dt)
 
 void Item::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    if (!nIsCollected)
+    if (!isMarkedForRemoval())
     {
         target.draw(nAnimation, states);
     }

@@ -14,10 +14,18 @@ namespace Textures
 		Dough1,
 		Dough2,
 		Enemy,
+		Ghost,
+		Chicken,
+		CockRoach,
+		Snail,
+		SnailShell,
 		Sky,
 		Dirt,
 		Breakable,
 		BreakAnimation,
+		LuckyBlock,
+		StaticLuckyBlock,
+		JumpyBlock,
 		Coin,
 		Stone,
 		UnderDirt,
@@ -26,7 +34,18 @@ namespace Textures
 		Wonder,
 		Move,
 		Break,
-		Loxo
+		Loxo,
+		CoinAnimation,
+		Heart,
+		HeartAnimation,
+		BigItem,
+		BigItemAnimation,
+		FireBigItem,
+		FireBigItemAnimation,
+		FireBall,
+		BigDough,
+		FireBigDough,
+
 	};
 }
 

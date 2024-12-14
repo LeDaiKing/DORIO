@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include "Command/CommandQueue.hpp"
 #include "World/Dough.hpp"
-
+#include <iostream>
 #include <map>
 #include <string>
 #include <algorithm>
@@ -35,6 +35,20 @@ struct DougJump
 
 };
 
+struct Firing
+{
+	Firing(CommandQueue& commands)
+	: commands(commands)
+	{
+	}
+	void operator() (Dough& Dough, sf::Time) const
+	{
+		Dough.fire(commands);
+	}
+	CommandQueue& commands;
+};
+
+
 
 
 Player::Player()
@@ -43,6 +57,7 @@ Player::Player()
 	nKeyBinding[sf::Keyboard::Left] = MoveLeft;
 	nKeyBinding[sf::Keyboard::Right] = MoveRight;
 	nKeyBinding[sf::Keyboard::Up] = MoveUp;
+	// nKeyBinding[sf::Keyboard::Down] = Sit;
 
 	
 
@@ -52,6 +67,7 @@ Player::Player()
 	// Assign all categories to player's Dough
 	for(auto& pair : nActionBinding)
 		pair.second.category = Category::PlayerDough;
+	nActionBinding[Fire].category = Category::PlayerDough;
 }
 
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
@@ -62,6 +78,25 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 		auto found = nKeyBinding.find(event.key.code);
 		if (found != nKeyBinding.end() && !isRealtimeAction(found->second))
 			commands.push(nActionBinding[found->second]);
+
+		if (event.key.code == sf::Keyboard::Down)
+		{
+			commands.push(nActionBinding[Sit]);
+		}
+
+		if (event.key.code == sf::Keyboard::Space)
+		{
+			nActionBinding[Fire].action = derivedAction<Dough>(Firing(commands));
+			commands.push(nActionBinding[Fire]);
+		}
+	}
+
+	if (event.type == sf::Event::KeyReleased)
+	{
+		if (event.key.code == sf::Keyboard::Down)
+		{
+			commands.push(nActionBinding[StandUp]);
+		}
 	}
 
 }
@@ -112,7 +147,9 @@ void Player::initializeActions()
 	nActionBinding[MoveLeft].action	 = derivedAction<Dough>(DoughMover(true));
 	nActionBinding[MoveRight].action = derivedAction<Dough>(DoughMover(false));
 	nActionBinding[MoveUp].action    = derivedAction<Dough>(DougJump());
-
+	nActionBinding[Sit].action       = derivedAction<Dough>([](Dough& a, sf::Time){ a.sit(); });
+	nActionBinding[StandUp].action   = derivedAction<Dough>([](Dough& a, sf::Time){ a.standUp(); });
+	// nActionBinding[Fire].action      = derivedAction<Dough>(Firing(commands));
 }
 
 

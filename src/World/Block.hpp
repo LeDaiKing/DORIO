@@ -7,6 +7,9 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 
+// class Dough;
+class Entity;
+
 class Block : public SpriteNode
 {
 
@@ -22,7 +25,10 @@ class Block : public SpriteNode
             Wonder,
             Move,
             Break,
-            Loxo
+            Loxo,
+            LuckyBlock,
+            SlideBlock,
+            JumpyBlock,
         };
 
     public:
@@ -30,12 +36,14 @@ class Block : public SpriteNode
         Block(Type type, sf::Vector2f position);
         virtual unsigned int getCategory() const;
 
-        virtual void applyNormal(SceneNode& graph) = 0;
+        virtual void applyNormal(SceneNode& graph);
+        virtual void handleBottomCollision(Entity& player) = 0;
+        virtual void handleTopCollision(Entity& entity) = 0;
 
         virtual sf::FloatRect getBoundingRect() const;
 
     private:
         Type nType;
-        // virtual void updateCurrent(sf::Time dt);
+        // virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
         // virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 };

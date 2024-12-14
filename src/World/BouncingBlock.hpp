@@ -1,16 +1,18 @@
 #pragma once
 #include "Block.hpp"
 
-class Dough;
+class Entity;
 class BouncingBlock : public Block
 {
     public:
         BouncingBlock(Type type, sf::Vector2f position);
-        virtual void applyNormal(SceneNode& graph);
+        virtual void handleBottomCollision(Entity& player);
+        virtual void handleTopCollision(Entity& player);
+        // virtual void applyNormal(SceneNode& graph);
         // virtual ~BreakableBlock();
         
     protected:
-        virtual void updateCurrent(sf::Time dt);
+        virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 
     protected:
         int nStateBounce;

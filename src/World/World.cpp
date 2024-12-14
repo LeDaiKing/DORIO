@@ -4,12 +4,18 @@
 #include "BreakableBlock.hpp"
 #include "StaticBlock.hpp"
 #include "Coin.hpp"
-
+#include "LuckyBlock.hpp"
+#include "SlideBlock.hpp"
+#include "JumpyBlock.hpp"
+#include "CockRoach.hpp"
+#include "Ghost.hpp"
+#include "Chicken.hpp"
+#include "Snail.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 
-int World::nGravity = 512;
+int World::nGravity = 700;
 
 World::World(sf::RenderWindow& window)
 : nWindow(window)
@@ -50,7 +56,7 @@ void World::update(sf::Time dt)
 	handleCollisions();
 	removeSceneNode();
 
-	nSceneGraph.update(dt);
+	nSceneGraph.update(dt, nCommandQueue);
 	// Regular update step, adapt position (correct if outside view)
 
 	adaptCameraPosition();
@@ -79,11 +85,25 @@ void World::loadTextures()
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
 	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bng.png");
+	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/BigDough.png");
+	//TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg1.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
+	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
+	TextureHolder::getInstance().load(Textures::Chicken, "res/Enemy/Chicken/Chicken.png");
+	TextureHolder::getInstance().load(Textures::CockRoach, "res/Enemy/CockRoach/CockRoach.png");
+	TextureHolder::getInstance().load(Textures::Snail, "res/Enemy/Snail/Snail.png");
+	TextureHolder::getInstance().load(Textures::SnailShell, "res/Enemy/Snail/SnailShell.png");
 	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
 	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
+	TextureHolder::getInstance().load(Textures::LuckyBlock, "res/Background/LuckyBlock/LuckyBlock.png");
+	TextureHolder::getInstance().load(Textures::StaticLuckyBlock, "res/Background/LuckyBlock/StaticLuckyBlock.png");
+	TextureHolder::getInstance().load(Textures::JumpyBlock, "res/Background/JumpyBlock/JumpyBlock.png");
 	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
 
+	TextureHolder::getInstance().load(Textures::CoinAnimation, "res/Item/CoinAnimation.png");
+	TextureHolder::getInstance().load(Textures::Heart, "res/Item/Star.png");
+	TextureHolder::getInstance().load(Textures::HeartAnimation, "res/Item/StarAnimation.png");
+	TextureHolder::getInstance().load(Textures::FireBall, "res/Item/Fireball.png");
 
 }
 
@@ -92,6 +112,24 @@ void World::buildScene()
 	// Initialize the different layers
 	for (std::size_t i = 0; i < LayerCount; ++i)
 	{
+		if (i == Items)
+		{
+			std::unique_ptr<SceneNode> layer(new SceneNode(Category::ItemScene));
+			nSceneLayers[i] = layer.get();
+			nCategoryLayers[i] = Category::ItemScene;
+			nSceneGraph.attachChild(std::move(layer));
+			continue;
+		}
+
+		if (i == Enemies)
+		{
+			std::unique_ptr<SceneNode> layer(new SceneNode(Category::EnemyScene));
+			nSceneLayers[i] = layer.get();
+			nCategoryLayers[i] = Category::EnemyScene;
+			nSceneGraph.attachChild(std::move(layer));
+			continue;
+		}
+
 		SceneNode::Ptr layer(new SceneNode());
 		nSceneLayers[i] = layer.get();
 		nCategoryLayers[i] = Category::None;
@@ -164,7 +202,6 @@ void World::adaptCameraPosition()
 void World::loadMap()
 {
 	
-
 	// Prepare the tiled background
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
@@ -176,7 +213,7 @@ void World::loadMap()
 	{
 		sf::Color color = map.getPixel(x + 5,y + 5);
 		// std::cout << color.toInteger() << std::endl;
-		if (color.toInteger() == 0x000000 + 255)
+		if (color.toInteger() == 0x000000 + 255 || (x == 0 && y == 16 * 32))
 		{
 			// std::cout << x << " " << y << std::endl;
 			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Dirt, sf::Vector2f(x + 16, y + 16)));
@@ -189,7 +226,29 @@ void World::loadMap()
 		}
 		else if (color.toInteger() == 0x0DFF0000 + 255)
 		{
-			std::unique_ptr<Enemy> leader1(new Enemy(sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Enemy> leader1(new CockRoach(Enemy::CockRoach, sf::Vector2f(x + 16, y + 16)));
+		
+			if (x == 320)
+			{
+				leader1->addWaitBehavior(sf::seconds(1));
+				leader1->addMoveBehavior(sf::Vector2f(32 * 4, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addTurnBehavior();
+
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addMoveBehavior(sf::Vector2f(32  * 2, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addTurnBehavior();
+
+				leader1->addWaitBehavior(sf::seconds(5));
+				leader1->addMoveBehavior(sf::Vector2f(-32 * 6, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addTurnBehavior();
+
+				leader1->addWaitBehavior(sf::seconds(2));
+				leader1->addMoveBehavior(sf::Vector2f(-32 * 2, 0));
+				leader1->addWaitBehavior(sf::seconds(2));
+			}
 			nSceneLayers[Enemies]->attachChild(std::move(leader1));
 		}
 		else if (color.toInteger() == 0xFFFC0000 + 255)
@@ -219,12 +278,52 @@ void World::loadMap()
 		} 
 		else if (color.toInteger() == 0xAA34A000 + 255) {
 			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Loxo, sf::Vector2f(x + 16, y + 16)));
-			nSceneLayers[Map]->attachChild(std::move(block));		
+			nSceneLayers[Map]->attachChild(std::move(block));	
+		}	
+		else if (color.toInteger() == 0x0000FF00 + 255)
+		{
+			std::unique_ptr<LuckyBlock> block(new LuckyBlock(Block::LuckyBlock, sf::Vector2f(x + 16, y + 16)));
+			block->addItem(Item::Heart);
+			block->addItem(Item::Coin);
+			block->addItem(Item::Coin);
+			block->addItem(Item::Coin);
+			block->addItem(Item::Coin);
+			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 
 	}
 	// std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(4 * 32 + 16, 14 * 32 + 16)));
 	// nSceneLayers[Map]->attachChild(std::move(block));
+	std::unique_ptr<SlideBlock> block(new SlideBlock(Block::Dirt, sf::Vector2f(22 * 32 + 16, 12 * 32 + 16)));
+	block->addPath(sf::Vector2f(0, -32 * 3));
+	block->addPath(sf::Vector2f(32 * 5, 0));
+	nSceneLayers[Map]->attachChild(std::move(block));
+
+	std::unique_ptr<JumpyBlock> block1(new JumpyBlock(Block::JumpyBlock, sf::Vector2f(32 * 13 + 16, 32 * 14 + 16)));
+	nSceneLayers[Map]->attachChild(std::move(block1));
+
+	std::unique_ptr<Ghost> enemy(new Ghost(Enemy::Ghost, sf::Vector2f(32 * 16 + 16, 32 * 7 + 16)));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(32 * 4, 0));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addTurnBehavior();
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(- 32 * 7, 32 * 5));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addTurnBehavior();
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(32 * 3, 0));
+	enemy->addWaitBehavior(sf::seconds(2));
+	enemy->addMoveBehavior(sf::Vector2f(0, -32 * 5));
+	enemy->addWaitBehavior(sf::seconds(1));
+	nSceneLayers[Enemies]->attachChild(std::move(enemy));
+
+	std::unique_ptr<Chicken> enemy1(new Chicken(Enemy::Chicken, sf::Vector2f(32 * 17 + 16, 32 * 17 + 16)));
+	// enemy1->addWaitBehavior(sf::seconds(2));
+	nSceneLayers[Enemies]->attachChild(std::move(enemy1));
+
+	std::unique_ptr<Snail> enemy2(new Snail(Enemy::Snail, sf::Vector2f(32 * 5 + 16, 32 * 17 + 16)));
+	nSceneLayers[Enemies]->attachChild(std::move(enemy2));
 
 	// // Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
@@ -273,6 +372,13 @@ void World::removeSceneNode()
 	{
 		if (node.isMarkedForRemoval())
 		{
+			if ((node.getCategory()  & Category::Entity))
+			{
+				// sf::FloatRect bound = 
+				if (!nWorldBounds.intersects(node.getBoundingRect()))
+					nodes.push_back(&node);
+			}
+			else
 			nodes.push_back(&node);
 		}
 	});

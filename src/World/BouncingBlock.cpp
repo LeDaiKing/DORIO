@@ -4,6 +4,7 @@
 #include "World.hpp"
 #include <iostream>
 #include "Dough.hpp"
+#include "Category.hpp"
 
 
 BouncingBlock::BouncingBlock(Type type, sf::Vector2f position)
@@ -15,7 +16,7 @@ BouncingBlock::BouncingBlock(Type type, sf::Vector2f position)
     nStateBounce = 0;
 }
 
-void BouncingBlock::updateCurrent(sf::Time dt)
+void BouncingBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (nStateBounce == 1)
     {
@@ -38,58 +39,19 @@ void BouncingBlock::updateCurrent(sf::Time dt)
    
 }
 
-void BouncingBlock::applyNormal(SceneNode& graph)
+void BouncingBlock::handleTopCollision(Entity& entity)
 {
-    if (graph.getCategory() & Category::Entity)
-    {
-        assert(dynamic_cast<Entity*>(&graph) != nullptr);
-        Entity& entity = static_cast<Entity&>(graph);
-
-        sf::FloatRect entityHitBox = entity.getBoundingRect();
-        sf::FloatRect bound = getBoundingRect();
-
-        collision::Side side = checkCollisionSide(entityHitBox, bound);
-        int gravity = World::getGravity();
-
-        if (side == collision::Top && entity.getVelocity().y > 0)
-        {
-            entity.setPosition(entity.getPosition().x, bound.top - entityHitBox.height / 2);
-            entity.setVelocity(entity.getVelocity().x, 0.f);
-            entity.accelerate(0.f, -gravity);
-            entity.setOnGround(true);
-        }
-        else if (side == collision::Bottom && entity.getVelocity().y < 0)
-        {
-            // breakBlock(entity);
-            entity.setPosition(entity.getPosition().x, bound.top + bound.height + entityHitBox.height / 2);
-            if (entity.getCategory() == Category::PlayerDough)
-            {
-                entity.setVelocity(entity.getVelocity().x, 30.f);
-                nStateBounce = 1;
-            }
-            else
-            {
-                entity.setVelocity(entity.getVelocity().x, 0.f);
-            }
-            
-        }
-        else if (side == collision::Left && entity.getVelocity().x > 0)
-        {
-            entity.setPosition(bound.left - entityHitBox.width / 2, entity.getPosition().y);
-            entity.setVelocity(0.f, entity.getVelocity().y);
-        }
-        else if (side == collision::Right && entity.getVelocity().x < 0)
-        {
-            entity.setPosition(bound.left + bound.width + entityHitBox.width / 2, entity.getPosition().y);
-            entity.setVelocity(0.f, entity.getVelocity().y);
-        }
-
-        
-
-    }
-    for (Ptr& child : graph.getChildren())
-    {
-        applyNormal(*child);
-    }
+     entity.move(0.f, getBoundingRect().top - entity.getBoundingRect().top - entity.getBoundingRect().height);
+    entity.setVelocity(entity.getVelocity().x, 0.f);
 }
 
+void BouncingBlock::handleBottomCollision(Entity& player)
+{
+    sf::FloatRect bound = getBoundingRect();
+    player.move(0.f, bound.top + bound.height - player.getBoundingRect().top);
+    player.setVelocity(player.getVelocity().x, 0.f);
+    if (player.getCategory() & Category::PlayerDough)
+    {
+        nStateBounce = 1;
+    }
+}
