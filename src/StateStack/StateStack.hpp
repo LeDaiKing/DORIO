@@ -10,6 +10,7 @@
 #include <utility>
 #include <functional>
 #include <map>
+#include <iostream>
 
 
 class StateStack: public sf::NonCopyable
@@ -61,6 +62,7 @@ class StateStack: public sf::NonCopyable
 
 template <typename T>
 void StateStack::registerState(States::ID stateID) {
+    std::cerr << "Registering state " << stateID << std::endl;
     nFactories[stateID] = [this]() {
         return State::Ptr(new T(*this, nContext));
     };

@@ -9,5 +9,8 @@ namespace States {
         Loading,
         Pause,
         ChooseCharacter,
+        ChooseLevel,
+        ChooseMode,
+        ChoosePlayer,
     };
 }

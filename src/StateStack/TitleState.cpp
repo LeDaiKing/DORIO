@@ -20,6 +20,7 @@ TitleState::TitleState(StateStack& stack, Context context)
     this->nameTitle.setOutlineThickness(5.f);
     centerOrigin(this->nameTitle);
     this->nameTitle.setPosition(context.window->getView().getSize().x / 2.f, context.window->getView().getSize().y / 4.f);
+    context.music->play(Music::ID::BackgroundTheme);
 }   
 
 void TitleState::draw() {
@@ -43,7 +44,7 @@ bool TitleState::update(sf::Time dt) {
 bool TitleState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         this->requestStackPop();
-        this->requestStackPush(States::ID::Game);
+        this->requestStackPush(States::ID::ChooseMode);
     }
     return true;
 }

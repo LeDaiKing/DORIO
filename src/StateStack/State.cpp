@@ -26,9 +26,12 @@ State::Context State::getContext() const {
 }
 
 State::Context::Context(sf::RenderWindow& window, TextureHolder& textures,
-                        FontHolder& fonts, Player& player)
+                        FontHolder& fonts, Player& player, MusicPlayer& music, 
+                        SoundPlayer& sounds)
 : window(&window)
 , textures(&textures)
 , fonts(&fonts)
-, player(&player) {
+, player(&player) 
+, music(&music) 
+, sounds(&sounds) {
 }

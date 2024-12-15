@@ -1,8 +1,11 @@
 #include "StateStack.hpp"
 #include <cassert>
+#include <iostream>
+
 
 State::Ptr StateStack::createState(States::ID stateID) {
     auto found = nFactories.find(stateID);
+    std::cerr << stateID << std::endl;
     assert(found != nFactories.end());
 
     return found->second();

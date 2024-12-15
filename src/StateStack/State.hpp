@@ -1,6 +1,8 @@
 #pragma once
 #include "StateIdentifiers.hpp"
 #include "../Holder/ResourceIdentifiers.hpp"
+#include "../Music/MusicPlayer.hpp"
+#include "../Music/SoundPlayer.hpp"
 #include <memory>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -12,11 +14,13 @@ class State{
     public:
         typedef std::unique_ptr<State> Ptr;
         struct Context{
-            Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
+            Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, MusicPlayer& music, SoundPlayer& sounds);
             sf::RenderWindow* window;
             TextureHolder* textures;
             FontHolder* fonts;
             Player* player;
+            MusicPlayer* music;
+            SoundPlayer* sounds;
         };
     public:
         State(StateStack& stack, Context context);

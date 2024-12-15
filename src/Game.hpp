@@ -5,10 +5,8 @@
 #include "StateStack/StateStack.hpp"
 #include "Holder/ResourceHolder.hpp"
 #include "Holder/ResourceIdentifiers.hpp"
-#include "StateStack/TitleState.hpp"
-#include "StateStack/GameState.hpp"
-#include "StateStack/PauseState.hpp"
-
+#include "Music/MusicPlayer.hpp"
+#include "Music/SoundPlayer.hpp"
 
 
 #include <SFML/Graphics.hpp>
@@ -46,5 +44,6 @@ class Game : private sf::NonCopyable
         sf::Time nStatisticsUpdateTime;
         World nWorld;
 		Player nPlayer;
-
+        MusicPlayer nMusicPlayer;
+        SoundPlayer nSoundPlayer;
 };
