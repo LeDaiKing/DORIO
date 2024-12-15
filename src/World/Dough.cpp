@@ -28,7 +28,8 @@ Dough::Dough(Type type)
 , Entity(TextureHolder::getInstance().get(toTextureID(type)))
 , nBig(TextureHolder::getInstance().get(Textures::BigDough))
 , nFireBig(TextureHolder::getInstance().get(Textures::BigDough))
-// , nFireBig(TextureHolder::getInstance().get(Textures::FireBigDough))
+, stateJump(0)
+, nCoinsCount(0)
 {
 	setUpEntity();
 	setAnimationState(State::Idle);
@@ -85,8 +86,8 @@ void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 		nFireBig.update(dt);
 	}
 
-	if (nOnGround) std::cout << "On Ground" << std::endl;
-	else std::cout << "Not On Ground" << std::endl;
+	// if (nOnGround) std::cout << "On Ground" << std::endl;
+	// else std::cout << "Not On Ground" << std::endl;
 }
 
 void Dough::setUpEntity()
@@ -101,7 +102,7 @@ void Dough::setUpEntity()
 		nMaxVelocity = sf::Vector2f(200.f, 712.f);
 		nJumpVelocity = 400;
 		nJumpVelocity2 = 280;
-		nHitPoints = 10;
+		nHitPoints = 3;
 		break;
 	
 	default:
@@ -188,7 +189,9 @@ void Dough::getDamage(int damage)
 	{
 		nGrowUp = Small;
 	}
-	nSprite.setAnimationState(State::Hit);
+	// nSprite.setAnimationState(State::Hit);
+	nHitPoints -= damage;
+	setAnimationState(State::Hit);
 }
 
 void Dough::handleCollisionEnemies(SceneNode& graph)
@@ -270,11 +273,11 @@ void Dough::standUp()
 	if (nGrowUp == Small) return;
 	if (nGrowUp == Big)
 	{
-		nBig.setAnimationState(State::Idle);
+		nBig.setAnimationState(nCurrentState);
 	}
 	else if (nGrowUp == FireBig)
 	{
-		nFireBig.setAnimationState(State::Idle);
+		nFireBig.setAnimationState(nCurrentState);
 	}
 	// nBig.setAnimationState(nCurrentState);
 }
@@ -347,6 +350,8 @@ void Dough::growUPBig()
 {
 	if (nGrowUp == Big || nGrowUp == FireBig) return;
 	nGrowUp = Big;
+	addHitPoints(1);
+	setAnimationState(State::Idle);
 	nBig.setAnimationState(State::Idle);
 }
 
@@ -354,6 +359,8 @@ void Dough::growUPFireBig()
 {
 	if (nGrowUp == FireBig) return;
 	nGrowUp = FireBig;
+	addHitPoints(1);
+	setAnimationState(State::Idle);
 	nFireBig.setAnimationState(State::Idle);
 }
 
@@ -399,4 +406,18 @@ void Dough::fire(CommandQueue& commands){
 void Dough::addHitPoints(int points)
 {
 	nHitPoints += points;
+}
+
+void Dough::addCoins(int coins)
+{
+	nCoinsCount += coins;
+}
+int Dough::getCoinsCount() const
+{
+	return nCoinsCount;
+}
+
+int Dough::getHitPoints() const
+{
+	return nHitPoints;
 }

@@ -32,4 +32,5 @@ class LuckyBlock :  public BouncingBlock
         std::stack<ItemPair> nItems;
         bool nIsDropping;
         std::vector<ItemPair> nQueueItems;
+        std::stack<Item::Type> nItemTypes;
 };

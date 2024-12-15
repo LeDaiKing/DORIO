@@ -12,4 +12,7 @@ Coin::Coin(Type type, sf::Vector2f position)
 void Coin::activate(Entity& player)
 {
     nIsCollected = true;
+    Dough& dough = static_cast<Dough&>(player);
+    dough.addCoins(1);
+
 }

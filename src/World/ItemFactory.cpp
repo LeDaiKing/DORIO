@@ -2,7 +2,7 @@
 #include "Coin.hpp"
 #include "Heart.hpp"
 #include "BigItem.hpp"
-#include "FireBigItem.hpp"
+#include "FireBigItem.hpp"  
 #include "../Holder/ResourceHolder.hpp"
 #include  "../Holder/ResourceIdentifiers.hpp"
 
@@ -40,6 +40,10 @@ std::unique_ptr<Animation> ItemFactory::createAppearAnimation(Item::Type type)
             animation->setAnimationState(0);
             return animation;
         default:
+            animation = std::make_unique<Animation>(TextureHolder::getInstance().get(Textures::HeartAnimation));
+            animation->addAnimationState(0, 0, 4, sf::seconds(0.6), sf::Vector2i(25, 64), false);
+            animation->setAnimationState(0);
+            return animation;
             break;
     }
     return nullptr;

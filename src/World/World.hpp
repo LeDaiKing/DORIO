@@ -8,6 +8,7 @@
 #include "Dough.hpp"
 #include "Enemy.hpp"
 #include "Item.hpp"
+#include "Hub.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
 
@@ -17,6 +18,7 @@
 
 #include <array>
 #include <queue>
+
 
 
 
@@ -37,7 +39,7 @@ class World : private sf::NonCopyable
 		static int getGravity();
 
 	private:
-		void loadTextures();
+		// void loadTextures();
 		void buildScene();
 		void applyGravity();
 		void applyNormal();
@@ -72,6 +74,7 @@ class World : private sf::NonCopyable
 		sf::Vector2f nSpawnPosition;
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
+		Hub nHub;
 
 		static int nGravity;
 };

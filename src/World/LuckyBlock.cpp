@@ -31,6 +31,7 @@ void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
         nQueueItems.push_back(std::move(nItems.top()));
         nQueueItems.back().second->setPosition(0, -16);
         nItems.pop();
+        nItemTypes.pop();
         nIsDropping = false;
     }
     if (nItems.empty() && nStateBounce == 0)
@@ -82,6 +83,7 @@ void LuckyBlock::addItem(Item::Type type)
     itemPair.second = ItemFactory::createAppearAnimation(type);
 
     nItems.push(std::move(itemPair));
+    nItemTypes.push(type);
 }
 
 void LuckyBlock::handleBottomCollision(Entity& player)
@@ -96,6 +98,10 @@ void LuckyBlock::handleBottomCollision(Entity& player)
             dough.move(0.f, bound.top + bound.height - dough.getBoundingRect().top);
             dough.setVelocity(dough.getVelocity().x, 0);
             return;
+        }
+        if (!nItemTypes.empty() && nItemTypes.top() == Item::Coin)
+        {
+            dough.addCoins(1);
         }
     }
     BouncingBlock::handleBottomCollision(player);

@@ -26,7 +26,7 @@ World::World(sf::RenderWindow& window)
 , nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
 {
-	loadTextures();
+	// loadTextures();
 	buildScene();
 
 	// Prepare the view
@@ -35,10 +35,12 @@ World::World(sf::RenderWindow& window)
 	// nWorldBounds = sf::FloatRect(0.f, 0.f, 10, 10000.f);
 	nWorldView.setCenter(nWorldView.getSize().x / 4.f, nWorldView.getSize().y / 2.f);
 	nWorldView.zoom(0.5f);
+	// nHub = Hub();
 }
 
 void World::update(sf::Time dt)
 {
+
 	
 	applyNormal();
 	applyGravity();
@@ -60,12 +62,15 @@ void World::update(sf::Time dt)
 	// Regular update step, adapt position (correct if outside view)
 
 	adaptCameraPosition();
+	nHub.update(dt, *nPlayerDough);
 }
 
 void World::draw()
 {
 	nWindow.setView(nWorldView);
 	nWindow.draw(nSceneGraph);
+	nWindow.setView(nWindow.getDefaultView());	
+	nHub.draw(nWindow);
 }
 
 CommandQueue& World::getCommandQueue()
@@ -73,32 +78,7 @@ CommandQueue& World::getCommandQueue()
 	return nCommandQueue;
 }
 
-void World::loadTextures()
-{
-	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
-	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
-	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
-	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/BigDough.png");
-	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg1.png");
-	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
-	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
-	TextureHolder::getInstance().load(Textures::Chicken, "res/Enemy/Chicken/Chicken.png");
-	TextureHolder::getInstance().load(Textures::CockRoach, "res/Enemy/CockRoach/CockRoach.png");
-	TextureHolder::getInstance().load(Textures::Snail, "res/Enemy/Snail/Snail.png");
-	TextureHolder::getInstance().load(Textures::SnailShell, "res/Enemy/Snail/SnailShell.png");
-	TextureHolder::getInstance().load(Textures::Breakable, "res/Background/Breakable/Breakable.png");
-	TextureHolder::getInstance().load(Textures::BreakAnimation, "res/Background/Breakable/BreakAnimation.png");
-	TextureHolder::getInstance().load(Textures::LuckyBlock, "res/Background/LuckyBlock/LuckyBlock.png");
-	TextureHolder::getInstance().load(Textures::StaticLuckyBlock, "res/Background/LuckyBlock/StaticLuckyBlock.png");
-	TextureHolder::getInstance().load(Textures::JumpyBlock, "res/Background/JumpyBlock/JumpyBlock.png");
-	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
-	TextureHolder::getInstance().load(Textures::CoinAnimation, "res/Item/CoinAnimation.png");
-	TextureHolder::getInstance().load(Textures::Heart, "res/Item/Star.png");
-	TextureHolder::getInstance().load(Textures::HeartAnimation, "res/Item/StarAnimation.png");
-	TextureHolder::getInstance().load(Textures::FireBall, "res/Item/Fireball.png");
-
-}
-
+// void World::
 void World::buildScene()
 {
 	// Initialize the different layers
@@ -251,7 +231,7 @@ void World::loadMap()
 		else if (color.toInteger() == 0x0000FF00 + 255)
 		{
 			std::unique_ptr<LuckyBlock> block(new LuckyBlock(Block::LuckyBlock, sf::Vector2f(x + 16, y + 16)));
-			block->addItem(Item::Heart);
+			block->addItem(Item::FireBig);
 			block->addItem(Item::Coin);
 			block->addItem(Item::Coin);
 			block->addItem(Item::Coin);

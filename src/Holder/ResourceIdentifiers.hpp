@@ -37,7 +37,12 @@ namespace Textures
 		FireBall,
 		BigDough,
 		FireBigDough,
-
+		ClockIcon,
+		CoinIcon,
+		HeartIcon,
+		SettingBut,
+		WhiteText,
+		BlackText,
 	};
 }
 

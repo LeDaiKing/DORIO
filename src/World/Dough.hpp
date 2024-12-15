@@ -44,6 +44,9 @@ class Dough : public Entity
 		void growUPFireBig();
 		void fire(CommandQueue& commands);
 		void addHitPoints(int points);
+		void addCoins(int coins);
+		int getCoinsCount() const;
+		int getHitPoints() const;
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -62,4 +65,5 @@ class Dough : public Entity
 		Animation nBig;
 		Animation nFireBig;
 		sf::Vector2f nBigHitBox;
+		int nCoinsCount;
 };

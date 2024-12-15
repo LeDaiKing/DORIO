@@ -22,6 +22,8 @@ class Game : private sf::NonCopyable
         void update(sf::Time elapsedTime);
         void render();
 
+        // void loadTextures();
+
         void updateStatistics(sf::Time elapsedTime);
 
     private:
