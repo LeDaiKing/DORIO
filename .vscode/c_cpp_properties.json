@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "name": "Win32",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed",
+        "C:/Users/Xuan Bac/Desktop/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include",
+        "C:\\Users\\Xuan Bac\\Desktop\\SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit\\SFML-2.6.1\\include"
+      ],
+      "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
+      "compilerPath": "C:\\Users\\Xuan Bac\\Desktop\\winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5\\mingw64\\bin\\g++.exe",
+      "intelliSenseMode": "windows-gcc-x64",
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}
