@@ -5,9 +5,14 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <iostream>
+#include "Block.hpp"
 
 Entity::Entity(const sf::Texture& texture)
-: nSprite(texture, sf::Vector2i(32, 32)), nCurrentState(State::None)
+: nSprite(texture)
+, nCurrentState(State::None)
+, nDirection(false)
 {
 	centerOrigin(nSprite);
 }
@@ -31,12 +36,22 @@ sf::Vector2f Entity::getVelocity() const
 void Entity::addVelocity(sf::Vector2f velocity)
 {
 	nVelocity += velocity;
+	if (nCurrentState == State::Dead) return;
+	nVelocity.x = std::max(nVelocity.x, -nMaxVelocity.x);
+	nVelocity.x = std::min(nVelocity.x, nMaxVelocity.x);
+	nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
+	nVelocity.y = std::min(nVelocity.y, nMaxVelocity.y);
 }
 
 void Entity::addVelocity(float vx, float vy)
 {
 	nVelocity.x += vx;
 	nVelocity.y += vy;
+	if (nCurrentState == State::Dead) return;
+	nVelocity.x = std::max(nVelocity.x, -nMaxVelocity.x);
+	nVelocity.x = std::min(nVelocity.x, nMaxVelocity.x);
+	nVelocity.y = std::max(nVelocity.y, -nMaxVelocity.y);
+	nVelocity.y = std::min(nVelocity.y, nMaxVelocity.y);
 }
 
 void Entity::accelerate(sf::Vector2f acceleration)
@@ -50,16 +65,41 @@ void Entity::accelerate(float vx, float vy)
 	nAcceleration.y += vy;
 }
 
-void Entity::updateCurrent(sf::Time dt)
+void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
 	
+	nSprite.update(dt);
+	if (nCurrentState != State::Dead)
+	{
+		// if (nCurrentState == State::Dead) return;
+
+		if (nClosestBottomBlock != nullptr)
+		{
+			nClosestBottomBlock->handleBottomCollision(*this);
+			nClosestBottomBlock = nullptr;
+		}
+
+		if (nClosestTopBlock != nullptr)
+		{
+			nClosestTopBlock->handleTopCollision(*this);
+			nClosestTopBlock = nullptr;
+		}
+	}
+	else
+	{
+		rotate(90 * dt.asSeconds());
+	}
+
+
 
 	addVelocity(nAcceleration * dt.asSeconds());
+
+
 	move(nVelocity * dt.asSeconds());
 	nAcceleration = sf::Vector2f(0.f, 0.f);
 	
 	//friction
-	sf::Vector2f friction = sf::Vector2f(512.f, 64.f) * 0.8f * dt.asSeconds();
+	sf::Vector2f friction = nSpeed * 0.8f * dt.asSeconds();
 
 	if (nVelocity.x > 0)
 	{
@@ -87,14 +127,33 @@ void Entity::updateCurrent(sf::Time dt)
 			nVelocity.y = 0;
 	}
 
-	if (nVelocity == sf::Vector2f(0.f, 0.f))
+	// if ((nCurrentState == State::Jump || nCurrentState == State::DoubleJump)&& nVelocity.y == 0)
+	// 	setAnimationState(State::Idle);
+
+	// if (nVelocity.y != 0.f) nOnGround = false;s
+
+	if (!nOnGround && nVelocity.y > 0 && nCurrentState != State::Hit)
+		setAnimationState(State::Fall);
+
+	if (nVelocity.x == 0.f && nOnGround && nCurrentState != State::Hit)
 		setAnimationState(State::Idle);
 
-	nSprite.update(dt);
+	if (abs(nVelocity.y) > 10.f) 
+	{
+		nOnGround = false;
+		// nClosestTopBlock = nullptr;
+	}
+	// nOnGround = false;
+	// if (nCurrentState == State::DoubleJump && nVelocity.y > 32)
+	// 	setAnimationState(State::Jump);
+
 }
 
 void Entity::setAnimationState(State type)
 {
+	if (nCurrentState == State::Dead)
+		return;
+
 	if (nCurrentState == type)
 		return;
 
@@ -102,15 +161,18 @@ void Entity::setAnimationState(State type)
 	nSprite.setAnimationState(type);
 }
 
-void Entity::Move(bool nDirection)
+void Entity::walk(bool nDirection)
 {
+	if (nOnGround && nCurrentState != State::Hit) 
+		setAnimationState(State::Walk);
+
+	// if (nCurrentState == State::Walk && this -> nDirection != nDirection)
+	// 	return;
 	if (this -> nDirection != nDirection)
 	{
 		this -> nDirection = nDirection;
 		nSprite.setFlipped(nDirection);
 	}
-	if (nCurrentState != State::Jump)
-		setAnimationState(State::Walk);
 	
 	if (nDirection)
 	{
@@ -124,18 +186,123 @@ void Entity::Move(bool nDirection)
 
 void Entity::jump()
 {
-	setAnimationState(State::Jump);
-	addVelocity(0.f, -nJumpVelocitty);
+	if (!nOnGround)
+		return;
+
+	if (nCurrentState != State::Hit)
+		setAnimationState(State::Jump);
+
+	nOnGround = false;
+	setVelocity(nVelocity.x, -nJumpVelocity);
 }
 
-void Entity::addAnimationState(State state, std::size_t row, std::size_t numFrames, sf::Time duration, bool repeat)
+void Entity::addAnimationState(State state, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat)
 {
-	nSprite.addAnimationState(state, row, numFrames, duration, repeat);
+	nSprite.addAnimationState(state, row, numFrames, duration, frameSize, repeat);
 }
 
 
 void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	sf::FloatRect bounds = getBoundingRect();
+	sf::RectangleShape rect(sf::Vector2f(bounds.width, bounds.height));
+	rect.setPosition(bounds.left, bounds.top);
+	rect.setFillColor(sf::Color(255, 255, 255, 0));
+	rect.setOutlineColor(sf::Color::Red);
+	rect.setOutlineThickness(1.f);
+	target.draw(rect);
 	target.draw(nSprite, states);
 }
 
+sf::FloatRect Entity::getBoundingRect() const
+{
+	// return getWorldTransform().transformRect(nSprite.getGlobalBounds());
+	// sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
+	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
+	sf::Vector2f pos = getPosition() - sf::Vector2f(nHitBox.x / 2, nHitBox.y / 2);
+
+	return sf::FloatRect(pos, nHitBox);
+}
+
+// sf::FloatRect Entity::getHitBox() const
+// {
+// 	sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
+// 	// sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height - nHitBox.y};
+// 	sf::Vector2f pos = {bound.left + bound.width / 2 - nHitBox.x / 2, bound.top + bound.height / 2 - nHitBox.y / 2};
+
+// 	return sf::FloatRect(pos, nHitBox);
+// }
+
+unsigned int Entity::getCategory() const
+{
+	return Category::Entity;
+}
+
+void Entity::setOnGround(bool flag)
+{
+	nOnGround = flag;
+}
+
+bool Entity::getDirection() const
+{
+	return nDirection;
+}
+
+bool Entity::isMarkedForRemoval() const
+{
+	return nCurrentState == State::Dead;
+}
+
+// void Entity::remove()
+// {
+// 	nParent->detachChild(*this);
+// }
+
+void Entity::getDamage(int damage)
+{
+	if (nCurrentState == State::Dead)
+		return;
+
+	nHitPoints -= damage;
+	if (nHitPoints <= 0)
+	{
+		setAnimationState(State::Dead);
+		setVelocity(0.f, -180.f);
+	}
+	else
+	{
+		setAnimationState(State::Hit);
+	}
+}
+
+void Entity::updateClosestTopBlock(Block* block)
+{
+	if (nClosestTopBlock == nullptr)
+	{
+		nClosestTopBlock = block;
+		return;
+	}
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f blockPos = block->getPosition();
+	sf::Vector2f closestBlockPos = nClosestTopBlock->getPosition();
+	if (std::abs(pos.x - blockPos.x) < std::abs(pos.x - closestBlockPos.x))
+	{
+		nClosestTopBlock = block;
+	}
+}
+
+void Entity::updateClosestBottomBlock(Block* block)
+{
+	if (nClosestBottomBlock == nullptr)
+	{
+		nClosestBottomBlock = block;
+		return;
+	}
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f blockPos = block->getPosition();
+	sf::Vector2f closestBlockPos = nClosestBottomBlock->getPosition();
+	if (std::abs(pos.x - blockPos.x) < std::abs(pos.x - closestBlockPos.x))
+	{
+		nClosestBottomBlock = block;
+	}
+}

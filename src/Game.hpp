@@ -25,9 +25,12 @@ class Game : private sf::NonCopyable
 
     private:
 
+        void loadTextures();
         void processInput();
         void update(sf::Time elapsedTime);
         void render();
+
+        // void loadTextures();
 
         void updateStatistics(sf::Time elapsedTime);
         void registerStates();
@@ -36,14 +39,12 @@ class Game : private sf::NonCopyable
         static const sf::Time TimePerFrame;
 
         sf::RenderWindow nWindow;
-        TextureHolder nTextures;
-        FontHolder nFonts;
         StateStack nGameStateStack;
 
         sf::Text nStatisticsText;
         sf::Time nStatisticsUpdateTime;
-        World nWorld;
 		Player nPlayer;
         MusicPlayer nMusicPlayer;
         SoundPlayer nSoundPlayer;
 };
+

@@ -16,7 +16,10 @@ class Player
 			MoveLeft,
 			MoveRight,
 			MoveUp,
+			Sit,
+			StandUp,
 			Jump,
+			Fire,
 			ActionCount
 		};
 

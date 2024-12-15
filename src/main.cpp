@@ -1,9 +1,10 @@
 #include "Game.hpp"
 #include <iostream>
 #include <stdexcept>
+#include "Holder/ResourceHolder.hpp"
 
 int main() 
-{
+{	
     try
 	{
 		Game game;

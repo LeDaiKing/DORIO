@@ -12,9 +12,9 @@ class SoundPlayer : private sf::NonCopyable
 {
     public:
         SoundPlayer();
+        ~SoundPlayer() = default;
         void play(SoundEffect::ID effect);
         void removeStoppedSounds();
     private:
-        SoundBufferHolder mSoundBuffers;
         std::list<sf::Sound> mSounds;
 };

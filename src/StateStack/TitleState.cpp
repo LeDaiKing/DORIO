@@ -6,13 +6,13 @@ TitleState::TitleState(StateStack& stack, Context context)
 , nameTitle()
 , nShowText(true)
 , nTextEffectTime(sf::Time::Zero) {
-    this->nBackgroundSprite.setTexture(context.textures->get(Textures::TitleScreen));
-    this->nText.setFont(context.fonts->get(Fonts::Main));
+    this->nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::TitleScreen));
+    this->nText.setFont(FontHolder::getInstance().get(Fonts::Main));
     this->nText.setString("Press any key to start");
     centerOrigin(this->nText);
     this->nText.setPosition(context.window->getView().getSize() / 2.f);
 
-    this->nameTitle.setFont(context.fonts->get(Fonts::Main));
+    this->nameTitle.setFont(FontHolder::getInstance().get(Fonts::Main));
     this->nameTitle.setString("DORIO");
     this->nameTitle.setCharacterSize(100);
     this->nameTitle.setFillColor(sf::Color::White);

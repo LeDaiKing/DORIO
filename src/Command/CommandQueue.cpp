@@ -1,4 +1,3 @@
-#pragma once
 
 #include "CommandQueue.hpp"
 // #include "../World/SceneNode.hpp"

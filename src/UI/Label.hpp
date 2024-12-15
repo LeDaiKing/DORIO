@@ -13,7 +13,7 @@ namespace GUI{
         typedef std::shared_ptr<Label> Ptr;
 
         public:
-        Label(const std::string& text, const FontHolder& fonts);
+        Label(const std::string& text);
 
         virtual bool isSelectable() const;
         void setColor(const sf::Color& color);

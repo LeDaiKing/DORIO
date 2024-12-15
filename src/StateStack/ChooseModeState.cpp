@@ -9,7 +9,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , nGUIContainer()
 , backButton(context, GUI::Button::Type::BackButton)
 {
-    nBackgroundSprite.setTexture(context.textures->get(Textures::ChooseModeScreen));
+    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
 
     auto slotButton1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
     slotButton1->setPosition(140, 190);
@@ -19,7 +19,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     slotButton1->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Game);
     });
 
     auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
@@ -30,7 +30,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     slotButton2->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Game);
     });
 
     auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
@@ -41,7 +41,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     slotButton3->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Game);
     });
 
     auto creativeButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::CreativeButton);
@@ -52,7 +52,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     creativeButton->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Game);
     });
 
 
@@ -65,12 +65,12 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     });
 
 
-    auto textNormalMode = std::make_shared<GUI::Label>("Normal Mode", *context.fonts);
+    auto textNormalMode = std::make_shared<GUI::Label>("Normal Mode");
     textNormalMode->setCharacterSize(30);
     textNormalMode->setColor(sf::Color::Yellow);
     textNormalMode->setPosition((800 - textNormalMode->getWidth()) / 2, 50);    
 
-    auto textSpecialMode = std::make_shared<GUI::Label>("Special Mode", *context.fonts);
+    auto textSpecialMode = std::make_shared<GUI::Label>("Special Mode");
     textSpecialMode->setCharacterSize(30);
     textSpecialMode->setColor(sf::Color::Yellow);
     textSpecialMode->setPosition((800 - textSpecialMode->getWidth()) / 2, 300);    

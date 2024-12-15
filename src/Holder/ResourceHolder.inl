@@ -1,4 +1,11 @@
 template <typename Resource, typename Identifier>
+ResourceHolder<Resource, Identifier>& ResourceHolder<Resource, Identifier>::getInstance()
+{
+	static ResourceHolder holder;
+	return holder;
+}
+
+template <typename Resource, typename Identifier>
 void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename)
 {
 	// Create and load resource

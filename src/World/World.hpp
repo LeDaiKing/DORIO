@@ -4,7 +4,11 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
 #include "SpriteNode.hpp"
+#include "Block.hpp"
 #include "Dough.hpp"
+#include "Enemy.hpp"
+#include "Item.hpp"
+#include "Hub.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
 
@@ -14,6 +18,7 @@
 
 #include <array>
 #include <queue>
+
 
 
 
@@ -31,19 +36,27 @@ class World : private sf::NonCopyable
 		
 		CommandQueue& getCommandQueue();
 
+		static int getGravity();
 
 	private:
-		void loadTextures();
+		// void loadTextures();
 		void buildScene();
-		void adaptPlayerPosition();
 		void applyGravity();
+		void applyNormal();
+		void adaptCameraPosition();
+		void loadMap();
 
+		void handleCollisions();
+		void removeSceneNode();
 
 	private:
 		enum Layer
 		{
 			Background,
-			Air,
+			Map,
+			Enemies,
+			Items,
+			Player,
 			LayerCount
 		};
 
@@ -51,7 +64,6 @@ class World : private sf::NonCopyable
 	private:
 		sf::RenderWindow& nWindow;
 		sf::View nWorldView;
-		TextureHolder nTextures;
 
 		SceneNode nSceneGraph;
 		std::array<SceneNode*, LayerCount>	nSceneLayers;
@@ -62,6 +74,7 @@ class World : private sf::NonCopyable
 		sf::Vector2f nSpawnPosition;
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
+		Hub nHub;
 
-		int nGravity;
+		static int nGravity;
 };

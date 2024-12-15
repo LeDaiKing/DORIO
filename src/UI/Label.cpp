@@ -1,9 +1,10 @@
 #include "Label.hpp"
 
 namespace GUI{
-    Label::Label(const std::string& text, const FontHolder& fonts)
-    : nText(text, fonts.get(Fonts::Main), 16)
+    Label::Label(const std::string& text)
+    : nText(text, FontHolder::getInstance().get(Fonts::Main), 16)
     {
+        
     }
 
     bool Label::isSelectable() const {

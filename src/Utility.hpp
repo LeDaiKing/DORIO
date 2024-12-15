@@ -17,6 +17,21 @@ namespace sf
 	class Text;
 }
 
+namespace collision
+{
+	enum Side
+	{
+		None,
+		Top,
+		Bottom,
+		Left,
+		Right,
+	};
+}
+
+const float		PI = 3.14159265358979f;
+// const float 	
+
 class Animation;
 
 // Since std::to_string doesn't work on MinGW we have to implement
@@ -36,6 +51,7 @@ void			centerOrigin(Animation& animation);
 float			toDegree(float radian);
 float			toRadian(float degree);
 
+float    		getAngle(sf::Vector2f vector);
 // Random number generation
 int				randomInt(int exclusiveMax);
 
@@ -43,4 +59,11 @@ int				randomInt(int exclusiveMax);
 float			length(sf::Vector2f vector);
 sf::Vector2f	unitVector(sf::Vector2f vector);
 
+
+// Check Collision
+bool checkCollision(const sf::FloatRect rect1, const sf::FloatRect rect2);
+collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRect rect2);
+// bool checkCollisionLC(const sf::FloatRect rect1, const sf::FloatRect rect2);
+// bool checkCollisionRC(const sf::FloatRect rect1, const sf::FloatRect rect2);
 #include "Utility.inl"
+

@@ -10,6 +10,7 @@ class MusicPlayer : private sf::NonCopyable
 {
     public:
         MusicPlayer();
+        ~MusicPlayer() = default;
         void play(Music::ID theme);
         void stop();
 

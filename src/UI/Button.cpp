@@ -10,10 +10,10 @@
 namespace GUI{
     Button::Button(State::Context context, Type type = Type::RectangleButton) 
     : nCallback()
-    , nNormalTexture(context.textures->get(getNormalTexture(type)))
-    , nSelectedTexture(context.textures->get(getSelectedTexture(type)))
-    , nPressedTexture(context.textures->get(getPressedTexture(type)))
-    , nText("", context.fonts->get(Fonts::Main), 16)
+    , nNormalTexture(TextureHolder::getInstance().get(getNormalTexture(type)))
+    , nSelectedTexture(TextureHolder::getInstance().get(getSelectedTexture(type)))
+    , nPressedTexture(TextureHolder::getInstance().get(getPressedTexture(type)))
+    , nText("", FontHolder::getInstance().get(Fonts::Main), 16)
     , nIsToggle(false)
     , nType(type)
     , nSoundPlayer(*context.sounds)
@@ -23,11 +23,13 @@ namespace GUI{
         // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));        
     }
 
+
     void Button::setNormalSprite() {
-        nSprite.setTexture(nNormalTexture, true);
-        centerOrigin(nSprite);
-        // sf::FloatRect bounds = nSprite.getLocalBounds();
-        // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));        
+      nSprite.setTexture(nNormalTexture, true);
+      centerOrigin(nSprite);
+      // sf::FloatRect bounds = nSprite.getLocalBounds();
+      // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f),
+      // std::floor(bounds.top + bounds.height / 2.f));
     }
 
     void Button::setSelectedSprite() {

@@ -25,12 +25,10 @@ State::Context State::getContext() const {
     return nContext;
 }
 
-State::Context::Context(sf::RenderWindow& window, TextureHolder& textures,
-                        FontHolder& fonts, Player& player, MusicPlayer& music, 
+State::Context::Context(sf::RenderWindow& window,
+                        Player& player, MusicPlayer& music, 
                         SoundPlayer& sounds)
 : window(&window)
-, textures(&textures)
-, fonts(&fonts)
 , player(&player) 
 , music(&music) 
 , sounds(&sounds) {

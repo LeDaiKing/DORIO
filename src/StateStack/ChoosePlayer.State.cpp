@@ -8,7 +8,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 , nGUIContainer()
 , backButton(context, GUI::Button::Type::BackButton)
 {
-    nBackgroundSprite.setTexture(context.textures->get(Textures::ChooseModeScreen));
+    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
 
     const int START = 75;
     auto slotButton1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
@@ -34,7 +34,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     });
 
 
-    auto textInstruction = std::make_shared<GUI::Label>("How many people are playing", *context.fonts);
+    auto textInstruction = std::make_shared<GUI::Label>("How many people are playing");
     textInstruction->setCharacterSize(30);
     textInstruction->setColor(sf::Color::White);
     textInstruction->setPosition((800 - textInstruction->getWidth()) / 2, 150);  

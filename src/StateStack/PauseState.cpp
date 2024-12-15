@@ -10,7 +10,7 @@ PauseState::PauseState(StateStack& stack, Context context)
 , nBackgroundSprite()
 , nPausedText()
 , nInstructionText() {
-    sf::Font& font = context.fonts->get(Fonts::Main);
+    sf::Font& font = FontHolder::getInstance().get(Fonts::Main);
     sf::Vector2f viewSize = context.window->getView().getSize();
 
     this->nPausedText.setFont(font);
