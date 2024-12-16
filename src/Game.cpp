@@ -74,7 +74,7 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton3.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton3.png");
 	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
-	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough_normal.png");
+	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
 	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/big_dough.png");
 	TextureHolder::getInstance().load(Textures::FireBigDough, "res/Dough/fire_dough.png");
