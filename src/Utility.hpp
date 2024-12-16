@@ -5,12 +5,13 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <nlohmann/json.hpp>
 
 #include <sstream>
 #include <string>
 #include <vector>
 #include <cmath>
-
+#define var2Str(var) #var
 namespace sf
 {
 	class Sprite;
@@ -65,5 +66,10 @@ bool checkCollision(const sf::FloatRect rect1, const sf::FloatRect rect2);
 collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRect rect2);
 // bool checkCollisionLC(const sf::FloatRect rect1, const sf::FloatRect rect2);
 // bool checkCollisionRC(const sf::FloatRect rect1, const sf::FloatRect rect2);
+
+// convert json to vector2
+template <typename T>
+sf::Vector2<T> toVector2(const nlohmann::json& json);
+
 #include "Utility.inl"
 

@@ -14,7 +14,7 @@ Textures::ID toTextureID(Item::Type type)
         case Item::Heart:
             return Textures::Heart;
         case Item::Big:
-            return Textures::BigItem;
+            return Textures::Heart;
         case Item::FireBig:
             return Textures::Heart;
         case Item::FireBall:

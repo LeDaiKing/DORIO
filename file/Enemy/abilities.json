@@ -1,0 +1,42 @@
+{
+    "Chicken":
+    {
+        "HitBox": [27, 25],
+        "Speed": [700, 0],
+        "MaxVelocity": [130, 200],
+        "JumpVelocity": 0,
+        "Range" : 100
+    },
+    "CockRoach":
+    {
+        "HitBox": [25, 20],
+        "Speed": [576, 0],
+        "MaxVelocity": [64, 200],
+        "JumpVelocity": 0
+    },
+    "Ghost":
+    {
+        "HitBox": [30, 25],
+        "GSpeed": 400,
+        "MaxGVelocity": 96,
+        "FireRange": 200,
+        "FireSpeed": 96,
+        "FireCoolDown": 1.5,
+        "JumpVelocity": 0,
+        "TimeDisappear": 8
+    },
+    "Snail":
+    {
+        "HitBox": [25, 20],
+        "Speed": [576, 0],
+        "MaxVelocity": [64, 200],
+        "JumpVelocity": 0
+    },
+    "SnailShell":
+    {
+        "HitBox": [25, 18],
+        "Speed": [700, 0],
+        "MaxVelocity": [300, 200],
+        "JumpVelocity": 0
+    }
+}

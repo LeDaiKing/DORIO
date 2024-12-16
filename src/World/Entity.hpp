@@ -22,6 +22,7 @@ class Entity : public SceneNode
 			Disappear,
 			Invisible,
 			WithoutShell,
+			Fire,
 			StateCount
 		};
 

@@ -117,7 +117,7 @@ void World::buildScene()
 
 
 	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
@@ -231,7 +231,7 @@ void World::loadMap()
 		else if (color.toInteger() == 0x0000FF00 + 255)
 		{
 			std::unique_ptr<LuckyBlock> block(new LuckyBlock(Block::LuckyBlock, sf::Vector2f(x + 16, y + 16)));
-			block->addItem(Item::FireBig);
+			block->addItem(Item::Big);
 			block->addItem(Item::Coin);
 			block->addItem(Item::Coin);
 			block->addItem(Item::Coin);

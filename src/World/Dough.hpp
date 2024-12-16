@@ -39,10 +39,10 @@ class Dough : public Entity
 		void setStateJump(int state);
 		void sit();
 		void standUp();
+		void preFire();
 		virtual sf::FloatRect getBoundingRect() const;
 		void growUPBig();
 		void growUPFireBig();
-		void fire(CommandQueue& commands);
 		void addHitPoints(int points);
 		void addCoins(int coins);
 		int getCoinsCount() const;
@@ -51,10 +51,11 @@ class Dough : public Entity
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 		virtual void setUpEntity() ;
-		// virtual void setAnimationState(State type);
+		void fire(CommandQueue& commands);
+		virtual void setAnimationState(State type);
 
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-
+		void toSmall();
 
 	private:
 		Type nType;

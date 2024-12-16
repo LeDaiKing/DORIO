@@ -7,6 +7,7 @@
 #include "StateStack/ChooseModeState.hpp"
 #include "StateStack/ChoosePlayerState.hpp"
 
+
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
 
@@ -73,10 +74,11 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton3.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton3.png");
 	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
-	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
+	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough_normal.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
-	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/BigDough.png");
-	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg1.png");
+	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/big_dough.png");
+	TextureHolder::getInstance().load(Textures::FireBigDough, "res/Dough/fire_dough.png");
+	TextureHolder::getInstance().load(Textures::Sky, "res/Background/bg_kitchen_930x608.png");
 	TextureHolder::getInstance().load(Textures::Enemy, "res/Enemy/Enemy.png");
 	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
 	TextureHolder::getInstance().load(Textures::Chicken, "res/Enemy/Chicken/Chicken.png");

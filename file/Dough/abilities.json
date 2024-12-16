@@ -1,0 +1,22 @@
+{
+    "Dough1": {
+        "HitBox": [25, 21],
+        "BigHitBox": [32, 58],
+        "Speed": [1024, 128],
+        "MaxVelocity": [200, 712],
+        "JumpVelocity": 400,
+        "JumpVelocity2": 280,
+        "HitPoints": 3
+    },
+
+    "Dough2": {
+        "HitBox": [25, 21],
+        "BigHitBox": [32, 58],
+        "Speed": [1024, 128],
+        "MaxVelocity": [200, 712],
+        "JumpVelocity": 400,
+        "JumpVelocity2": 280,
+        "HitPoints": 3
+    }
+}
+

@@ -2,6 +2,7 @@
 #include "Utility.hpp"
 #include "SnailShell.hpp"
 #include <iostream>
+#include "../ConfigLoader.hpp" 
 
 Snail::Snail(Type type, sf::Vector2f position)
 : Enemy(type, position)
@@ -19,10 +20,13 @@ void Snail::setUpEntity()
     addAnimationState(State::Dead, 0, 5, sf::seconds(0.5), sf::Vector2i(38, 24), false);
     addAnimationState(State::WithoutShell, 48, 1, sf::seconds(1), sf::Vector2i(38, 24), true);
     nSprite.turnInverse();
-    nHitBox = sf::Vector2f(25.f, 20.f);
-    nSpeed = sf::Vector2f(576.f, 0.f);
-    nMaxVelocity = sf::Vector2f(64.f, 64.f);
-    nJumpVelocity = 0;
+    
+    const nlohmann::json& config = ConfigLoader::getInstance().getConfig("Enemy/Snail");
+    
+    nHitBox = toVector2<float>(config["HitBox"]);
+    nSpeed = toVector2<float>(config["Speed"]);
+    nMaxVelocity = toVector2<float>(config["MaxVelocity"]);
+    nJumpVelocity = config["JumpVelocity"];
 }
 
 void Snail::updateCurrent(sf::Time dt, CommandQueue& commands)

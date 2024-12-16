@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
+#include "../ConfigLoader.hpp"
 Textures::ID toTextureID(Dough::Type type)
 {
 	switch (type)
@@ -27,7 +28,7 @@ Dough::Dough(Type type)
 , nGrowUp(Small)
 , Entity(TextureHolder::getInstance().get(toTextureID(type)))
 , nBig(TextureHolder::getInstance().get(Textures::BigDough))
-, nFireBig(TextureHolder::getInstance().get(Textures::BigDough))
+, nFireBig(TextureHolder::getInstance().get(Textures::FireBigDough))
 , stateJump(0)
 , nCoinsCount(0)
 {
@@ -63,25 +64,47 @@ void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 	Entity::updateCurrent(dt, commands);
 	if (nGrowUp == Big)
 	{
-		if (nBig.getCurrentAnimationID() != State::Sit && nBig.getCurrentAnimationID() != nCurrentState)
-		{
-			nBig.setAnimationState(nCurrentState);
-		}
-		if (nDirection != nBig.isFlipped())
-		{
+		if (nBig.isFlipped() != nDirection)
 			nBig.setFlipped(nDirection);
+		
+		if (nCurrentState == State::Appear && nBig.isFinished())
+		{
+			nBig.setAnimationState(State::Idle);
+			nCurrentState = State::Idle;
+		}
+
+		if (nCurrentState == State::Disappear && nBig.isFinished())
+		{
+			toSmall();
+			return;
 		}
 		nBig.update(dt);
 	}
 	else if (nGrowUp == FireBig)
 	{
-		if (nFireBig.getCurrentAnimationID() != State::Sit && nFireBig.getCurrentAnimationID() != nCurrentState)
-		{
-			nFireBig.setAnimationState(nCurrentState);
-		}
-		if (nDirection != nFireBig.isFlipped())
-		{
+		if (nFireBig.isFlipped() != nDirection)
 			nFireBig.setFlipped(nDirection);
+		if (nCurrentState == State::Appear && nFireBig.isFinished())
+		{
+			nFireBig.setAnimationState(State::Idle);
+			nCurrentState = State::Idle;
+		}
+
+		if (nCurrentState == State::Disappear && nFireBig.isFinished())
+		{
+			toSmall();
+			return;
+		}
+	
+		if (nCurrentState == State::Fire)
+		{
+			if (nFireBig.getCurrentAnimationID() == State::Sit || (nFireBig.isFinished()))
+			{
+				fire(commands);
+				nCurrentState = State::Idle;
+				if (nFireBig.isFinished())
+					nFireBig.setAnimationState(State::Idle);
+			}
 		}
 		nFireBig.update(dt);
 	}
@@ -92,31 +115,25 @@ void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 
 void Dough::setUpEntity()
 {
-	switch (nType)
-	{
-	case Dough1:
-	case Dough2:
-		nHitBox = sf::Vector2f(25.f, 28.f);
-		nBigHitBox = sf::Vector2f(32.f, 62.f);
-		nSpeed = sf::Vector2f(1024.f, 128.f);
-		nMaxVelocity = sf::Vector2f(200.f, 712.f);
-		nJumpVelocity = 400;
-		nJumpVelocity2 = 280;
-		nHitPoints = 3;
-		break;
-	
-	default:
-		break;
-	}
+	std::string key = std::string("Dough/") + (nType == Dough1 ? "Dough1" : "Dough2");
+	const nlohmann::json& config = ConfigLoader::getInstance().getConfig(key.c_str());
+	nHitBox = toVector2<float>(config["HitBox"]);
+	nBigHitBox = toVector2<float>(config["BigHitBox"]);
+	nSpeed = toVector2<float>(config["Speed"]);
+	nMaxVelocity = toVector2<float>(config["MaxVelocity"]);
+	nJumpVelocity = config["JumpVelocity"];
+	nJumpVelocity2 = config["JumpVelocity2"];
+	nHitPoints = config["HitPoints"];
 
 	switch (nType)
 	{
 	case Dough1:
-		addAnimationState(State::Idle, 64, 12, sf::seconds(1.f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Idle, 96, 12, sf::seconds(1.f), sf::Vector2i(32, 32), true);
 		addAnimationState(State::Walk, 0, 4, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Jump, 32, 14, sf::seconds(1.f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::DoubleJump, 32, 14, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::Hit, 96, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
+		addAnimationState(State::Jump, 32, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::DoubleJump, 32, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::Fall, 64, 5, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::Hit, 128, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
 		break;
 	case Dough2:
 		addAnimationState(State::Idle, 96, 11, sf::seconds(1.f), sf::Vector2i(32, 32), true);
@@ -132,20 +149,25 @@ void Dough::setUpEntity()
 		break;
 	}
 	centerOrigin(nBig);
-	nBig.addAnimationState(State::Idle, 60, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), true);
-	nBig.addAnimationState(State::Walk, 0, 3, sf::seconds(0.5f), sf::Vector2i(32, 60), true);
-	nBig.addAnimationState(State::Jump, 120, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), false);
-	nBig.addAnimationState(State::DoubleJump, 120, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), false);
-	nBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), true);
-	nBig.addAnimationState(State::Fall, 240, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), false);	
+	nBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
+	nBig.addAnimationState(State::Walk, 64, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
+	nBig.addAnimationState(State::Jump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
+	nBig.addAnimationState(State::DoubleJump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
+	// nBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
+	nBig.addAnimationState(State::Fall, 192, 5, sf::seconds(0.5f), sf::Vector2i(32, 64), false);
+	nBig.addAnimationState(State::Appear, 256, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
+	nBig.addAnimationState(State::Disappear, 256, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);	
 
 	centerOrigin(nFireBig);
-	nFireBig.addAnimationState(State::Idle, 60, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), true);
-	nFireBig.addAnimationState(State::Walk, 0, 3, sf::seconds(0.5f), sf::Vector2i(32, 60), true);
-	nFireBig.addAnimationState(State::Jump, 120, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), false);
-	nFireBig.addAnimationState(State::DoubleJump, 120, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), false);
-	nFireBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), true);
-	nFireBig.addAnimationState(State::Fall, 240, 1, sf::seconds(0.5f), sf::Vector2i(32, 60), false);	
+	nFireBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
+	nFireBig.addAnimationState(State::Walk, 64, 6, sf::seconds(0.6f), sf::Vector2i(32, 64), true);
+	nFireBig.addAnimationState(State::Jump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
+	nFireBig.addAnimationState(State::DoubleJump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
+	// nFireBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
+	nFireBig.addAnimationState(State::Fall, 192, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), false);	
+	nFireBig.addAnimationState(State::Fire, 256, 6, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
+	nFireBig.addAnimationState(State::Appear, 320, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
+	nFireBig.addAnimationState(State::Disappear, 320, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
 }
 
 void Dough::jump()
@@ -185,9 +207,18 @@ void Dough::getDamage(int damage)
 		return;
 	
 	nTimeDamage = sf::seconds(0.35f);
-	if (nGrowUp == Big || nGrowUp == FireBig)
+	if (nGrowUp != Small)
 	{
-		nGrowUp = Small;
+		// nGrowUp = Small;
+		nCurrentState = State::Disappear;
+		if (nGrowUp == Big)
+		{
+			nBig.setAnimationState(State::Disappear);
+		}
+		else if (nGrowUp == FireBig)
+		{
+			nFireBig.setAnimationState(State::Disappear);
+		}
 	}
 	// nSprite.setAnimationState(State::Hit);
 	nHitPoints -= damage;
@@ -284,8 +315,15 @@ void Dough::standUp()
 
 sf::FloatRect Dough::getBoundingRect() const
 {
-	if (nGrowUp == Small) return Entity::getBoundingRect();
-	
+	if (nGrowUp == Small) 
+	{
+		sf::FloatRect bound = getWorldTransform().transformRect(nSprite.getGlobalBounds());
+		bound.top -= (nHitBox.y - bound.height);
+		bound.left -= (nHitBox.x - bound.width) / 2;
+		bound.height = nHitBox.y;
+		bound.width = nHitBox.x;
+		return bound;
+	}
 
 	sf::FloatRect bound;
 	if (nGrowUp == Big)
@@ -330,28 +368,44 @@ sf::FloatRect Dough::getBoundingRect() const
 	
 }
 
-// void Dough::setAnimationState(State type)
-// {
-// 	if (nGrowUp == Small)
-// 	{
-// 		Entity::setAnimationState(type);
-// 		return;
-// 	}
+void Dough::setAnimationState(State type)
+{
+	if (nGrowUp == Small)
+	{
+		Entity::setAnimationState(type);
+		return;
+	}
 
-// 	if (nCurrentState == State::Dead || type == nCurrentState)
-// 		return;
+	if (nCurrentState == State::Dead || type == nCurrentState
+	|| nCurrentState ==State::Fire || nCurrentState == State::Appear 
+	|| nCurrentState == State::Disappear)
+		return;
 
-// 	nCurrentState = type;
-// 	if (nSprite.getCurrentAnimationID() == State::Sit) return;
-// 	nSprite.setAnimationState(type);
-// }
+	if (nCurrentState != State::Fire)
+		nCurrentState = type;
+	if (nGrowUp == Big)
+	{
+		if (nBig.getCurrentAnimationID() != State::Sit)
+		{
+			nBig.setAnimationState(type);
+		}
+		
+	}
+	else if (nGrowUp == FireBig)
+	{
+		if (nFireBig.getCurrentAnimationID() != State::Sit)
+		{
+			nFireBig.setAnimationState(type);
+		}
+	}
+}
 
 void Dough::growUPBig()
 {
 	if (nGrowUp == Big || nGrowUp == FireBig) return;
 	nGrowUp = Big;
 	addHitPoints(1);
-	setAnimationState(State::Idle);
+	nCurrentState = State::Idle;
 	nBig.setAnimationState(State::Idle);
 }
 
@@ -360,8 +414,8 @@ void Dough::growUPFireBig()
 	if (nGrowUp == FireBig) return;
 	nGrowUp = FireBig;
 	addHitPoints(1);
-	setAnimationState(State::Idle);
-	nFireBig.setAnimationState(State::Idle);
+	nCurrentState = State::Appear;
+	nFireBig.setAnimationState(State::Appear);
 }
 
 void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
@@ -386,7 +440,8 @@ void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 
-void Dough::fire(CommandQueue& commands){
+void Dough::fire(CommandQueue& commands)
+{
 	if (nGrowUp != FireBig) return;
 	Command fire;
 	fire.category = Category::ItemScene;
@@ -420,4 +475,21 @@ int Dough::getCoinsCount() const
 int Dough::getHitPoints() const
 {
 	return nHitPoints;
+}
+
+void Dough::preFire()
+{
+	if (nGrowUp != FireBig) return;
+	if (nFireBig.getCurrentAnimationID() == State::Fire) return;
+	setAnimationState(State::Fire);
+}
+
+void Dough::toSmall()
+{
+	if (nGrowUp == Small) return;
+	nGrowUp = Small;
+	// nCurrentState = State::Idle;
+	setAnimationState(State::Idle);
+	nBig.setAnimationState(State::Idle);
+	nFireBig.setAnimationState(State::Idle);
 }

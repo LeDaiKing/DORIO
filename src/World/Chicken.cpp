@@ -1,11 +1,12 @@
 #include "Chicken.hpp"
 #include "Utility.hpp"
 #include "Dough.hpp"
+#include "../ConfigLoader.hpp"
 // #include <iostream>
 
 Chicken::Chicken(Type type, sf::Vector2f position)
 : Enemy(type, position)
-, nRange(100.f)
+// , nRange(100.f)
 {
     setUpEntity();
     setAnimationState(State::Idle);
@@ -19,10 +20,14 @@ void Chicken::setUpEntity()
     addAnimationState(State::Hit, 0, 5, sf::seconds(0.5), sf::Vector2i(32, 34), false);
     addAnimationState(State::Dead, 0, 5, sf::seconds(0.5), sf::Vector2i(32, 34), false);
     nSprite.turnInverse();
-    nHitBox = sf::Vector2f(27.f, 25.f);
-    nSpeed = sf::Vector2f(700.f, 0.f);
-    nMaxVelocity = sf::Vector2f(130.f, 200.f);
-    nJumpVelocity = 0;
+    
+    const nlohmann::json& config = ConfigLoader::getInstance().getConfig("Enemy/Chicken");
+    
+    nHitBox = toVector2<float>(config["HitBox"]);
+    nSpeed = toVector2<float>(config["Speed"]);
+    nMaxVelocity = toVector2<float>(config["MaxVelocity"]);
+    nJumpVelocity = config["JumpVelocity"];
+    nRange = config["Range"];
 }
 
 void Chicken::isTargetInRange(const sf::Vector2f& target)

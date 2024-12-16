@@ -3,17 +3,18 @@
 #include "World.hpp"
 #include <iostream>
 #include "Projectile.hpp"
+#include "../ConfigLoader.hpp"
 
 Ghost::Ghost(Type type, sf::Vector2f position)
 : Enemy(type, position)
-, nGSpeed(400.f)
-, nMaxGVelocity(96.f)
-, nFireRange(200.f)
-, nFireSpeed(96.f)
-, nFireCooldown(sf::seconds(1.5f))
+// , nGSpeed(400.f)
+// , nMaxGVelocity(96.f)
+// , nFireRange(200.f)
+// , nFireSpeed(96.f)
+// , nFireCooldown(sf::seconds(1.5f))
 , nCurFireCooldown(sf::Time::Zero)
 , nTarget(sf::Vector2f(0.f, 0.f))
-, nTimeDisappear(sf::seconds(8.f))
+// , nTimeDisappear(sf::seconds(8.f))
 {
     setUpEntity();
     setAnimationState(State::Idle);
@@ -28,10 +29,19 @@ void Ghost::setUpEntity()
     addAnimationState(State::Hit, 76, 5, sf::seconds(0.5), sf::Vector2i(44, 30), false);
     addAnimationState(State::Dead, 76, 5, sf::seconds(0.5), sf::Vector2i(44, 30), false);
     nSprite.turnInverse();
-    nHitBox = sf::Vector2f(30.f, 25.f);
+   
+    const nlohmann::json& config = ConfigLoader::getInstance().getConfig("Enemy/Ghost");
+   
+    nHitBox = toVector2<float>(config["HitBox"]);
+    nGSpeed = config["GSpeed"];
+    nMaxGVelocity = config["MaxGVelocity"];
+    nFireRange = config["FireRange"];
+    nFireSpeed = config["FireSpeed"];
+    nFireCooldown = sf::seconds(config["FireCoolDown"]);
+    nJumpVelocity = config["JumpVelocity"];
+    nTimeDisappear = sf::seconds(config["TimeDisappear"]);
     // nSpeed = sf::Vector2f(400.f, 400.f);
     // nMaxVelocity = sf::Vector2f(96.f, 96.f);
-    nJumpVelocity = 0;
 }
 
 void Ghost::attackPlayer(Dough& player)

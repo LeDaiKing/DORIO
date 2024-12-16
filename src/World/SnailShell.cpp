@@ -1,6 +1,7 @@
 #include "SnailShell.hpp"
 #include "Dough.hpp"
 #include <iostream>
+#include "../ConfigLoader.hpp"
 
 SnailShell::SnailShell(Type type, sf::Vector2f position)
 : Enemy(type, position)
@@ -18,10 +19,13 @@ void SnailShell::setUpEntity()
     addAnimationState(State::Hit, 48, 4, sf::seconds(0.3), sf::Vector2i(38, 24), false);
     addAnimationState(State::Dead, 24, 5, sf::seconds(0.5), sf::Vector2i(38, 24), false);
     nSprite.turnInverse();
-    nHitBox = sf::Vector2f(25.f, 18.f);
-    nSpeed = sf::Vector2f(700.f, 0.f);
-    nMaxVelocity = sf::Vector2f(300.f, 64.f);
-    nJumpVelocity = 0;
+
+    const nlohmann::json& config = ConfigLoader::getInstance().getConfig("Enemy/SnailShell");
+
+    nHitBox = toVector2<float>(config["HitBox"]);
+    nSpeed = toVector2<float>(config["Speed"]);
+    nMaxVelocity = toVector2<float>(config["MaxVelocity"]);
+    nJumpVelocity = config["JumpVelocity"];
 }
 
 void SnailShell::attackPlayer(Dough& player)

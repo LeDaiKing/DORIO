@@ -35,19 +35,6 @@ struct DougJump
 
 };
 
-struct Firing
-{
-	Firing(CommandQueue& commands)
-	: commands(commands)
-	{
-	}
-	void operator() (Dough& Dough, sf::Time) const
-	{
-		Dough.fire(commands);
-	}
-	CommandQueue& commands;
-};
-
 
 
 
@@ -86,7 +73,6 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 
 		if (event.key.code == sf::Keyboard::Space)
 		{
-			nActionBinding[Fire].action = derivedAction<Dough>(Firing(commands));
 			commands.push(nActionBinding[Fire]);
 		}
 	}
@@ -149,7 +135,7 @@ void Player::initializeActions()
 	nActionBinding[MoveUp].action    = derivedAction<Dough>(DougJump());
 	nActionBinding[Sit].action       = derivedAction<Dough>([](Dough& a, sf::Time){ a.sit(); });
 	nActionBinding[StandUp].action   = derivedAction<Dough>([](Dough& a, sf::Time){ a.standUp(); });
-	// nActionBinding[Fire].action      = derivedAction<Dough>(Firing(commands));
+	nActionBinding[Fire].action      = derivedAction<Dough>([](Dough& a, sf::Time){ a.preFire(); });
 }
 
 
