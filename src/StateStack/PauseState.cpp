@@ -1,9 +1,9 @@
 #include "PauseState.hpp"
-#include "..\Utility.hpp"
+#include "../Utility.hpp"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "State.hpp"
-#include "..\Holder\ResourceIdentifiers.hpp"
-#include "..\Holder\ResourceHolder.hpp"
+#include "../Holder/ResourceIdentifiers.hpp"
+#include "../Holder/ResourceHolder.hpp"
 
 PauseState::PauseState(StateStack& stack, Context context)
 : State(stack, context)

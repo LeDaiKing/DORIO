@@ -10,7 +10,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 {
 
 }
-/*
+
+
 void ChooseCharState::draw()
 {
     sf::RenderWindow& window = *getContext().window;
@@ -31,4 +32,3 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     backButton.handleEvent(event);
     return false;
 }
-*/
