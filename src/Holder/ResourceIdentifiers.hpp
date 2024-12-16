@@ -75,6 +75,7 @@ namespace Textures
 		SettingBut,
 		WhiteText,
 		BlackText,
+		ChooseCharScreen,
 	};
 }
 
