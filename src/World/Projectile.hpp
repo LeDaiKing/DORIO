@@ -26,6 +26,7 @@ class Projectile : public Item
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         void setAnimationState(AniState state);
         void handleEnemyCollision(CommandQueue& commands);
+        void handleBlockCollision(CommandQueue& commands);
     private:
         sf::Vector2f nVelocity;
         float nSpeed;

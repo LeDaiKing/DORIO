@@ -71,18 +71,27 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 	nSprite.update(dt);
 	if (nCurrentState != State::Dead)
 	{
-		// if (nCurrentState == State::Dead) return;
+		if (nCurrentState == State::Dead) return;
 
-		if (nClosestBottomBlock != nullptr)
+		if (nClosestBottomBlock != nullptr && !nClosestBottomBlock->isMarkedForRemoval())
 		{
 			nClosestBottomBlock->handleBottomCollision(*this);
 			nClosestBottomBlock = nullptr;
 		}
 
-		if (nClosestTopBlock != nullptr)
+		if (nClosestTopBlock != nullptr && !nClosestTopBlock->isMarkedForRemoval())
 		{
 			nClosestTopBlock->handleTopCollision(*this);
 			nClosestTopBlock = nullptr;
+		}
+		else if (nClosestTopBlock != nullptr)
+		{
+			if (getCategory() & Category::Enemy)
+			{
+				setAnimationState(State::Dead);
+				setVelocity(0.f, -180.f);
+				nClosestTopBlock = nullptr;
+			}
 		}
 	}
 	else
@@ -305,4 +314,10 @@ void Entity::updateClosestBottomBlock(Block* block)
 	{
 		nClosestBottomBlock = block;
 	}
+}
+void Entity::setDirection(bool type)
+{
+	if (type == nDirection) return;
+	nDirection = type;
+	nSprite.setFlipped(nDirection);
 }

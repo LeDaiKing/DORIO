@@ -55,3 +55,4 @@ void Snail::setAnimationState(State type)
         return;
     Enemy::setAnimationState(type);
 }
+

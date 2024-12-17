@@ -15,6 +15,7 @@ class BreakableBlock : public BouncingBlock
         virtual void handleBottomCollision(Entity& player);
 
         // void breakBlock(Dough& player);
+        void breakBlock();
 
         virtual bool isMarkedForRemoval() const;
 

@@ -98,8 +98,9 @@ void BreakableBlock::handleBottomCollision(Entity& player)
         Dough& player1 = static_cast<Dough&>(player);
         if (player1.getVelocity().y < -220.f && player1.getStateJump() == 1)
         {
-            nIsBroken = true;
-            nBreakAnimation.setAnimationState(0);
+            // nIsBroken = true;
+            // nBreakAnimation.setAnimationState(0);
+            breakBlock();
         }
     }
     BouncingBlock::handleBottomCollision(player);
@@ -114,4 +115,10 @@ void BreakableBlock::handleBottomCollision(Entity& player)
 bool BreakableBlock::isMarkedForRemoval() const
 {
     return nIsBroken && nBreakAnimation.isFinished();
+}
+
+void BreakableBlock::breakBlock()
+{
+    nIsBroken = true;
+    nBreakAnimation.setAnimationState(0);
 }

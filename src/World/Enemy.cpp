@@ -59,6 +59,12 @@ void Enemy::updateCurrent(sf::Time dt, CommandQueue& commands)
 
     if (nCurrentState == State::Dead) return;
 
+    if (isAutoAI()) 
+    {
+        autoMove();
+        return;
+    }
+
     switch (nAIState)
     {
     case Patrolling:
@@ -195,4 +201,14 @@ sf::FloatRect Enemy::getBoundingRect() const
     bound.width = nHitBox.x;
 
 	return bound;
+}
+
+bool Enemy::isAutoAI()
+{
+    return (int)nBehaviors.size() == 0 && nAIState == None;
+}
+
+void Enemy::autoMove()
+{
+    walk(nDirection);
 }

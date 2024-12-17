@@ -110,3 +110,8 @@ void SnailShell::hitBlock()
     nSprite.setFlipped(nDirection);
     setAnimationState(State::Hit);
 }
+
+bool SnailShell::isAutoAI()
+{
+    return false;
+}

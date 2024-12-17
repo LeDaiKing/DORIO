@@ -41,16 +41,17 @@ class Enemy : public Entity
 		virtual void addTurnBehavior();
 		virtual void isTargetInRange(const sf::Vector2f& target);
 		virtual sf::FloatRect getBoundingRect() const;
+		virtual bool isAutoAI();
 	protected:
 		void setAIState(AIState state);
 		virtual void moveToPosition(sf::Time dt);
 		virtual void wait(sf::Time time);
 		virtual void turn();
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
+		virtual void autoMove();
 		// virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 	
 	private:
-		
 
 	private:
 		Type nType;

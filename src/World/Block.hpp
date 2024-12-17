@@ -1,7 +1,6 @@
 #pragma once
 #include "Category.hpp"
 #include "SpriteNode.hpp"
-
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/Transformable.hpp>

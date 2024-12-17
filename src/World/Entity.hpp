@@ -1,6 +1,7 @@
 #pragma once
 #include "Animation.hpp"
 #include "SceneNode.hpp"
+#include <memory>
 class Block;
 class Entity : public SceneNode
 {
@@ -43,6 +44,7 @@ class Entity : public SceneNode
 		// void remove();
 
 		void setOnGround(bool flag);
+		void setDirection(bool type);
 		// bool isOnGround() const;
 		virtual void walk(bool nDirection);
 		virtual void jump();
@@ -83,6 +85,8 @@ class Entity : public SceneNode
 		int nJumpVelocity;
 		bool nOnGround;
 		int nHitPoints = 1;
+		// Block* nClosestTopBlock = nullptr;
+		// Block* nClosestBottomBlock = nullptr;
 		Block* nClosestTopBlock = nullptr;
 		Block* nClosestBottomBlock = nullptr;
 };

@@ -180,7 +180,7 @@ void World::loadMap()
 	texture.setRepeated(true);
 	sf::Image map; map.loadFromFile("res/Background/map1_10.png");
 	nWorldBounds.width = map.getSize().x;
-	for (int x = 0; x < map.getSize().x; x += 32)
+	for (int x = 0; x < 3000; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
 		sf::Color color = map.getPixel(x + 5,y + 5);
@@ -231,7 +231,7 @@ void World::loadMap()
 		else if (color.toInteger() == 0x0000FF00 + 255)
 		{
 			std::unique_ptr<LuckyBlock> block(new LuckyBlock(Block::LuckyBlock, sf::Vector2f(x + 16, y + 16)));
-			block->addItem(Item::Big);
+			block->addItem(Item::FireBig);
 			block->addItem(Item::Coin);
 			block->addItem(Item::Coin);
 			block->addItem(Item::Coin);

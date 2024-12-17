@@ -1,6 +1,7 @@
 #include "Projectile.hpp"
 #include "Entity.hpp"
 #include "Utility.hpp"
+#include "BreakableBlock.hpp"
 #include "Enemy.hpp"
 #include <iostream>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -66,6 +67,8 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
         {
             handleEnemyCollision(commands);
         }
+
+        handleBlockCollision(commands);
 
         if (!nIsCollected)
         move(nVelocity * dt.asSeconds());
@@ -157,4 +160,25 @@ void Projectile::handleEnemyCollision(CommandQueue& commands)
         }
     });
     commands.push(enemyHit);
+}
+
+void Projectile::handleBlockCollision(CommandQueue& commands)
+{
+    if (nIsCollected) return;
+    Command blockHit;
+    blockHit.category = Category::Block;
+    blockHit.action = derivedAction<Block>([this] (Block& block, sf::Time)
+    {
+        if (block.getBoundingRect().intersects(getBoundingRect()))
+        {
+            destroy();
+            nIsCollected = true;
+            if (dynamic_cast<BreakableBlock*>(&block) != nullptr)
+            {
+                BreakableBlock& breakableBlock = static_cast<BreakableBlock&>(block);
+                breakableBlock.breakBlock();
+            }
+        }
+    });
+    commands.push(blockHit);
 }

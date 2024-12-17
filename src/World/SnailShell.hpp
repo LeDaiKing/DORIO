@@ -10,6 +10,7 @@ class SnailShell : public Enemy
         virtual void attackPlayer(Dough& player);
         void attackEnemy(Enemy& enemy);
         void hitBlock();
+        virtual bool isAutoAI();
         // virtual void isTargetInRange(const sf::Vector2f& target);
         bool isPushed();
     protected:
