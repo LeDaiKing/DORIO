@@ -19,6 +19,7 @@ namespace GUI
             virtual ~Component();
             virtual bool isSelectable() const = 0;
             bool isSelected() const;
+            virtual void update(sf::Time dt);
             virtual void select();
             virtual void deselect();
             virtual bool isPressable() const;

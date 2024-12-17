@@ -60,16 +60,16 @@ void Game::run()
 
 void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::TitleScreen, "res/Background/title.png");
-	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/sprout-valley.png");
+	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/background.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/SmallRectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/SmallRectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/SmallRectButton.png");
-	TextureHolder::getInstance().load(Textures::ID::SquareButtonNormal, "res/UI/SquareButton1.png");
-	TextureHolder::getInstance().load(Textures::ID::SquareButtonSelected, "res/UI/SquareButton2.png");
-	TextureHolder::getInstance().load(Textures::ID::SquareButtonPressed, "res/UI/SquareButton3.png");
-	TextureHolder::getInstance().load(Textures::ID::CreativeButtonNormal, "res/UI/CreativeButton11.png");
-	TextureHolder::getInstance().load(Textures::ID::CreativeButtonSelected, "res/UI/CreativeButton22.png");
-	TextureHolder::getInstance().load(Textures::ID::CreativeButtonPressed, "res/UI/CreativeButton22.png");
+	TextureHolder::getInstance().load(Textures::ID::SquareButtonNormal, "res/UI/SquareButton1111.png");
+	TextureHolder::getInstance().load(Textures::ID::SquareButtonSelected, "res/UI/SquareButton222.png");
+	TextureHolder::getInstance().load(Textures::ID::SquareButtonPressed, "res/UI/SquareButton333.png");
+	TextureHolder::getInstance().load(Textures::ID::CreativeButtonNormal, "res/UI/CreativeButton111.png");
+	TextureHolder::getInstance().load(Textures::ID::CreativeButtonSelected, "res/UI/CreativeButton222.png");
+	TextureHolder::getInstance().load(Textures::ID::CreativeButtonPressed, "res/UI/CreativeButton222.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonNormal, "res/UI/BackButton3.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton3.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton3.png");

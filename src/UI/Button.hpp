@@ -2,7 +2,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-
+#include "../World/Animation.hpp"
 #include "../StateStack/StateStack.hpp"
 #include "Component.hpp"
 
@@ -37,6 +37,7 @@ namespace GUI{
 
         void setIsSelected(bool flag);
 
+        virtual void update(sf::Time dt);
         virtual bool isSelectable() const;
         virtual bool isPressable() const;
         virtual void select();
@@ -57,8 +58,10 @@ namespace GUI{
         const sf::Texture& nPressedTexture;
         SoundPlayer& nSoundPlayer;
         bool nIsSelected = true;
+        bool nIsSelecting = false;
         Type nType;
         sf::Sprite nSprite;
+        Animation nSelectedAni;
         sf::Text nText;
         bool nIsToggle;
     };

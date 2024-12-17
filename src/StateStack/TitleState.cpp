@@ -10,7 +10,7 @@ TitleState::TitleState(StateStack& stack, Context context)
     this->nText.setFont(FontHolder::getInstance().get(Fonts::Main));
     this->nText.setString("Press any key to start");
     centerOrigin(this->nText);
-    this->nText.setPosition(context.window->getView().getSize() / 2.f);
+    this->nText.setPosition(context.window->getSize().x / 2.f, context.window->getSize().y / 8.f * 7.f);
 
     this->nameTitle.setFont(FontHolder::getInstance().get(Fonts::Main));
     this->nameTitle.setString("DORIO");

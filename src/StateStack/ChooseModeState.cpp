@@ -12,7 +12,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
 
     auto slotButton1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    slotButton1->setPosition(140, 190);
+    const float bonusX = 1.75f;
+    const float bonusY = 1.33f;
+    slotButton1->setPosition(140 * bonusX, 190 * bonusY);
     slotButton1->setText("NEW!");
     slotButton1->setColor(sf::Color::Red);
     slotButton1->setSizeText(30);
@@ -23,7 +25,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     });
 
     auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    slotButton2->setPosition(260 + 140, 190);
+    slotButton2->setPosition((260 + 140) * bonusX, 190 * bonusY);
     slotButton2->setText("NEW!");
     slotButton2->setColor(sf::Color::Red);
     slotButton2->setSizeText(30);
@@ -34,18 +36,19 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     });
 
     auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    slotButton3->setPosition(260 + 140 + 260, 190);
+    slotButton3->setPosition((260 + 140 + 260) * bonusX, 190 * bonusY);
     slotButton3->setText("NEW!");
     slotButton3->setColor(sf::Color::Red);
     slotButton3->setSizeText(30);
     slotButton3->setCallback([this] ()
     {
+
         requestStackPop();
         requestStackPush(States::Game);
     });
 
     auto creativeButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::CreativeButton);
-    creativeButton->setPosition(400, 400);
+    creativeButton->setPosition(400 * bonusX, 400 * bonusY);
     creativeButton->setText("Creative");
     creativeButton->setColor(sf::Color::Red);
     creativeButton->setSizeText(30);
@@ -56,7 +59,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     });
 
 
-    backButton.setPosition(62.5f, 600 - 105.0f / 2.0f);
+    backButton.setPosition(62.5f, 800 - 105.0f / 2.0f);
     backButton.setIsSelected(false);
     backButton.setCallback([this] ()
     {
@@ -68,12 +71,12 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     auto textNormalMode = std::make_shared<GUI::Label>("Normal Mode");
     textNormalMode->setCharacterSize(30);
     textNormalMode->setColor(sf::Color::Yellow);
-    textNormalMode->setPosition((800 - textNormalMode->getWidth()) / 2, 50);    
+    textNormalMode->setPosition((1400 - textNormalMode->getWidth()) / 2, 50 * bonusY);    
 
     auto textSpecialMode = std::make_shared<GUI::Label>("Special Mode");
     textSpecialMode->setCharacterSize(30);
     textSpecialMode->setColor(sf::Color::Yellow);
-    textSpecialMode->setPosition((800 - textSpecialMode->getWidth()) / 2, 300);    
+    textSpecialMode->setPosition((1400 - textSpecialMode->getWidth()) / 2, 300 * bonusY);    
 
 
 
@@ -96,6 +99,7 @@ void ChooseModeState::draw()
 
 bool ChooseModeState::update(sf::Time dt)
 {
+    nGUIContainer.update(dt);
     return true;
 }
 

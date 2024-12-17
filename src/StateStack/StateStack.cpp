@@ -17,7 +17,7 @@ void StateStack::applyPendingChanges() {
             case Action::Push:
                 nStack.push_back(createState(change.stateID));
                 break;
-            case Action::Pop:
+            case Action::Pop: 
                 nStack.pop_back();
                 break;
             case Action::Clear:

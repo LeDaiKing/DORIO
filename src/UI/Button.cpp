@@ -12,12 +12,15 @@ namespace GUI{
     : nCallback()
     , nNormalTexture(TextureHolder::getInstance().get(getNormalTexture(type)))
     , nSelectedTexture(TextureHolder::getInstance().get(getSelectedTexture(type)))
+    , nSelectedAni(TextureHolder::getInstance().get(getSelectedTexture(type)))
     , nPressedTexture(TextureHolder::getInstance().get(getPressedTexture(type)))
     , nText("", FontHolder::getInstance().get(Fonts::Main), 16)
     , nIsToggle(false)
     , nType(type)
     , nSoundPlayer(*context.sounds)
     {
+        nSelectedAni.addAnimationState(0, 0, 2, sf::seconds(1.0f), sf::Vector2i(486, 274), true);
+        nSelectedAni.setAnimationState(0);
         setNormalSprite();
         // sf::FloatRect bounds = nSprite.getLocalBounds();
         // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));        
@@ -123,20 +126,26 @@ namespace GUI{
         nIsSelected = flag;
     }
 
-    bool Button::isSelectable() const {
-        return nIsSelected;
+    void Button::update(sf::Time dt) {
+        if (nIsSelecting) {
+            nSelectedAni.update(dt);
+        }
     }
+
+    bool Button::isSelectable() const { return nIsSelected; }
 
     bool Button::isPressable() const {
         return true;
     }
 
     void Button::select() {
+        nIsSelecting = true;
         Component::select();
         setSelectedSprite();
     }
 
     void Button::deselect() {
+        nIsSelecting = false;
         Component::deselect();
         setNormalSprite();
     }
@@ -194,7 +203,12 @@ namespace GUI{
 
     void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
         states.transform *= getTransform();
-        target.draw(nSprite, states);
+        if (nIsSelecting) {
+            target.draw(nSelectedAni, states);
+        }
+        else {
+            target.draw(nSprite, states);
+        }
         target.draw(nText, states);
     }
 }

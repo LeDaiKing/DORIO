@@ -20,9 +20,13 @@ namespace GUI
         }
     }
 
-    bool Container::isSelectable() const {
-        return false;
+    void Container::update(sf::Time dt) {
+        for (const Component::Ptr& child : nChildren) {
+            child->update(dt);
+        }
     }
+
+    bool Container::isSelectable() const { return false; }
 
     bool Container::isPressasble() const {
         return false;

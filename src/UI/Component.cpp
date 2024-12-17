@@ -16,6 +16,10 @@ namespace GUI{
         return nIsSelected;
     }
 
+    void Component::update(sf::Time dt) {
+        // pass
+    }
+
     void Component::select()
     {
         nIsSelected = true;

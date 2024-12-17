@@ -12,7 +12,8 @@ namespace GUI{
         public: 
         Container();
         void pack(Component::Ptr component);
-
+        
+        virtual void update(sf::Time dt);
         virtual bool isSelectable() const;
         virtual bool isPressasble() const;
         virtual void handleEvent(const sf::Event& event);
