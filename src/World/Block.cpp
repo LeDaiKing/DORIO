@@ -49,6 +49,8 @@ sf::FloatRect Block::getBoundingRect() const
 	return getWorldTransform().transformRect(nSprite.getGlobalBounds());
 }
 
+bool Block::isBroken() const { return false; }
+
 void Block::applyNormal(SceneNode& graph)
 {
     if (graph.getCategory() & Category::Entity && !graph.isMarkedForRemoval())

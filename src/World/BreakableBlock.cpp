@@ -117,6 +117,10 @@ bool BreakableBlock::isMarkedForRemoval() const
     return nIsBroken && nBreakAnimation.isFinished();
 }
 
+bool BreakableBlock::isBroken() const {
+    return nIsBroken;
+}
+
 void BreakableBlock::breakBlock()
 {
     nIsBroken = true;

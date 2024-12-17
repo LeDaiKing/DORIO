@@ -18,6 +18,7 @@ class BreakableBlock : public BouncingBlock
         void breakBlock();
 
         virtual bool isMarkedForRemoval() const;
+        virtual bool isBroken() const;
 
     private:
         bool nIsBroken;

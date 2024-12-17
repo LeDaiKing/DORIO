@@ -15,7 +15,8 @@ class State{
     public:
         typedef std::unique_ptr<State> Ptr;
         struct Context{
-            Context(sf::RenderWindow& window, Player& player, MusicPlayer& music, SoundPlayer& sounds, ParallelTask& loadingTask);
+            Context(sf::RenderWindow& window, Player& player, MusicPlayer& music, SoundPlayer& sounds, 
+            ParallelTask& loadingTask);
             sf::RenderWindow* window;
             Player* player;
             MusicPlayer* music;

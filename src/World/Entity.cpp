@@ -72,14 +72,13 @@ void Entity::updateCurrent(sf::Time dt, CommandQueue& commands)
 	if (nCurrentState != State::Dead)
 	{
 		if (nCurrentState == State::Dead) return;
-
-		if (nClosestBottomBlock != nullptr && !nClosestBottomBlock->isMarkedForRemoval())
+		if (nClosestBottomBlock != nullptr && !nClosestBottomBlock->isBroken())
 		{
 			nClosestBottomBlock->handleBottomCollision(*this);
 			nClosestBottomBlock = nullptr;
 		}
 
-		if (nClosestTopBlock != nullptr && !nClosestTopBlock->isMarkedForRemoval())
+		if (nClosestTopBlock != nullptr && !nClosestTopBlock->isBroken())
 		{
 			nClosestTopBlock->handleTopCollision(*this);
 			nClosestTopBlock = nullptr;
@@ -286,6 +285,8 @@ void Entity::getDamage(int damage)
 
 void Entity::updateClosestTopBlock(Block* block)
 {
+	if (block->isBroken())
+		return;
 	if (nClosestTopBlock == nullptr)
 	{
 		nClosestTopBlock = block;
@@ -302,6 +303,8 @@ void Entity::updateClosestTopBlock(Block* block)
 
 void Entity::updateClosestBottomBlock(Block* block)
 {
+	if (block->isBroken())
+		return;
 	if (nClosestBottomBlock == nullptr)
 	{
 		nClosestBottomBlock = block;

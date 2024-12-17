@@ -32,6 +32,7 @@ class Block : public SpriteNode
         virtual void handleTopCollision(Entity& entity) = 0;
 
         virtual sf::FloatRect getBoundingRect() const;
+        virtual bool isBroken() const;
 
     private:
         Type nType;
