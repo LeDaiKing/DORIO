@@ -178,7 +178,7 @@ void World::loadMap()
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
-	sf::Image map; map.loadFromFile("res/Background/map1_10.png");
+	sf::Image map; map.loadFromFile("res/Background/map1_11.png");
 	nWorldBounds.width = map.getSize().x;
 	for (int x = 0; x < 3000; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)

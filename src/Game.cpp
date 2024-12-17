@@ -6,6 +6,7 @@
 #include "StateStack/MenuState.hpp"
 #include "StateStack/ChooseModeState.hpp"
 #include "StateStack/ChoosePlayerState.hpp"
+#include "StateStack/LoadingState.hpp"
 
 
 #include "Holder/ResourceHolder.hpp"
@@ -18,7 +19,7 @@ Game::Game()
 , nPlayer()
 , nMusicPlayer()
 , nSoundPlayer()
-, nGameStateStack(State::Context(nWindow, nPlayer, nMusicPlayer, nSoundPlayer))
+, nGameStateStack(State::Context(nWindow, nPlayer, nMusicPlayer, nSoundPlayer, nLoadingTask))
 , nStatisticsText()
 , nStatisticsUpdateTime()
 {
@@ -150,4 +151,5 @@ void Game::registerStates() {
 	nGameStateStack.registerState<MenuState>(States::ID::Menu);
 	nGameStateStack.registerState<ChooseModeState>(States::ID::ChooseMode);
 	nGameStateStack.registerState<ChoosePlayerState>(States::ID::ChoosePlayer);
+	nGameStateStack.registerState<LoadingState>(States::ID::Loading);	
 }

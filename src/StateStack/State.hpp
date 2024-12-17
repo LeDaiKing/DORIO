@@ -3,6 +3,7 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Music/MusicPlayer.hpp"
 #include "../Music/SoundPlayer.hpp"
+#include "../StateStack/ParallelTask.hpp"
 #include <memory>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -14,11 +15,12 @@ class State{
     public:
         typedef std::unique_ptr<State> Ptr;
         struct Context{
-            Context(sf::RenderWindow& window, Player& player, MusicPlayer& music, SoundPlayer& sounds);
+            Context(sf::RenderWindow& window, Player& player, MusicPlayer& music, SoundPlayer& sounds, ParallelTask& loadingTask);
             sf::RenderWindow* window;
             Player* player;
             MusicPlayer* music;
             SoundPlayer* sounds;
+            ParallelTask* loadingTask;
         };
     public:
         State(StateStack& stack, Context context);

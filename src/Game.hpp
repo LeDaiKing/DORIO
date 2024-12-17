@@ -7,6 +7,7 @@
 #include "Holder/ResourceIdentifiers.hpp"
 #include "Music/MusicPlayer.hpp"
 #include "Music/SoundPlayer.hpp"
+#include "StateStack/ParallelTask.hpp"
 
 
 #include <SFML/Graphics.hpp>
@@ -46,5 +47,6 @@ class Game : private sf::NonCopyable
 		Player nPlayer;
         MusicPlayer nMusicPlayer;
         SoundPlayer nSoundPlayer;
+        ParallelTask nLoadingTask;
 };
 

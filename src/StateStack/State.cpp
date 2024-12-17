@@ -27,9 +27,11 @@ State::Context State::getContext() const {
 
 State::Context::Context(sf::RenderWindow& window,
                         Player& player, MusicPlayer& music, 
-                        SoundPlayer& sounds)
+                        SoundPlayer& sounds, ParallelTask& loadingTask)
 : window(&window)
 , player(&player) 
 , music(&music) 
-, sounds(&sounds) {
+, sounds(&sounds) 
+, loadingTask(&loadingTask) {
 }
+

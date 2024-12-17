@@ -22,6 +22,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::Game);
+        requestStackPush(States::Loading);
     });
 
     auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
@@ -32,7 +33,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     slotButton2->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::Game);
+        requestStackPush(States::Loading);
     });
 
     auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
@@ -55,7 +56,8 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     creativeButton->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::Game);
+
+        requestStackPush(States::Loading);
     });
 
 
