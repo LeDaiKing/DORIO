@@ -191,7 +191,7 @@ collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRec
 	float topOverlap = rect1.top + rect1.height - rect2.top;
 	float bottomOverlap = rect2.top + rect2.height - rect1.top;
 
-	if (leftOverlap <= 0.f || rightOverlap <= 0.f || topOverlap <= 0.f || bottomOverlap <= 0.f)
+	if (leftOverlap < 0.f || rightOverlap < 0.f || topOverlap < 0.f || bottomOverlap < 0.f)
 		return collision::None;
 
 	float minOverlap = std::min(std::min(leftOverlap, rightOverlap), std::min(topOverlap, bottomOverlap));

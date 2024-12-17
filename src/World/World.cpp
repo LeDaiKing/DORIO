@@ -178,13 +178,13 @@ void World::loadMap()
 	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
-	sf::Image map; map.loadFromFile("res/Background/map1_10.png");
+	sf::Image map; map.loadFromFile("res/Background/map1_13.png");
 	nWorldBounds.width = map.getSize().x;
 	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
 		sf::Color color = map.getPixel(x + 5,y + 5);
-		// std::cout << color.toInteger() << std::endl;
+		 std::cout << color.toInteger() << std::endl;
 		if (color.toInteger() == 0x000000 + 255 || (x == 0 && y == 16 * 32))
 		{
 			// std::cout << x << " " << y << std::endl;
