@@ -87,7 +87,9 @@ void Block::applyNormal(SceneNode& graph)
             entity.updateClosestBottomBlock(this);
             
         }
-        else if (side == collision::Left && entity.getVelocity().x > 0)
+        entityHitBox.height -= 3.f;
+        side = checkCollisionSide(entityHitBox, bound);
+        if (side == collision::Left && entity.getVelocity().x > 0)
         {
             entity.move(bound.left - entityHitBox.left - entityHitBox.width, 0.f);
 
