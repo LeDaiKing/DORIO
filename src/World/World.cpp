@@ -199,8 +199,11 @@ void World::loadMap()
 	sf::Texture& texture = TextureHolder::getInstance().get(config["Background"]);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
-	sf::Image map; map.loadFromFile("res/Background/map1_11.png");
-	nWorldBounds.width = map.getSize().x;
+	std::unique_ptr<SpriteNode> background(new SpriteNode(texture, textureRect));
+	background->setPosition(nWorldBounds.left, nWorldBounds.top);
+	nSceneLayers[Background]->attachChild(std::move(background));
+
+	//Map
 	for (int x = 0; x < 3000; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
