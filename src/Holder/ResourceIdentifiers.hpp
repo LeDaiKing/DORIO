@@ -28,16 +28,11 @@ namespace Textures
 {
 	enum ID
 	{
-        // Add an entry for each new texture
-		Dough1,
-		Dough2,
-		Enemy,
-		Ghost,
-		Chicken,
-		CockRoach,
-		Snail,
-		SnailShell,
-		Sky,
+        // Background
+		BackGround1,
+		BackGround2,
+		
+		// Button
 		TitleScreen,
 		ChooseModeScreen,
 		RectButtonNormal,
@@ -52,12 +47,39 @@ namespace Textures
 		BackButtonNormal,
 		BackButtonSelected,
 		BackButtonPressed,
-		Dirt,
-		Breakable,
-		BreakAnimation,
-		LuckyBlock,
-		StaticLuckyBlock,
+		ChooseCharScreen,
+		
+		// Dough
+		Dough1,
+		Dough2,
+		BigDough,
+		FireBigDough,
+
+		Ghost,
+		Chicken,
+		CockRoach,
+		Snail,
+		SnailShell,
+
+		// Block
+		Floor1,
+		UnderFloor1,
+		StaticBlock1,
+		Floor2,
+		UnderFloor2,
+		StaticBlock2,
+		Breakable1,
+		BreakAnimation1,
+		Breakable2,
+		BreakAnimation2,
+		LuckyBlock1,
+		StaticLuckyBlock1,
+		LuckyBlock2,
+		StaticLuckyBlock2,
 		JumpyBlock,
+		SlideBlock,
+
+		// Item
 		Coin,
 		CoinAnimation,
 		Heart,
@@ -67,15 +89,14 @@ namespace Textures
 		FireBigItem,
 		FireBigItemAnimation,
 		FireBall,
-		BigDough,
-		FireBigDough,
+
+		// Hub
 		ClockIcon,
 		CoinIcon,
 		HeartIcon,
 		SettingBut,
 		WhiteText,
 		BlackText,
-		ChooseCharScreen,
 	};
 }
 

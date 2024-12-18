@@ -1,16 +1,11 @@
 #include "ConfigLoader.hpp"
 #include <fstream>
+#include <iostream>
 ConfigLoader::ConfigLoader()
 {
-    std::ifstream file("file/Dough/abilities.json");
-    nlohmann::json a;
-    file >> a;
-    configList["Dough"] = a;
-    file.close();
-    file.open("file/Enemy/abilities.json");
-    file >> a;
-    configList["Enemy"] = a;
-    file.close();
+    loadConfig("Dough", "file/Dough/abilities.json");
+    loadConfig("Enemy", "file/Enemy/abilities.json");
+    loadConfig("Map", "file/Map/loadmap.json");
 }
 
 ConfigLoader& ConfigLoader::getInstance()
@@ -40,4 +35,18 @@ const nlohmann::json& ConfigLoader::getConfig(const char* nkey)
         
 
     return (*current)[key];
+}
+
+void ConfigLoader::loadConfig(const char* key, const char* path)
+{
+    std::ifstream file(path);
+    if (!file.is_open())
+    {
+        std::cerr << "Cannot open file " << path << std::endl;
+        return;
+    }
+    nlohmann::json a;
+    file >> a;
+    configList[key] = a;
+    file.close();
 }

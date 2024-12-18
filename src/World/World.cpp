@@ -14,6 +14,10 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <fstream>
+#include "../ConfigLoader.hpp"
+#include "BlockFactory.hpp"
+#include "nlohmann/json.hpp"
 
 int World::nGravity = 700;
 
@@ -25,6 +29,7 @@ World::World(sf::RenderWindow& window)
 , nWorldBounds(0.f, 0.f, 5000, nWorldView.getSize().y)
 , nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
+, nTime(sf::Time::Zero)
 {
 	// loadTextures();
 	buildScene();
@@ -41,7 +46,7 @@ World::World(sf::RenderWindow& window)
 void World::update(sf::Time dt)
 {
 
-	
+	nTime -= dt;
 	applyNormal();
 	applyGravity();
 	// enemiesAttackPlayer();
@@ -62,7 +67,7 @@ void World::update(sf::Time dt)
 	// Regular update step, adapt position (correct if outside view)
 
 	adaptCameraPosition();
-	nHub.update(dt, *nPlayerDough);
+	nHub.update(dt, *nPlayerDough, nTime);
 }
 
 void World::draw()
@@ -174,8 +179,24 @@ void World::adaptCameraPosition()
 void World::loadMap()
 {
 	
-	// Prepare the tiled background
-	sf::Texture& texture = TextureHolder::getInstance().get(Textures::Sky);
+	std::string level;
+	std::ifstream file("file/Map/map.txt");
+	file >> level;
+	file.close();
+	// std::cout << level << std::endl;
+
+	std::string key = "Map/Level" + level;
+	nlohmann::json config = ConfigLoader::getInstance().getConfig(key.c_str());
+
+
+	//Time
+	nTime = sf::seconds(config["Time"].get<float>());
+
+	sf::Image map; map.loadFromFile(config["MapImage"].get<std::string>());
+	nWorldBounds.width = map.getSize().x;
+
+	//Background
+	sf::Texture& texture = TextureHolder::getInstance().get(config["Background"]);
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
 	sf::Image map; map.loadFromFile("res/Background/map1_11.png");
@@ -183,105 +204,51 @@ void World::loadMap()
 	for (int x = 0; x < 3000; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
-		sf::Color color = map.getPixel(x + 5,y + 5);
-		 std::cout << color.toInteger() << std::endl;
-		if (color.toInteger() == 0x000000 + 255 || (x == 0 && y == 16 * 32))
+		sf::Color color = map.getPixel(x + 5, y + 5);
+		if (color.toInteger() == 0xFF)
 		{
-			// std::cout << x << " " << y << std::endl;
-			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Dirt, sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("Floor" + level, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
-		else if (color.toInteger() == 0xFF000000 + 255)
+		else if (color.toInteger() == 0xB2B2FF)
 		{
-			std::unique_ptr<Block> block(new BreakableBlock(BreakableBlock::Breakable, sf::Vector2f(x + 16, y + 16)));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("UnderFloor" + level, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
-		else if (color.toInteger() == 0x0DFF0000 + 255)
+		else if (color.toInteger() == 0xA53A00FF)
 		{
-			std::unique_ptr<Enemy> leader1(new CockRoach(Enemy::CockRoach, sf::Vector2f(x + 16, y + 16)));
-		
-			if (x == 320)
-			{
-				leader1->addWaitBehavior(sf::seconds(1));
-				leader1->addMoveBehavior(sf::Vector2f(32 * 4, 0));
-				leader1->addWaitBehavior(sf::seconds(2));
-				leader1->addTurnBehavior();
-
-				leader1->addWaitBehavior(sf::seconds(2));
-				leader1->addMoveBehavior(sf::Vector2f(32  * 2, 0));
-				leader1->addWaitBehavior(sf::seconds(2));
-				leader1->addTurnBehavior();
-
-				leader1->addWaitBehavior(sf::seconds(5));
-				leader1->addMoveBehavior(sf::Vector2f(-32 * 6, 0));
-				leader1->addWaitBehavior(sf::seconds(2));
-				leader1->addTurnBehavior();
-
-				leader1->addWaitBehavior(sf::seconds(2));
-				leader1->addMoveBehavior(sf::Vector2f(-32 * 2, 0));
-				leader1->addWaitBehavior(sf::seconds(2));
-			}
-			nSceneLayers[Enemies]->attachChild(std::move(leader1));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("StaticBlock" + level, sf::Vector2f(x + 16, y + 16));
+			nSceneLayers[Map]->attachChild(std::move(block));
 		}
-		else if (color.toInteger() == 0xFFFC0000 + 255)
+		else if (color.toInteger() == 0xF600FFFF)
+		{
+			std::unique_ptr<Block> block = BlockFactory::createBlock("LuckyBlock" + level, sf::Vector2f(x + 16, y + 16));
+			LuckyBlock& luckyBlock = static_cast<LuckyBlock&>(*block);
+			luckyBlock.randomItem(-1);
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+		else if (color.toInteger() == 0xFF0000FF)
+		{
+			std::unique_ptr<Block> block = BlockFactory::createBlock("Breakable" + level, sf::Vector2f(x + 16, y + 16));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+		else if (color.toInteger() == 0x54E5FFFF)
+		{
+			std::unique_ptr<Block> block = BlockFactory::createBlock("SlideBlock", sf::Vector2f(x + 16, y + 3));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+		else if (color.toInteger() == 0xAA34A0FF)
+		{
+			std::unique_ptr<Block> block = BlockFactory::createBlock("JumpyBlock", sf::Vector2f(x + 16, y + 16));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
+		else if (color.toInteger() == 0xFFFC00FF)
 		{
 			std::unique_ptr<Coin> coin(new Coin(Item::Coin, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
-		else if (color.toInteger() == 0x0000FF00 + 255)
-		{
-			std::unique_ptr<LuckyBlock> block(new LuckyBlock(Block::LuckyBlock, sf::Vector2f(x + 16, y + 16)));
-			block->addItem(Item::FireBig);
-			block->addItem(Item::Coin);
-			block->addItem(Item::Coin);
-			block->addItem(Item::Coin);
-			block->addItem(Item::Coin);
-			nSceneLayers[Map]->attachChild(std::move(block));
-		}
-		else if (color.toInteger() >= 255)
-		{
-			std::unique_ptr<Block> block(new StaticBlock(StaticBlock::Dirt, sf::Vector2f(x + 16, y + 16)));
-			nSceneLayers[Map]->attachChild(std::move(block));
-		}
-
 	}
-	// std::unique_ptr<Block> block(new BreakableBlock(sf::Vector2f(4 * 32 + 16, 14 * 32 + 16)));
-	// nSceneLayers[Map]->attachChild(std::move(block));
-	std::unique_ptr<SlideBlock> block(new SlideBlock(Block::Dirt, sf::Vector2f(22 * 32 + 16, 12 * 32 + 16)));
-	block->addPath(sf::Vector2f(0, -32 * 3));
-	block->addPath(sf::Vector2f(32 * 5, 0));
-	nSceneLayers[Map]->attachChild(std::move(block));
-
-	std::unique_ptr<JumpyBlock> block1(new JumpyBlock(Block::JumpyBlock, sf::Vector2f(32 * 13 + 16, 32 * 14 + 16)));
-	nSceneLayers[Map]->attachChild(std::move(block1));
-
-	std::unique_ptr<Ghost> enemy(new Ghost(Enemy::Ghost, sf::Vector2f(32 * 16 + 16, 32 * 7 + 16)));
-	enemy->addWaitBehavior(sf::seconds(2));
-	enemy->addMoveBehavior(sf::Vector2f(32 * 4, 0));
-	enemy->addWaitBehavior(sf::seconds(2));
-	enemy->addTurnBehavior();
-	enemy->addWaitBehavior(sf::seconds(2));
-	enemy->addMoveBehavior(sf::Vector2f(- 32 * 7, 32 * 5));
-	enemy->addWaitBehavior(sf::seconds(2));
-	enemy->addTurnBehavior();
-	enemy->addWaitBehavior(sf::seconds(2));
-	enemy->addMoveBehavior(sf::Vector2f(32 * 3, 0));
-	enemy->addWaitBehavior(sf::seconds(2));
-	enemy->addMoveBehavior(sf::Vector2f(0, -32 * 5));
-	enemy->addWaitBehavior(sf::seconds(1));
-	nSceneLayers[Enemies]->attachChild(std::move(enemy));
-
-	std::unique_ptr<Chicken> enemy1(new Chicken(Enemy::Chicken, sf::Vector2f(32 * 16 + 16, 32 * 16 + 16)));
-	// enemy1->addWaitBehavior(sf::seconds(2));
-	nSceneLayers[Enemies]->attachChild(std::move(enemy1));
-
-	std::unique_ptr<Snail> enemy2(new Snail(Enemy::Snail, sf::Vector2f(32 * 5 + 16, 32 * 16 + 16)));
-	nSceneLayers[Enemies]->attachChild(std::move(enemy2));
-
-	// // Add the background sprite to the scene
-	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
-	backgroundSprite->setPosition(nWorldBounds.left, nWorldBounds.top);
-	nSceneLayers[Background]->attachChild(std::move(backgroundSprite));
+	
 
 }
 

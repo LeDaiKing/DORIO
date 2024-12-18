@@ -1,0 +1,14 @@
+{
+    "Level1":
+    {
+        "MapImage": "res/Background/Map/map1_10.png",
+        "Background": 0,
+        "Time": 300
+    },
+    "Level2":
+    {
+        "MapImage": "res/Background/Map/map1_10.png",
+        "Background": 1,
+        "Time": 100
+    }
+}

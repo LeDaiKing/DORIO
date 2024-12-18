@@ -18,6 +18,7 @@ namespace GUI{
     , nIsToggle(false)
     , nType(type)
     , nSoundPlayer(*context.sounds)
+    , nButSize(-1, -1)
     {
         nSelectedAni.addAnimationState(0, 0, 2, sf::seconds(1.0f), sf::Vector2i(486, 274), true);
         nSelectedAni.setAnimationState(0);
@@ -30,6 +31,9 @@ namespace GUI{
     void Button::setNormalSprite() {
       nSprite.setTexture(nNormalTexture, true);
       centerOrigin(nSprite);
+      if (nButSize.x != -1 && nButSize.y != -1) {
+        nSprite.setScale(nButSize.x / nSprite.getLocalBounds().width, nButSize.y / nSprite.getLocalBounds().height);
+      }
       // sf::FloatRect bounds = nSprite.getLocalBounds();
       // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f),
       // std::floor(bounds.top + bounds.height / 2.f));
@@ -38,6 +42,9 @@ namespace GUI{
     void Button::setSelectedSprite() {
         nSprite.setTexture(nSelectedTexture, true);
         centerOrigin(nSprite);
+        if (nButSize.x != -1 && nButSize.y != -1) {
+            nSprite.setScale(nButSize.x / nSprite.getLocalBounds().width, nButSize.y / nSprite.getLocalBounds().height);
+        }
         // sf::FloatRect bounds = nSprite.getLocalBounds();
         // std::cerr << "Bounds: " << bounds.left << " " << bounds.top << " " << bounds.width << " " << bounds.height << std::endl;
         // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));        
@@ -46,6 +53,9 @@ namespace GUI{
     void Button::setPressedSprite() {
         nSprite.setTexture(nPressedTexture, true);
         centerOrigin(nSprite);
+        if (nButSize.x != -1 && nButSize.y != -1) {
+            nSprite.setScale(nButSize.x / nSprite.getLocalBounds().width, nButSize.y / nSprite.getLocalBounds().height);
+        }
         // sf::FloatRect bounds = nSprite.getLocalBounds();
         // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));        
     }
@@ -210,5 +220,9 @@ namespace GUI{
             target.draw(nSprite, states);
         }
         target.draw(nText, states);
+    }
+
+    void Button::setButtonSize(float width, float height) {
+        nButSize = sf::Vector2f(width, height);
     }
 }

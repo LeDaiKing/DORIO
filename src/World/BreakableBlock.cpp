@@ -9,14 +9,36 @@
 #include <iostream>
 #include "Dough.hpp"
 
+Textures::ID toTextureIDAni(BreakableBlock::Type type)
+{
+    switch (type)
+    {
+        case BreakableBlock::Type::Breakable1:
+            return Textures::BreakAnimation1;
+        case BreakableBlock::Type::Breakable2:
+            return Textures::BreakAnimation2;
+        default:
+            break;
+    }
+    return Textures::Breakable1;
+}
+
 BreakableBlock::BreakableBlock(Type type, sf::Vector2f position)
 : BouncingBlock(type, position)
 , nIsBroken(false)
-, nBreakAnimation(TextureHolder::getInstance().get(Textures::BreakAnimation))
+, nBreakAnimation(TextureHolder::getInstance().get(toTextureIDAni(type)))
 {
     centerOrigin(nBreakAnimation);
-    nBreakAnimation.addAnimationState(0, 0, 3, sf::seconds(0.3), sf::Vector2i(72, 63), false);
-    nBreakAnimation.setAnimationState(0);
+    if (type == Type::Breakable1)
+    {
+        nBreakAnimation.addAnimationState(0, 0, 4, sf::seconds(0.3), sf::Vector2i(96, 32), false);
+        nBreakAnimation.setAnimationState(0);
+    }
+    else
+    {
+        nBreakAnimation.addAnimationState(0, 0, 3, sf::seconds(0.3), sf::Vector2i(72, 63), false);
+        nBreakAnimation.setAnimationState(0);
+    }
 }
 
 void BreakableBlock::updateCurrent(sf::Time dt, CommandQueue& commands)

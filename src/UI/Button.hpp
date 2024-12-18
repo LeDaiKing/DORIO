@@ -47,6 +47,8 @@ namespace GUI{
         virtual void activate();
         virtual void deactivate();
 
+        void setButtonSize(float width, float height);
+
         virtual void handleEvent(const sf::Event& event);
         private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -64,5 +66,6 @@ namespace GUI{
         Animation nSelectedAni;
         sf::Text nText;
         bool nIsToggle;
+        sf::Vector2f nButSize;
     };
 }

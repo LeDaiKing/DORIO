@@ -9,11 +9,25 @@
 #include "ItemFactory.hpp"
 // #include <iostream>
 
+Textures::ID toTextureIDEmpty(LuckyBlock::Type type)
+{
+    switch (type)
+    {
+        case LuckyBlock::Type::LuckyBlock1:
+            return Textures::StaticLuckyBlock1;
+        case LuckyBlock::Type::LuckyBlock2:
+            return Textures::StaticLuckyBlock2;
+        default:
+            break;
+    }
+    return Textures::StaticLuckyBlock1;
+}
+
 LuckyBlock::LuckyBlock(Type type, sf::Vector2f position)
 : BouncingBlock(type, position)
 , nIsEmpty(true)
 , nIsDropping(false)
-, nTexture(TextureHolder::getInstance().get(Textures::StaticLuckyBlock))
+, nTexture(TextureHolder::getInstance().get(toTextureIDEmpty(type)))
 {
 }
 
@@ -117,9 +131,23 @@ void LuckyBlock::dropItem()
 
 void LuckyBlock::randomItem(int num)
 {
+    if (num == -1) num = randomInt(5) + 1;
+    bool isGrowUp = false;
     while(num--)
     {
-        Item::Type type = static_cast<Item::Type>(randomInt(Item::Count));
+        Item::Type type = static_cast<Item::Type>(randomInt(4));
+        if (isGrowUp)
+        {
+            type = Item::Coin;
+        }
+        else
+        {
+            if (type != Item::Coin)
+            {
+                isGrowUp = true;
+            }
+        }
+
         addItem(type);
     }
 }

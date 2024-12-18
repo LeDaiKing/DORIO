@@ -15,9 +15,18 @@ class Block : public SpriteNode
     public:
         enum Type
         {
-            Dirt,
-            Breakable,
-            LuckyBlock,
+            Floor1,
+            UnderFloor1,
+            StaticBlock1,
+            Breakable1,
+            LuckyBlock1,
+
+            Floor2,
+            UnderFloor2,
+            StaticBlock2,
+            Breakable2,
+            LuckyBlock2,
+
             SlideBlock,
             JumpyBlock,
         };
