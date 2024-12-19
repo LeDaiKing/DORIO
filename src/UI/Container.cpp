@@ -64,6 +64,18 @@ namespace GUI
         }
     }
 
+/*
+    Component::Ptr Container::getChildMouseOver(sf::RenderWindow &window)
+    {
+	    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+        sf::Transform transform = getTransform();
+        for (std::size_t i = 0; i < nChildren.size(); ++i) if (nChildren[i]->isSelectable()) {
+            if (nChildren[i]->isMouseOver(window)) {
+                return nChildren[i];
+            }
+        }
+    }
+*/
     void Container::draw(sf::RenderTarget& target, sf::RenderStates states) const {
         states.transform *= getTransform();
 
@@ -110,5 +122,9 @@ namespace GUI
 
     bool Container::hasSelection() const {
         return nSelectedChild >= 0;
+    }
+
+    Component::Ptr Container::getSelectedChild() const {
+        return nChildren[nSelectedChild];
     }
 }

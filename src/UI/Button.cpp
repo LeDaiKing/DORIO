@@ -63,6 +63,10 @@ namespace GUI{
         nText.setFillColor(color);
     }
 
+    void Button::setSpriteColor(const sf::Color& color) {
+        nSprite.setColor(color);
+    }
+
     void Button::setSizeText(unsigned int size) {
         nText.setCharacterSize(size);
         centerOrigin(nText);
@@ -79,11 +83,53 @@ namespace GUI{
         if (type == Type::SquareButton) {
             return Textures::SquareButtonNormal;
         }
-        if (type == Type::CreativeButton) {
-            return Textures::CreativeButtonNormal;
-        }
         if (type == Type::BackButton) {
             return Textures::BackButtonNormal;
+        }
+        if (type == Type::charSlot1) {
+            return Textures::charSlot1Normal;
+        }
+        if (type == Type::charSlot2) {
+            return Textures::charSlot2Normal;
+        }
+        if (type == Type::previousButton) {
+            return Textures::previousButton;
+        }
+        if (type == Type::nextButton) {
+            return Textures::nextButton;
+        }
+        if (type == Type::saveButton) {
+            return Textures::saveButtonNormal;
+        }
+         if (type == Type::choosePlayerButton) {
+            return Textures::choosePlayerButtonNormal;
+        }
+        if (type == Type::chooseCharButton) {
+            return Textures::chooseCharButtonNormal;
+        }
+        if(type == Type::chooseModeButton) {
+            return Textures::chooseModeButtonNormal;
+        }
+        if (type == Type::playStartButton) {
+            return Textures::playStartButtonNormal;
+        }
+        if (type == Type::kitchenMode) {
+            return Textures::kitchenModeNormal;
+        }
+        if (type == Type::hallwayMode) {
+            return Textures::hallwayModeNormal;
+        }
+        if (type == Type::gardenMode) {
+            return Textures::gardenModeNormal;
+        }
+        if (type == Type::creativeMode) {
+            return Textures::creativeModeNormal;
+        }
+        if (type == Type::onePlayerButton) {
+            return Textures::onePlayerButton;
+        }
+        if (type == Type::twoPlayerButton) {
+            return Textures::twoPlayerButton;
         }
 
         assert(false);
@@ -96,13 +142,55 @@ namespace GUI{
         if (type == Type::SquareButton) {
             return Textures::SquareButtonSelected;
         }
-        if (type == Type::CreativeButton) {
-            return Textures::CreativeButtonSelected;
-        }
         if (type == Type::BackButton) {
             return Textures::BackButtonSelected;
         }
-
+         if (type == Type::charSlot1) {
+            return Textures::charSlot1Selected;
+        }
+        if (type == Type::charSlot2) {
+            return Textures::charSlot2Selected;
+        }
+         if (type == Type::previousButton) {
+            return Textures::previousButton;
+        }
+        if (type == Type::nextButton) {
+            return Textures::nextButton;
+        }
+        if (type == Type::saveButton) {
+            return Textures::saveButtonSelected;
+        }
+        if (type == Type::choosePlayerButton) {
+            return Textures::choosePlayerButtonSelected;
+        }
+        if (type == Type::chooseCharButton) {
+            return Textures::chooseCharButtonSelected;
+        }
+        if (type == Type::chooseModeButton) {
+            return Textures::chooseModeButtonSelected;
+        }
+        if (type == Type::playStartButton) {
+            return Textures::playStartButtonSelected;
+        }
+        if (type == Type::kitchenMode) {
+            return Textures::kitchenModeSelected;
+        }
+        if (type == Type::hallwayMode) {
+            return Textures::hallwayModeSelected;
+        }
+        if (type == Type::gardenMode) {
+            return Textures::gardenModeSelected;
+        }
+        if (type == Type::creativeMode) {
+            return Textures::creativeModeSelected;
+        }
+        if (type == Type::onePlayerButton) {
+            return Textures::onePlayerButton;
+        }
+        if (type == Type::twoPlayerButton) {
+            return Textures::twoPlayerButton;
+        }
+    
         assert(false);
     }
 
@@ -113,11 +201,53 @@ namespace GUI{
         if (type == Type::SquareButton) {
             return Textures::SquareButtonPressed;
         }
-        if (type == Type::CreativeButton) {
-            return Textures::CreativeButtonPressed;
-        }
         if (type == Type::BackButton) {
             return Textures::BackButtonPressed;
+        }
+         if (type == Type::charSlot1) {
+            return Textures::charSlot1Pressed;
+        }
+        if (type == Type::charSlot2) {
+            return Textures::charSlot2Pressed;
+        }
+         if (type == Type::previousButton) {
+            return Textures::previousButton;
+        }
+        if (type == Type::nextButton) {
+            return Textures::nextButton;
+        }
+        if (type == Type::saveButton) {
+            return Textures::saveButtonSelected;
+        }
+         if (type == Type::choosePlayerButton) {
+            return Textures::choosePlayerButtonSelected;
+        }
+        if (type == Type::chooseCharButton) {
+            return Textures::chooseCharButtonSelected;
+        }
+        if (type == Type::chooseModeButton) {
+            return Textures::chooseModeButtonSelected;
+        }
+        if (type == Type::playStartButton) {
+            return Textures::playStartButtonSelected;
+        }
+        if (type == Type::kitchenMode) {
+            return Textures::kitchenModeSelected;
+        }
+        if (type == Type::hallwayMode) {
+            return Textures::hallwayModeSelected;
+        }
+        if (type == Type::gardenMode) {
+            return Textures::gardenModeSelected;
+        }
+        if (type == Type::creativeMode) {
+            return Textures::creativeModeSelected;
+        }
+        if (type == Type::onePlayerButton) {
+            return Textures::onePlayerButton;
+        }
+        if (type == Type::twoPlayerButton) {
+            return Textures::twoPlayerButton;
         }
         assert(false);
     }
@@ -139,7 +269,7 @@ namespace GUI{
     }
 
     void Button::select() {
-        nIsSelecting = true;
+        //nIsSelecting = true;
         Component::select();
         setSelectedSprite();
     }
@@ -182,8 +312,9 @@ namespace GUI{
 
     void Button::handleEvent(const sf::Event& event) {
         if (event.type == sf::Event::MouseMoved) {
-            sf::Vector2f mousePos = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
-            if (nSprite.getGlobalBounds().contains(mousePos)) {
+            sf::Transform transform = getTransform();
+            sf::Vector2f mousePos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+            if (nSprite.getGlobalBounds().contains(transform.getInverse().transformPoint(mousePos))) {
                 select();
             }
             else {
@@ -200,6 +331,14 @@ namespace GUI{
             }
         }
     }
+
+    bool Button::isMouseOver(sf::RenderWindow &window)
+    {
+	    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+        sf::Transform transform = getTransform();
+        return nSprite.getGlobalBounds().contains(transform.getInverse().transformPoint(mousePos));
+    }
+
 
     void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
         states.transform *= getTransform();

@@ -19,6 +19,12 @@ class ChooseCharState : public State{
         virtual bool handleEvent(const sf::Event& event);
     private:
         sf::Sprite nBackgroundSprite;
+        sf::Sprite nChar, nCharIntro;
         GUI::Container nGUIContainer;
         GUI::Button backButton;
+        GUI::Button previousButton;
+        GUI::Button nextButton;
+        GUI::Button saveButton;
+        GUI::Button choosePlayerButton;
+        GUI::Button chooseModeButton;
 };

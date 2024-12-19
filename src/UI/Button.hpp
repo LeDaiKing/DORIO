@@ -17,8 +17,22 @@ namespace GUI{
         enum Type{
             SquareButton, 
             RectangleButton,
-            CreativeButton,
             BackButton,
+            charSlot1,
+            charSlot2,
+            previousButton,
+            nextButton,
+            saveButton,
+            choosePlayerButton,
+            chooseCharButton,
+            chooseModeButton,
+            playStartButton,
+            kitchenMode,
+            hallwayMode,
+            gardenMode,
+            creativeMode,
+            onePlayerButton,
+            twoPlayerButton,
         };
         Button(State::Context context, Type type);
 
@@ -28,6 +42,7 @@ namespace GUI{
         void setCallback(Callback callback);
         void setText(const std::string& text);
         void setColor(const sf::Color& color);
+        void setSpriteColor(const sf::Color& color);
         void setSizeText(unsigned int size);
         void setToggle(bool flag);
 
@@ -48,6 +63,7 @@ namespace GUI{
         virtual void deactivate();
 
         virtual void handleEvent(const sf::Event& event);
+        bool isMouseOver(sf::RenderWindow &window);
         private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

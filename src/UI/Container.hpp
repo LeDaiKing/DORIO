@@ -17,13 +17,14 @@ namespace GUI{
         virtual bool isSelectable() const;
         virtual bool isPressasble() const;
         virtual void handleEvent(const sf::Event& event);
+        void selectNext();
+        void selectPrevious();
+        Component::Ptr getSelectedChild() const;
 
         private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         bool hasSelection() const;
         void select(std::size_t index);
-        void selectNext();
-        void selectPrevious();
 
         private:
         std::vector<Component::Ptr> nChildren;

@@ -7,6 +7,7 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "../Utility.hpp"
+#include <vector>
 
 
 
@@ -23,4 +24,10 @@ class ChooseModeState : public State{
         sf::Sprite nBackgroundSprite;
         GUI::Container nGUIContainer;
         GUI::Button backButton;
+        GUI::Button playStartButton;
+        GUI::Button choosePlayerButton;
+        GUI::Button chooseCharButton;
+        std::vector<sf::Sprite> kitchenModeBadge;
+        std::vector<sf::Sprite> hallwayModeBadge;
+        std::vector<sf::Sprite> gardenModeBadge;
 };

@@ -21,6 +21,10 @@ class ChoosePlayerState : public State{
         virtual bool handleEvent(const sf::Event& event);
     private:
         sf::Sprite nBackgroundSprite;
-        GUI::Container nGUIContainer;
+        sf::Sprite handSprite;
+        sf::Sprite choosePlayerDeco;
         GUI::Button backButton;
+        GUI::Button onePlayerButton;
+        GUI::Button twoPlayerButton;
+        bool drawHand;
 };

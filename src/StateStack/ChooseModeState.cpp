@@ -8,86 +8,75 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , nBackgroundSprite()
 , nGUIContainer()
 , backButton(context, GUI::Button::Type::BackButton)
+, playStartButton(context, GUI::Button::Type::playStartButton)
+, choosePlayerButton(context, GUI::Button::Type::choosePlayerButton)
+, chooseCharButton(context, GUI::Button::Type::chooseCharButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
 
-    auto slotButton1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    const float bonusX = 1.75f;
-    const float bonusY = 1.33f;
-    slotButton1->setPosition(140 * bonusX, 190 * bonusY);
-    slotButton1->setText("NEW!");
-    slotButton1->setColor(sf::Color::Red);
-    slotButton1->setSizeText(30);
-    slotButton1->setCallback([this] ()
-    {
-        requestStackPop();
-        requestStackPush(States::Game);
-        requestStackPush(States::Loading);
-    });
+    auto kitchenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::kitchenMode);
+    kitchenMode->setPosition({407, 347});
 
-    auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    slotButton2->setPosition((260 + 140) * bonusX, 190 * bonusY);
-    slotButton2->setText("NEW!");
-    slotButton2->setColor(sf::Color::Red);
-    slotButton2->setSizeText(30);
-    slotButton2->setCallback([this] ()
-    {
-        requestStackPop();
-        requestStackPush(States::Loading);
-    });
+    auto hallwayMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::hallwayMode);
+    hallwayMode->setPosition({655.565, 165.5});
 
-    auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    slotButton3->setPosition((260 + 140 + 260) * bonusX, 190 * bonusY);
-    slotButton3->setText("NEW!");
-    slotButton3->setColor(sf::Color::Red);
-    slotButton3->setSizeText(30);
-    slotButton3->setCallback([this] ()
-    {
+    auto gardenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::gardenMode);
+    gardenMode->setPosition({912.77, 345});
 
-        requestStackPop();
-        requestStackPush(States::Game);
-    });
+    auto creativeMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::creativeMode);
+    creativeMode->setPosition({655.5, 555});
 
-    auto creativeButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::CreativeButton);
-    creativeButton->setPosition(400 * bonusX, 400 * bonusY);
-    creativeButton->setText("Creative");
-    creativeButton->setColor(sf::Color::Red);
-    creativeButton->setSizeText(30);
-    creativeButton->setCallback([this] ()
-    {
-        requestStackPop();
+    kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
+    kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
+    kitchenModeBadge[0].setPosition({237, 256});
+    kitchenModeBadge[1].setPosition({237, 335});
 
-        requestStackPush(States::Loading);
-    });
+    hallwayModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
+    hallwayModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
+    hallwayModeBadge[0].setPosition({442, 60});
+    hallwayModeBadge[1].setPosition({442, 139});
 
+    gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
+    gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
+    gardenModeBadge[0].setPosition({755, 256});
+    gardenModeBadge[1].setPosition({755, 335});
 
-    backButton.setPosition(62.5f, 800 - 105.0f / 2.0f);
+    backButton.setPosition({75, 705});
     backButton.setIsSelected(false);
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::Title);
+        requestStackPush(States::ChooseCharacter);
     });
 
+    playStartButton.setPosition({1077, 681});
+    playStartButton.setIsSelected(false);
+    playStartButton.setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::Game);
+        requestStackPush(States::Loading);
+    });
 
-    auto textNormalMode = std::make_shared<GUI::Label>("Normal Mode");
-    textNormalMode->setCharacterSize(30);
-    textNormalMode->setColor(sf::Color::Yellow);
-    textNormalMode->setPosition((1400 - textNormalMode->getWidth()) / 2, 50 * bonusY);    
+    choosePlayerButton.setPosition({75, 92});
+    choosePlayerButton.setIsSelected(false);
+    choosePlayerButton.setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::ChoosePlayer);
+    });
+    chooseCharButton.setPosition({75, 221});
+    chooseCharButton.setIsSelected(false);
+    chooseCharButton.setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::ChooseCharacter);
+    });
 
-    auto textSpecialMode = std::make_shared<GUI::Label>("Special Mode");
-    textSpecialMode->setCharacterSize(30);
-    textSpecialMode->setColor(sf::Color::Yellow);
-    textSpecialMode->setPosition((1400 - textSpecialMode->getWidth()) / 2, 300 * bonusY);    
-
-
-
-    nGUIContainer.pack(slotButton1);
-    nGUIContainer.pack(slotButton2);
-    nGUIContainer.pack(slotButton3);
-    nGUIContainer.pack(textNormalMode);
-    nGUIContainer.pack(textSpecialMode);
-    nGUIContainer.pack(creativeButton);
+    nGUIContainer.pack(kitchenMode);
+    nGUIContainer.pack(hallwayMode);
+    nGUIContainer.pack(gardenMode);
+    nGUIContainer.pack(creativeMode);
 }
 
 void ChooseModeState::draw()
@@ -97,11 +86,35 @@ void ChooseModeState::draw()
     window.draw(nBackgroundSprite);
     window.draw(nGUIContainer);
     window.draw(backButton);
+    window.draw(playStartButton);
+    window.draw(choosePlayerButton);
+    window.draw(chooseCharButton);
+    for (auto& badge : kitchenModeBadge)
+        window.draw(badge);
+    for (auto& badge : hallwayModeBadge)
+        window.draw(badge);
+    for (auto& badge : gardenModeBadge)
+        window.draw(badge);
 }
 
 bool ChooseModeState::update(sf::Time dt)
 {
-    nGUIContainer.update(dt);
+    sf::RenderWindow& window = *getContext().window;
+    if (backButton.isMouseOver(window))
+        backButton.setSelectedSprite();
+    else backButton.setNormalSprite();
+
+    if (playStartButton.isMouseOver(window))
+        playStartButton.setSelectedSprite();
+    else playStartButton.setNormalSprite();
+
+    if (choosePlayerButton.isMouseOver(window))
+        choosePlayerButton.setSelectedSprite();
+    else choosePlayerButton.setNormalSprite();
+
+    if (chooseCharButton.isMouseOver(window))
+        chooseCharButton.setSelectedSprite();
+    else chooseCharButton.setNormalSprite();
     return true;
 }
 
@@ -109,5 +122,8 @@ bool ChooseModeState::handleEvent(const sf::Event& event)
 {
     nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
+    playStartButton.handleEvent(event);
+    choosePlayerButton.handleEvent(event);
+    chooseCharButton.handleEvent(event);
     return false;
 }
