@@ -251,6 +251,32 @@ void World::loadMap()
 			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
 	}
+
+
+	std::string enemySpawn = "EnemySpawn" + level;
+	std::cout << enemySpawn << std::endl;
+	nlohmann::json enemyConfig = ConfigLoader::getInstance().getConfig(enemySpawn.c_str());
+
+	for (auto& cockroach : enemyConfig["CockRoach"])
+	{
+		std::unique_ptr<CockRoach> enemy(new CockRoach(Enemy::CockRoach, toVector2<float>(cockroach["Position"])));
+		for (auto& ai : cockroach["AI"])
+		{
+			if (ai.at(0) == 0)
+			{
+				enemy->addMoveBehavior(sf::Vector2f(ai[1], ai[2]));
+			}
+			else if (ai.at(0) == 1)
+			{
+				enemy->addWaitBehavior(sf::seconds(ai[1]));
+			}
+			else if (ai.at(0) == 2)
+			{
+				enemy->addTurnBehavior();
+			}
+		}
+		nSceneLayers[Enemies]->attachChild(std::move(enemy));
+	}
 	
 
 }

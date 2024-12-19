@@ -6,6 +6,7 @@ ConfigLoader::ConfigLoader()
     loadConfig("Dough", "file/Dough/abilities.json");
     loadConfig("Enemy", "file/Enemy/abilities.json");
     loadConfig("Map", "file/Map/loadmap.json");
+    loadConfig("EnemySpawn1", "file/Enemy/EnemySpawn1.json");
 }
 
 ConfigLoader& ConfigLoader::getInstance()
@@ -17,6 +18,8 @@ ConfigLoader& ConfigLoader::getInstance()
 const nlohmann::json& ConfigLoader::getConfig(const char* nkey)
 {
     //format a/b/c
+    if (configList.find(nkey) != configList.end())
+        return configList[nkey];
     std::string delimiter = "/";
     size_t pos = 0;
     std::string token;
