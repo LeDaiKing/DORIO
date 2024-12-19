@@ -72,12 +72,6 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
 
 	//Button
-	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/SmallRectButton.png");
-	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/SmallRectButton.png");
-	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/SmallRectButton.png");
-	TextureHolder::getInstance().load(Textures::ID::SquareButtonNormal, "res/UI/SquareButton1111.png");
-	TextureHolder::getInstance().load(Textures::ID::SquareButtonSelected, "res/UI/SquareButton222.png");
-	TextureHolder::getInstance().load(Textures::ID::SquareButtonPressed, "res/UI/SquareButton333.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonNormal, "res/UI/BackButton.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton_s.png");
