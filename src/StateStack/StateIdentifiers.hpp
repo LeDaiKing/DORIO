@@ -12,5 +12,6 @@ namespace States {
         ChooseLevel,
         ChooseMode,
         ChoosePlayer,
+        ChooseSlot,
     };
 }

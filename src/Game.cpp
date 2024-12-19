@@ -8,6 +8,7 @@
 #include "StateStack/ChoosePlayerState.hpp"
 #include "StateStack/LoadingState.hpp"
 #include "StateStack/ChooseCharState.hpp"
+#include "StateStack/ChooseSlotState.hpp"
 
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
@@ -72,6 +73,9 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
 
 	//Button
+	TextureHolder::getInstance().load(Textures::ID::slotButtonNormal, "res/UI/slotButton.png");
+	TextureHolder::getInstance().load(Textures::ID::slotButtonSelected, "res/UI/slotButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::slotButtonPressed, "res/UI/slotButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonNormal, "res/UI/BackButton.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton_s.png");
@@ -217,6 +221,7 @@ void Game::registerStates() {
 	nGameStateStack.registerState<ChoosePlayerState>(States::ID::ChoosePlayer);
 	nGameStateStack.registerState<LoadingState>(States::ID::Loading);	
 	nGameStateStack.registerState<ChooseCharState>(States::ID::ChooseCharacter);
+	nGameStateStack.registerState<ChooseSlotState>(States::ID::ChooseSlot);
 }
 
 
