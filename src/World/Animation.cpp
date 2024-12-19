@@ -64,7 +64,7 @@ sf::Vector2i Animation::getFrameSize() const
 bool Animation::isFinished() const
 {
 	if (nCurrentAnimation == nullptr)
-		return false;
+		return true;
 
 	return nCurrentFrame >= nCurrentAnimation->nNumFrames;
 }

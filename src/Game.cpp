@@ -122,6 +122,11 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::onePlayerButton, "res/UI/onePlayerButton.png");
 	TextureHolder::getInstance().load(Textures::ID::twoPlayerButton, "res/UI/twoPlayerButton.png");
 	TextureHolder::getInstance().load(Textures::ID::handSprite, "res/UI/handSprite.png");
+	
+	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
+	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
+	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/big_dough.png");
+	TextureHolder::getInstance().load(Textures::FireBigDough, "res/Dough/fire_dough.png");
 
 	//Enemy
 	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");

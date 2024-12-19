@@ -21,18 +21,17 @@ Hub::Hub()
     nHeart.addAnimationState(0, 0, 1, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
     nHeart.setAnimationState(0);
     nHeart2.addAnimationState(0, 0, 6, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
-    nHeart2.setAnimationState(0);
     nHeart2.update(sf::seconds(1.f));
 
-    nCoin.setScale(60.f  / nCoin.getGlobalBounds().width, 60.f / nCoin.getGlobalBounds().height);
-    nHeart.setScale(50.f / nHeart.getGlobalBounds().width, 50.f / nHeart.getGlobalBounds().height);
-    nHeart2.setScale(50.f / nHeart2.getGlobalBounds().width, 50.f / nHeart2.getGlobalBounds().height);
-    nClock.setScale(68.f / nClock.getGlobalBounds().width, 60.f / nClock.getGlobalBounds().height);
+    nCoin.setScale(50.f  / nCoin.getGlobalBounds().width, 50.f / nCoin.getGlobalBounds().height);
+    nHeart.setScale(65.f / nHeart.getGlobalBounds().width, 65.f / nHeart.getGlobalBounds().height);
+    nHeart2.setScale(65.f / nHeart2.getGlobalBounds().width, 65.f / nHeart2.getGlobalBounds().height);
+    nClock.setScale(58.f / nClock.getGlobalBounds().width, 50.f / nClock.getGlobalBounds().height);
     // nSettingBut.setScale(66.f / nSettingBut.getGlobalBounds().width, 70.f / nSettingBut.getGlobalBounds().height);
 
-    nCoin.setPosition(445 + nCoin.getGlobalBounds().width / 2, 29 + nCoin.getGlobalBounds().height / 2);
-    nClock.setPosition(772 + nClock.getGlobalBounds().width / 2, 29 + nClock.getGlobalBounds().height / 2);
-    nHeart.setPosition(146 + nHeart.getGlobalBounds().width / 2, 29 + nHeart.getGlobalBounds().height / 2);
+    nCoin.setPosition(37 + nCoin.getGlobalBounds().width / 2, 92 + nCoin.getGlobalBounds().height / 2);
+    nClock.setPosition(1039 + nClock.getGlobalBounds().width / 2, 29 + nClock.getGlobalBounds().height / 2);
+    nHeart.setPosition(29 + nHeart.getGlobalBounds().width / 2, 19 + nHeart.getGlobalBounds().height / 2);
 
     // centerOrigin(nSettingBut);
     // nSettingBut.setPosition(1115 + nSettingBut.getGlobalBounds().width / 2, 29 + nSettingBut.getGlobalBounds().height / 2);
@@ -48,38 +47,41 @@ void Hub::draw(sf::RenderWindow& window)
 
     int size = 30;
     std::string coinText = std::to_string(curCoins);
-    sf::Vector2f pos(475, 90);
-    float len = coinText.size() * 8;
-    len -= (coinText.size() - 1) * 2;
-    len *= size / 8.f;
-    pos.x -= len / 2;
+    sf::Vector2f pos(85, 102);
     TextRender::getInstance().drawText(window, coinText.c_str(), pos, size);
 
     int time = nTime.asSeconds();
-    std::string minuteText = std::to_string(time / 60); if (minuteText.size() == 1) minuteText = "0" + minuteText;
-    std::string secondText = std::to_string(time % 60); if (secondText.size() == 1) secondText = "0" + secondText;
-    std::string timeText = minuteText + ":" + secondText;
-    pos = {800, 90};
-    len = timeText.size() * 8;
-    len -= (timeText.size() - 1) * 2;
-    len *= size / 8.f;
-    pos.x -= len / 2;
+    std::string timeText = std::to_string(time);
+    pos = {1089, 39};
     TextRender::getInstance().drawText(window, timeText.c_str(), pos, size);
 
     nHeart.setPosition(146 + nHeart.getGlobalBounds().width / 2, 29 + nHeart.getGlobalBounds().height / 2);
-    for (int i = 0; i < curHitPoints; i++)
-    {
-        window.draw(nHeart);
-        if (i >= 4 && i % 4 == 0)
-        nHeart.move(0, 50);
-        else
-        nHeart.move(50, 0);
-    }
+    
     if (!nHeart2.isFinished())
     {
-        nHeart2.setPosition(nHeart.getPosition());
+        nHeart2.setPosition(29 + nHeart.getGlobalBounds().width / 2, 19 + nHeart.getGlobalBounds().height / 2);
         window.draw(nHeart2);
     }
+    else 
+    {
+        nHeart.setPosition(29 + nHeart.getGlobalBounds().width / 2, 19 + nHeart.getGlobalBounds().height / 2);
+        window.draw(nHeart);
+    }
+    std::string heartText = "x" + std::to_string(curHitPoints);
+    pos = {85, 39};
+    TextRender::getInstance().drawText(window, heartText.c_str(), pos, 30);
+
+
+    size = 32;
+    int score = curCoins * 100;
+    std::string scoreText = std::to_string(score);
+    pos = {960, 29};
+    float len = scoreText.size();
+    len = len * 8 - (len - 1) * 2;
+    len *= size / 8.f;
+    pos.x -= len;
+    TextRender::getInstance().drawText(window, scoreText.c_str(), pos, size);
+
 }
 
 void Hub::update(sf::Time dt, Dough& player, sf::Time& gameTime)
