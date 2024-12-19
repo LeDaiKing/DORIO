@@ -67,11 +67,11 @@ void Game::loadTextures() {
 	//Background
 	TextureHolder::getInstance().load(Textures::ID::BackGround1, "res/Background/bg_kitchen.png");
 	TextureHolder::getInstance().load(Textures::ID::BackGround2, "res/Background/bg_outside.png");
-
-	//Button
 	TextureHolder::getInstance().load(Textures::ID::TitleScreen, "res/Background/title.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseCharScreen, "res/Background/ChooseCharScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
+
+	//Button
 	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/SmallRectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/SmallRectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/SmallRectButton.png");
@@ -122,12 +122,6 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::onePlayerButton, "res/UI/onePlayerButton.png");
 	TextureHolder::getInstance().load(Textures::ID::twoPlayerButton, "res/UI/twoPlayerButton.png");
 	TextureHolder::getInstance().load(Textures::ID::handSprite, "res/UI/handSprite.png");
-	
-	TextureHolder::getInstance().load(Textures::Dirt, "res/Background/Dirt.png");
-	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
-	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
-	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/big_dough.png");
-	TextureHolder::getInstance().load(Textures::FireBigDough, "res/Dough/fire_dough.png");
 
 	//Enemy
 	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");

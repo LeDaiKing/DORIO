@@ -31,10 +31,11 @@ namespace Textures
         // Background
 		BackGround1,
 		BackGround2,
-		
-		// Button
 		TitleScreen,
 		ChooseModeScreen,
+		ChooseCharScreen,
+		
+		// Button
 		RectButtonNormal,
 		RectButtonSelected,
 		RectButtonPressed,
@@ -44,7 +45,6 @@ namespace Textures
 		BackButtonNormal,
 		BackButtonSelected,
 		BackButtonPressed,
-		ChooseCharScreen,
 		
 		// Dough
 		Dough1,
@@ -94,7 +94,8 @@ namespace Textures
 		SettingBut,
 		WhiteText,
 		BlackText,
-		ChooseCharScreen,
+		
+		//UI
 		charSlot1Normal,
 		charSlot1Selected,
 		charSlot1Pressed,
