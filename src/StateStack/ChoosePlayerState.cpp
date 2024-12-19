@@ -42,7 +42,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::Title);
+        requestStackPush(States::ChooseSlot);
     });  
 
     nGUIContainer.pack(onePlayerButton);
@@ -72,7 +72,7 @@ bool ChoosePlayerState::update(sf::Time dt)
     int index = nGUIContainer.getSelectedIndex();
     auto selected = nGUIContainer.getSelectedChild();
     drawHand = true;
-    std::cerr << "Index: " << index << std::endl;
+    // std::cerr << "Index: " << index << std::endl;
     assert(index != -1);
     if (index == 0) {
         handSprite.setPosition({445, 469});

@@ -46,7 +46,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::ChooseSlot);
     });
 
     playStartButton.setPosition({1077, 681});

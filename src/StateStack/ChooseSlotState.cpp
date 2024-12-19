@@ -45,7 +45,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::Title);
     });
 
     saveButton.setPosition({500, 620});
@@ -82,7 +82,10 @@ void ChooseSlotState::draw()
 
 bool ChooseSlotState::update(sf::Time dt)
 {
-    
+    if (backButton.isMouseOver(*getContext().window))
+        backButton.setIsSelected(true);
+    else
+        backButton.setIsSelected(false);
     return true;
 }
 
