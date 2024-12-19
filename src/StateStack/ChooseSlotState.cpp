@@ -6,10 +6,9 @@
 ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
-, nGUIContainer()
+, nGUIContainerSlot()
+, nGUIContainerConfirm()
 , backButton(context, GUI::Button::Type::BackButton)
-, saveButton(context, GUI::Button::Type::saveButton)
-, startButton(context, GUI::Button::Type::StartButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     
@@ -18,8 +17,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     slotButton1->setText("NEW !");
     slotButton1->setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ID::ChoosePlayer);
+        nSelectedSlot = 1;
     });
 
     auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
@@ -27,8 +25,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     slotButton2->setText("NEW !");
     slotButton2->setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ID::ChoosePlayer);
+        nSelectedSlot = 2;
     });
 
     auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
@@ -36,8 +33,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     slotButton3->setText("NEW !");
     slotButton3->setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ID::ChoosePlayer);
+        nSelectedSlot = 3;
     });
 
     backButton.setPosition({75, 705});
@@ -48,25 +44,39 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         requestStackPush(States::Title);
     });
 
-    saveButton.setPosition({500, 620});
-    saveButton.setIsSelected(false);
-    saveButton.setCallback([this] ()
-    {
-        // save file 
-    });
-
-    startButton.setPosition(759, 620);
-    startButton.setIsSelected(false);
-    startButton.setCallback([this] ()
+    auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
+    startButton->setPosition(891, 615);
+    startButton->setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ID::ChooseMode);
+        requestStackPush(States::ID::ChoosePlayer);
     });
-    
 
-    nGUIContainer.pack(slotButton1);
-    nGUIContainer.pack(slotButton2);
-    nGUIContainer.pack(slotButton3);
+    auto deleteButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::DeleteButton);
+    deleteButton->setPosition({632, 615});
+    deleteButton->setCallback([this] ()
+    {
+        // delete file
+    });
+
+    auto resetButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::ResetButton);
+    resetButton->setPosition({373, 615});
+    resetButton->setCallback([this] ()
+    {
+        nSelectedSlot = -1;
+    });
+    // pass
+
+
+    nGUIContainerSlot.pack(slotButton1);
+    nGUIContainerSlot.pack(slotButton2);
+    nGUIContainerSlot.pack(slotButton3);
+
+    nGUIContainerConfirm.pack(resetButton);
+    nGUIContainerConfirm.pack(deleteButton);
+    nGUIContainerConfirm.pack(startButton);
+    nGUIContainerConfirm.selectNext();
+    nGUIContainerConfirm.selectNext();
 }
 
 void ChooseSlotState::draw()
@@ -74,10 +84,10 @@ void ChooseSlotState::draw()
     sf::RenderWindow& window = *getContext().window;
     window.setView(window.getDefaultView());
     window.draw(nBackgroundSprite);
-    window.draw(nGUIContainer);
+    window.draw(nGUIContainerSlot);
     window.draw(backButton);
-    window.draw(saveButton);
-    window.draw(startButton);
+    if (nSelectedSlot != -1)
+        window.draw(nGUIContainerConfirm);
 }
 
 bool ChooseSlotState::update(sf::Time dt)
@@ -91,8 +101,12 @@ bool ChooseSlotState::update(sf::Time dt)
 
 bool ChooseSlotState::handleEvent(const sf::Event& event)
 {
-    nGUIContainer.handleEvent(event);
+    if (nSelectedSlot != -1) {
+        nGUIContainerConfirm.handleEvent(event);
+    }
+    else {
+        nGUIContainerSlot.handleEvent(event);
+    }
     backButton.handleEvent(event);
-    saveButton.handleEvent(event);
     return false;
 }

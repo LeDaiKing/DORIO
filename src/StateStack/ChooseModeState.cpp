@@ -8,7 +8,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , nBackgroundSprite()
 , nGUIContainer()
 , backButton(context, GUI::Button::Type::BackButton)
-, playStartButton(context, GUI::Button::Type::playStartButton)
+// , playStartButton(context, GUI::Button::Type::playStartButton)
 , choosePlayerButton(context, GUI::Button::Type::choosePlayerButton)
 , chooseCharButton(context, GUI::Button::Type::chooseCharButton)
 {
@@ -16,12 +16,30 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 
     auto kitchenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::kitchenMode);
     kitchenMode->setPosition({407, 347});
+    kitchenMode->setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::Game);
+        requestStackPush(States::Loading);
+    });
 
     auto hallwayMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::hallwayMode);
     hallwayMode->setPosition({655.565, 165.5});
+    hallwayMode->setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::Game);
+        requestStackPush(States::Loading);
+    });
 
     auto gardenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::gardenMode);
     gardenMode->setPosition({912.77, 345});
+    gardenMode->setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::Game);
+        requestStackPush(States::Loading);
+    });
 
     auto creativeMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::creativeMode);
     creativeMode->setPosition({655.5, 555});
@@ -36,6 +54,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     hallwayModeBadge[0].setPosition({442, 60});
     hallwayModeBadge[1].setPosition({442, 139});
 
+
     gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
     gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
     gardenModeBadge[0].setPosition({755, 256});
@@ -46,17 +65,17 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChooseSlot);
+        requestStackPush(States::ChooseCharacter);
     });
 
-    playStartButton.setPosition({1077, 681});
-    playStartButton.setIsSelected(false);
-    playStartButton.setCallback([this] ()
-    {
-        requestStackPop();
-        requestStackPush(States::Game);
-        requestStackPush(States::Loading);
-    });
+    // playStartButton.setPosition({1077, 681});
+    // playStartButton.setIsSelected(false);
+    // playStartButton.setCallback([this] ()
+    // {
+    //     requestStackPop();
+    //     requestStackPush(States::Game);
+    //     requestStackPush(States::Loading);
+    // });
 
     choosePlayerButton.setPosition({75, 92});
     choosePlayerButton.setIsSelected(false);
@@ -86,7 +105,7 @@ void ChooseModeState::draw()
     window.draw(nBackgroundSprite);
     window.draw(nGUIContainer);
     window.draw(backButton);
-    window.draw(playStartButton);
+    // window.draw(playStartButton);
     window.draw(choosePlayerButton);
     window.draw(chooseCharButton);
     for (auto& badge : kitchenModeBadge)
@@ -104,9 +123,9 @@ bool ChooseModeState::update(sf::Time dt)
         backButton.setSelectedSprite();
     else backButton.setNormalSprite();
 
-    if (playStartButton.isMouseOver(window))
-        playStartButton.setSelectedSprite();
-    else playStartButton.setNormalSprite();
+    // if (playStartButton.isMouseOver(window))
+    //     playStartButton.setSelectedSprite();
+    // else playStartButton.setNormalSprite();
 
     if (choosePlayerButton.isMouseOver(window))
         choosePlayerButton.setSelectedSprite();
@@ -122,7 +141,7 @@ bool ChooseModeState::handleEvent(const sf::Event& event)
 {
     nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
-    playStartButton.handleEvent(event);
+    // playStartButton.handleEvent(event);
     choosePlayerButton.handleEvent(event);
     chooseCharButton.handleEvent(event);
     return false;

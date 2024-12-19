@@ -80,9 +80,14 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::StartButtonNormal, "res/UI/startButton.png");
-	TextureHolder::getInstance().load(Textures::ID::StartButtonSelected, "res/UI/startButton.png");
-	TextureHolder::getInstance().load(Textures::ID::StartButtonPressed, "res/UI/startButton.png");
-
+	TextureHolder::getInstance().load(Textures::ID::StartButtonSelected, "res/UI/startButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::StartButtonPressed, "res/UI/startButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::DeleteButtonNormal, "res/UI/deleteButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DeleteButtonSelected, "res/UI/deleteButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::DeleteButtonPressed, "res/UI/deleteButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::ResetButtonNormal, "res/UI/resetButton.png");
+	TextureHolder::getInstance().load(Textures::ID::ResetButtonSelected, "res/UI/resetButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::ResetButtonPressed, "res/UI/resetButton_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Normal, "res/UI/charSlot.png");
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Pressed, "res/UI/charSlot_s.png");

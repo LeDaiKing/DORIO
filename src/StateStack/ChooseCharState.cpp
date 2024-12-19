@@ -1,6 +1,7 @@
 #include "ChooseCharState.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
+#include <iostream>
 
 ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 : State(stack, context)
@@ -142,6 +143,11 @@ bool ChooseCharState::update(sf::Time dt)
 
 bool ChooseCharState::handleEvent(const sf::Event& event)
 {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
+        requestStackPop();
+        requestStackPush(States::ChooseMode);
+        return false;
+    }
     nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
     previousButton.handleEvent(event);

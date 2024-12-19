@@ -24,7 +24,7 @@ class ChooseModeState : public State{
         sf::Sprite nBackgroundSprite;
         GUI::Container nGUIContainer;
         GUI::Button backButton;
-        GUI::Button playStartButton;
+        // GUI::Button playStartButton;
         GUI::Button choosePlayerButton;
         GUI::Button chooseCharButton;
         std::vector<sf::Sprite> kitchenModeBadge;

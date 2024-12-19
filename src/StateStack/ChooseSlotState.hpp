@@ -21,9 +21,12 @@ class ChooseSlotState : public State{
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
     private:
+        int nSelectedSlot = -1;
         sf::Sprite nBackgroundSprite;
-        GUI::Container nGUIContainer;
+        GUI::Container nGUIContainerSlot;
+        GUI::Container nGUIContainerConfirm;
         GUI::Button backButton;
-        GUI::Button startButton;
-        GUI::Button saveButton;
+        // GUI::Button startButton;
+        // GUI::Button deleteButton;
+        // GUI::Button resetButton;
 };

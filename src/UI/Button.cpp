@@ -128,6 +128,10 @@ namespace GUI{
                 return Textures::onePlayerButton;
             case Type::twoPlayerButton:
                 return Textures::twoPlayerButton;
+            case Type::DeleteButton:
+                return Textures::DeleteButtonNormal;
+            case Type::ResetButton:
+                return Textures::ResetButtonNormal;
             default:
                 assert(false);
         }
@@ -175,6 +179,10 @@ namespace GUI{
                 return Textures::onePlayerButton;
             case Type::twoPlayerButton:
                 return Textures::twoPlayerButton;
+            case Type::DeleteButton:
+                return Textures::DeleteButtonSelected;
+            case Type::ResetButton:
+                return Textures::ResetButtonSelected;
             default:
                 assert(false);
         }
@@ -222,6 +230,10 @@ namespace GUI{
                 return Textures::onePlayerButton;
             case Type::twoPlayerButton:
                 return Textures::twoPlayerButton;
+            case Type::DeleteButton:
+                return Textures::DeleteButtonSelected;
+            case Type::ResetButton:
+                return Textures::ResetButtonSelected;
             default:
                 assert(false);
         }

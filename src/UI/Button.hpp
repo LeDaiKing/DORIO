@@ -19,7 +19,6 @@ namespace GUI{
             SquareButton,
             SlotButton,
             BackButton,
-            StartButton,
             charSlot1,
             charSlot2,
             previousButton,
@@ -35,6 +34,9 @@ namespace GUI{
             creativeMode,
             onePlayerButton,
             twoPlayerButton,
+            DeleteButton,
+            ResetButton, 
+            StartButton
         };
         Button(State::Context context, Type type);
 

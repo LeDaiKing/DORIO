@@ -90,6 +90,12 @@ namespace Textures
 		StartButtonNormal, 
 		StartButtonSelected,
 		StartButtonPressed,
+		DeleteButtonNormal,
+		DeleteButtonSelected,
+		DeleteButtonPressed,
+		ResetButtonNormal,
+		ResetButtonSelected,
+		ResetButtonPressed,
 		
 		// Dough
 		Dough1,
