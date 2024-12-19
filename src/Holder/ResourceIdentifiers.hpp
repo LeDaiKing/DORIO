@@ -84,7 +84,12 @@ namespace Textures
 		onePlayerButton,
 		twoPlayerButton,
 		handSprite,
-
+		slotButtonNormal,
+		slotButtonSelected,
+		slotButtonPressed,
+		StartButtonNormal, 
+		StartButtonSelected,
+		StartButtonPressed,
 		
 		// Dough
 		Dough1,

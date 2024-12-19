@@ -1,6 +1,8 @@
 #include "ChoosePlayerState.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
+#include "../UI/Component.hpp"
+#include <iostream>
 
 ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 : State(stack, context)
@@ -8,8 +10,8 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 , handSprite()
 , choosePlayerDeco()
 , backButton(context, GUI::Button::Type::BackButton)
-, onePlayerButton(context, GUI::Button::Type::onePlayerButton)
-, twoPlayerButton(context, GUI::Button::Type::twoPlayerButton)
+// , onePlayerButton(context, GUI::Button::Type::onePlayerButton)
+// , twoPlayerButton(context, GUI::Button::Type::twoPlayerButton)
 , drawHand(false)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
@@ -17,17 +19,19 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     choosePlayerDeco.setTexture(TextureHolder::getInstance().get(Textures::choosePlayerDeco));
     choosePlayerDeco.setPosition({189, 0});
 
-    onePlayerButton.setPosition({418, 437});
-    onePlayerButton.setIsSelected(false);
-    onePlayerButton.setCallback([this] ()
+    auto onePlayerButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::onePlayerButton);
+    onePlayerButton->setPosition({418, 437});
+    onePlayerButton->setIsSelected(true);
+    onePlayerButton->setCallback([this] ()
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
     });
 
-    twoPlayerButton.setPosition({872, 443});
-    twoPlayerButton.setIsSelected(false);
-    twoPlayerButton.setCallback([this] ()
+    auto twoPlayerButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::twoPlayerButton);
+    twoPlayerButton->setPosition({872, 443});
+    twoPlayerButton->setIsSelected(true);
+    twoPlayerButton->setCallback([this] ()
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
@@ -41,6 +45,8 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
         requestStackPush(States::Title);
     });  
 
+    nGUIContainer.pack(onePlayerButton);
+    nGUIContainer.pack(twoPlayerButton);
 }
 
 void ChoosePlayerState::draw()
@@ -50,8 +56,9 @@ void ChoosePlayerState::draw()
     window.draw(nBackgroundSprite);
     window.draw(choosePlayerDeco);
     window.draw(backButton);
-    window.draw(onePlayerButton);
-    window.draw(twoPlayerButton);
+    window.draw(nGUIContainer);
+    // window.draw(onePlayerButton);
+    // window.draw(twoPlayerButton);
     if (drawHand)
         window.draw(handSprite);
 }
@@ -62,23 +69,35 @@ bool ChoosePlayerState::update(sf::Time dt)
     if (backButton.isMouseOver(window))
         backButton.setSelectedSprite();
     else backButton.setNormalSprite();
-    if (!onePlayerButton.isMouseOver(window) && !twoPlayerButton.isMouseOver(window))
-        drawHand = false;
-    else if (onePlayerButton.isMouseOver(window)) {
+    int index = nGUIContainer.getSelectedIndex();
+    auto selected = nGUIContainer.getSelectedChild();
+    drawHand = true;
+    std::cerr << "Index: " << index << std::endl;
+    assert(index != -1);
+    if (index == 0) {
         handSprite.setPosition({445, 469});
-        drawHand = true;
     }
-    else if (twoPlayerButton.isMouseOver(window)) {
+    else if (index == 1) {
         handSprite.setPosition({901, 466});
-        drawHand = true;
     }
+    // if (!onePlayerButton.isMouseOver(window) && !twoPlayerButton.isMouseOver(window))
+    //     drawHand = false;
+    // else if (onePlayerButton.isMouseOver(window)) {
+    //     handSprite.setPosition({445, 469});
+    //     drawHand = true;
+    // }
+    // else if (twoPlayerButton.isMouseOver(window)) {
+    //     handSprite.setPosition({901, 466});
+    //     drawHand = true;
+    // }
     return true;
 }
 
 bool ChoosePlayerState::handleEvent(const sf::Event& event)
 {
     backButton.handleEvent(event);
-    onePlayerButton.handleEvent(event);
-    twoPlayerButton.handleEvent(event);
+    nGUIContainer.handleEvent(event);
+    // onePlayerButton.handleEvent(event);
+    // twoPlayerButton.handleEvent(event);
     return false;
 }
