@@ -170,6 +170,11 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ClockIcon, "res/Hub/ClockIcon.png");
 	TextureHolder::getInstance().load(Textures::WhiteText, "res/Text/WhiteText.png");
 	TextureHolder::getInstance().load(Textures::BlackText, "res/Text/BlackText.png");
+
+	// CheckPoint
+	TextureHolder::getInstance().load(Textures::Start, "res/Background/CheckPoint/Start.png");
+	TextureHolder::getInstance().load(Textures::Checkpoint, "res/Background/CheckPoint/Checkpoint.png");
+	TextureHolder::getInstance().load(Textures::End, "res/Background/CheckPoint/End.png");
 }
 
 void Game::loadFonts() {

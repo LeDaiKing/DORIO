@@ -139,6 +139,11 @@ namespace Textures
 		SettingBut,
 		WhiteText,
 		BlackText,
+
+		// CheckPoint
+		Start,
+		Checkpoint,
+		End,
 	};
 }
 

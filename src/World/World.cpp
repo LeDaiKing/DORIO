@@ -1,5 +1,4 @@
 #include "World.hpp"
-
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "BreakableBlock.hpp"
 #include "StaticBlock.hpp"
@@ -11,6 +10,7 @@
 #include "Ghost.hpp"
 #include "Chicken.hpp"
 #include "Snail.hpp"
+#include "CheckPoint.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -18,6 +18,7 @@
 #include "../ConfigLoader.hpp"
 #include "BlockFactory.hpp"
 #include "nlohmann/json.hpp"
+
 
 int World::nGravity = 700;
 
@@ -125,6 +126,7 @@ void World::buildScene()
 	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
+	nPlayerDough->setCheckPoint(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
 	
 }
@@ -250,9 +252,21 @@ void World::loadMap()
 			std::unique_ptr<Coin> coin(new Coin(Item::Coin, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
+		else if (color.toInteger() == 0xFFAAD5FF)
+		{
+			std::unique_ptr<CheckPoint> checkpoint(new CheckPoint(CheckPoint::Checkpoint, sf::Vector2f(x, y)));
+			nSceneLayers[Map]->attachChild(std::move(checkpoint));
+		}
 	}
 
+	nSpawnPosition = toVector2<float>(config["StartPoint"]);
+	std::unique_ptr<CheckPoint> start(new CheckPoint(CheckPoint::Start, nSpawnPosition));
+	nSceneLayers[Map]->attachChild(std::move(start));
 
+
+
+
+	//Enemy
 	std::string enemySpawn = "EnemySpawn" + level;
 	std::cout << enemySpawn << std::endl;
 	nlohmann::json enemyConfig = ConfigLoader::getInstance().getConfig(enemySpawn.c_str());
@@ -319,9 +333,16 @@ void World::removeSceneNode()
 	std::vector<SceneNode*> nodes;
 	removeSceneNode.action = derivedAction<SceneNode>([this, &nodes] (SceneNode& node, sf::Time)
 	{
-		if (node.isMarkedForRemoval())
+		if ((node.getCategory() & Category::PlayerDough) && !node.isMarkedForRemoval() && !nWorldBounds.intersects(node.getBoundingRect()))
 		{
-			if ((node.getCategory()  & Category::Entity))
+			Dough* nPlayerDough = static_cast<Dough*>(&node);
+			nPlayerDough->getDamage(1);
+			nPlayerDough->resetCheckPoint();
+		}
+
+		if (node.isMarkedForRemoval())
+		{	
+			if ((node.getCategory() & Category::Entity))
 			{
 				// sf::FloatRect bound = 
 				if (!nWorldBounds.intersects(node.getBoundingRect()))

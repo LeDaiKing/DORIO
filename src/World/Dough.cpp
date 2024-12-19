@@ -493,3 +493,13 @@ void Dough::toSmall()
 	nBig.setAnimationState(State::Idle);
 	nFireBig.setAnimationState(State::Idle);
 }
+
+void Dough::setCheckPoint(sf::Vector2f checkPoint)
+{
+	nCheckPoint = checkPoint;
+}
+
+void Dough::resetCheckPoint()
+{
+	setPosition(nCheckPoint);
+}

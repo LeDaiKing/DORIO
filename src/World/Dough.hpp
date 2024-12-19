@@ -47,6 +47,8 @@ class Dough : public Entity
 		void addCoins(int coins);
 		int getCoinsCount() const;
 		int getHitPoints() const;
+		void setCheckPoint(sf::Vector2f checkPoint);
+		void resetCheckPoint();
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -67,4 +69,5 @@ class Dough : public Entity
 		Animation nFireBig;
 		sf::Vector2f nBigHitBox;
 		int nCoinsCount;
+		sf::Vector2f nCheckPoint;
 };
