@@ -15,6 +15,7 @@ Projectile::Projectile(Type type, sf::Vector2f position)
 , nDamage(1)
 , nTargetCategory(0)
 , nHitBox(20, 20)
+, nTimeLife(sf::seconds(3))
 {
     switch (type)
     {
@@ -73,6 +74,11 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
         if (!nIsCollected)
         move(nVelocity * dt.asSeconds());
         nAnimation.update(dt);
+        nTimeLife -= dt;
+        if (nTimeLife <= sf::Time::Zero)
+        {
+            destroy();
+        }
         // if (nAniState == AniState::Explode
     }
 

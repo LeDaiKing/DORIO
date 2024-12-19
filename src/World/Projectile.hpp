@@ -33,4 +33,5 @@ class Projectile : public Item
         unsigned int nDamage;
         unsigned int nTargetCategory;
         sf::Vector2f nHitBox;
+        sf::Time nTimeLife;
 };
