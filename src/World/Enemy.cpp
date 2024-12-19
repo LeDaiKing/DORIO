@@ -22,7 +22,7 @@ Textures::ID toTextureID(Enemy::Type type)
         case Enemy::SnailShell:
             return Textures::SnailShell;
     }
-    return Textures::Enemy;
+    return Textures::CockRoach;
 }
 
 Enemy::Enemy(Type type, sf::Vector2f position)

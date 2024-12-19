@@ -75,6 +75,7 @@ class World : private sf::NonCopyable
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
 		Hub nHub;
+		sf::Time nTime;
 
 		static int nGravity;
 };

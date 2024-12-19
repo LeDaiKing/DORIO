@@ -8,7 +8,7 @@ Hub::Hub()
 , nHeart2(TextureHolder::getInstance().get(Textures::HeartIcon))
 , nCoin(TextureHolder::getInstance().get(Textures::CoinIcon))
 , nClock(TextureHolder::getInstance().get(Textures::ClockIcon))
-, nSettingBut(TextureHolder::getInstance().get(Textures::SettingBut))
+// , nSettingBut(TextureHolder::getInstance().get(Textures::SettingBut))
 , preHitPoints(-1)
 , nTime(sf::Time::Zero)
 , curHitPoints(0)
@@ -28,14 +28,14 @@ Hub::Hub()
     nHeart.setScale(50.f / nHeart.getGlobalBounds().width, 50.f / nHeart.getGlobalBounds().height);
     nHeart2.setScale(50.f / nHeart2.getGlobalBounds().width, 50.f / nHeart2.getGlobalBounds().height);
     nClock.setScale(68.f / nClock.getGlobalBounds().width, 60.f / nClock.getGlobalBounds().height);
-    nSettingBut.setScale(66.f / nSettingBut.getGlobalBounds().width, 70.f / nSettingBut.getGlobalBounds().height);
+    // nSettingBut.setScale(66.f / nSettingBut.getGlobalBounds().width, 70.f / nSettingBut.getGlobalBounds().height);
 
     nCoin.setPosition(445 + nCoin.getGlobalBounds().width / 2, 29 + nCoin.getGlobalBounds().height / 2);
     nClock.setPosition(772 + nClock.getGlobalBounds().width / 2, 29 + nClock.getGlobalBounds().height / 2);
     nHeart.setPosition(146 + nHeart.getGlobalBounds().width / 2, 29 + nHeart.getGlobalBounds().height / 2);
 
-    centerOrigin(nSettingBut);
-    nSettingBut.setPosition(1115 + nSettingBut.getGlobalBounds().width / 2, 29 + nSettingBut.getGlobalBounds().height / 2);
+    // centerOrigin(nSettingBut);
+    // nSettingBut.setPosition(1115 + nSettingBut.getGlobalBounds().width / 2, 29 + nSettingBut.getGlobalBounds().height / 2);
   
 }
 
@@ -43,7 +43,7 @@ void Hub::draw(sf::RenderWindow& window)
 {
     window.draw(nCoin);
     window.draw(nClock);
-    window.draw(nSettingBut);
+    // window.draw(nSettingBut);
 
 
     int size = 30;
@@ -82,7 +82,7 @@ void Hub::draw(sf::RenderWindow& window)
     }
 }
 
-void Hub::update(sf::Time dt, Dough& player)
+void Hub::update(sf::Time dt, Dough& player, sf::Time& gameTime)
 {
     curHitPoints = player.getHitPoints();
     curCoins = player.getCoinsCount();
@@ -94,5 +94,6 @@ void Hub::update(sf::Time dt, Dough& player)
     nHeart2.update(dt);
     nCoin.update(dt);
     nClock.update(dt);
-    nTime += dt;
+
+    nTime = gameTime;
 }

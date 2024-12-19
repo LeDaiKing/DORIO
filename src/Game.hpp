@@ -27,6 +27,7 @@ class Game : private sf::NonCopyable
     private:
 
         void loadTextures();
+        void loadFonts();
         void processInput();
         void update(sf::Time elapsedTime);
         void render();

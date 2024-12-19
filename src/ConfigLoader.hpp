@@ -13,5 +13,8 @@ class ConfigLoader
         ~ConfigLoader() = default;
         ConfigLoader(const ConfigLoader&) = delete;
         ConfigLoader& operator=(const ConfigLoader&) = delete;
+        void loadConfig(const char* key, const char* path);
+
+    private:
         std::map<std::string, nlohmann::json> configList;
 };

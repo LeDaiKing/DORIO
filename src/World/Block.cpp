@@ -13,20 +13,32 @@ Textures::ID toTextureID(Block::Type type)
 {
     switch (type)
     {
-        case Block::Dirt:
-            return Textures::Dirt;
-        case Block::Breakable:
-            return Textures::Breakable;
-        case Block::LuckyBlock:
-            return Textures::LuckyBlock;
+        case Block::Floor1:
+            return Textures::Floor1;
+        case Block::UnderFloor1:
+            return Textures::UnderFloor1;
+        case Block::StaticBlock1:
+            return Textures::StaticBlock1;
+        case Block::Breakable1:
+            return Textures::Breakable1;
+        case Block::LuckyBlock1:
+            return Textures::LuckyBlock1;
+        case Block::Floor2:
+            return Textures::Floor2;
+        case Block::UnderFloor2:
+            return Textures::UnderFloor2;
+        case Block::StaticBlock2:
+            return Textures::StaticBlock2;
+        case Block::Breakable2:
+            return Textures::Breakable2;
+        case Block::LuckyBlock2:
+            return Textures::LuckyBlock2;
+        case Block::SlideBlock:
+            return Textures::SlideBlock;
         case Block::JumpyBlock:
             return Textures::JumpyBlock;
-        case Block::SlideBlock:
-            return Textures::Dirt;
-        default:
-            return Textures::Dirt;
     }
-    return Textures::Dirt;
+    return Textures::Floor1;
 }
 
 
@@ -74,11 +86,6 @@ void Block::applyNormal(SceneNode& graph)
 
         collision::Side side = checkCollisionSide(entityHitBox, bound);
         int gravity = World::getGravity();
-
-        if (entity.getCategory() & Category::PlayerDough)
-        {
-            if (side != collision::None) std:: cout << "Side: " << side << std::endl;
-        }
 
         if (side == collision::Top && entity.getVelocity().y > 0)
         {

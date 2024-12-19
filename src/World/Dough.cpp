@@ -150,7 +150,7 @@ void Dough::setUpEntity()
 	}
 	centerOrigin(nBig);
 	nBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
-	nBig.addAnimationState(State::Walk, 64, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
+	nBig.addAnimationState(State::Walk, 64, 8, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nBig.addAnimationState(State::Jump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
 	nBig.addAnimationState(State::DoubleJump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
 	// nBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
@@ -160,7 +160,7 @@ void Dough::setUpEntity()
 
 	centerOrigin(nFireBig);
 	nFireBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
-	nFireBig.addAnimationState(State::Walk, 64, 6, sf::seconds(0.6f), sf::Vector2i(32, 64), true);
+	nFireBig.addAnimationState(State::Walk, 64, 6, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nFireBig.addAnimationState(State::Jump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
 	nFireBig.addAnimationState(State::DoubleJump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
 	// nFireBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), true);

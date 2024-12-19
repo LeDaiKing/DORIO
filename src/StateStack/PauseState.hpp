@@ -5,6 +5,7 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "../Utility.hpp"
+#include "../UI/Container.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -19,4 +20,5 @@ class PauseState : public State{
         sf::Sprite nBackgroundSprite;
         sf::Text nPausedText;
         sf::Text nInstructionText;
+        GUI::Container nBar;
 };

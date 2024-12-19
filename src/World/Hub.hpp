@@ -6,13 +6,13 @@ class Hub
     public:
         Hub();
         void draw(sf::RenderWindow& window);
-        void update(sf::Time dt, Dough& player);
+        void update(sf::Time dt, Dough& player, sf::Time& gameTime);
     private:
         Animation nClock;
         Animation nCoin;
         Animation nHeart;
         Animation nHeart2;
-        sf::Sprite nSettingBut;
+        // sf::Sprite nSettingBut;
         int preHitPoints;
         int curHitPoints;
         int curCoins;
