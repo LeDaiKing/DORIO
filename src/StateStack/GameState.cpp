@@ -7,6 +7,8 @@ GameState::GameState(StateStack& stack, Context context)
 , nWorld(*context.window)
 , nPlayer(*context.player)
 {
+    nWorld.load();
+    nWorld.loadMap();
 }
 
 void GameState::draw()
@@ -30,6 +32,9 @@ bool GameState::handleEvent(const sf::Event& event)
     nPlayer.handleEvent(event, commands);
 
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+    {
         requestStackPush(States::ID::Pause);
+        nWorld.save();
+    }
     return true;
 }

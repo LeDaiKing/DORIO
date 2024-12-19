@@ -20,5 +20,5 @@ class PauseState : public State{
         sf::Sprite nBackgroundSprite;
         sf::Text nPausedText;
         sf::Text nInstructionText;
-        GUI::Container nBar;
+        // GUI::Container nBar;
 };

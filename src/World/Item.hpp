@@ -27,6 +27,8 @@ class Item : public SceneNode
         virtual sf::FloatRect getBoundingRect() const;
         virtual void activate(Entity& player) = 0;
         virtual bool isMarkedForRemoval() const;
+        virtual void load(std::ifstream& file);
+        virtual void save(std::ofstream& file);
     protected:
         virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;

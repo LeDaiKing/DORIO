@@ -42,13 +42,15 @@ void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
     {
         // commands.push(nItems.top().first);
         // nQueueItems.push_back(std::move(nItems.top().second));
-        nQueueItems.push_back(std::move(nItems.top()));
+        ItemPair item;
+        item.first = nItems.back();
+        item.second = ItemFactory::createAppearAnimation(nItems.back());
+        nQueueItems.push_back(std::move(item));
         nQueueItems.back().second->setPosition(0, -16);
-        nItems.pop();
-        nItemTypes.pop();
+        nItems.pop_back();
         nIsDropping = false;
     }
-    if (nItems.empty() && nStateBounce == 0)
+    if (!(int)nItems.size() && nStateBounce == 0)
     {
         nIsEmpty = true;
         nSprite.setTexture(nTexture);
@@ -58,7 +60,18 @@ void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
     {
         if ((*it).second->isFinished())
         {
-            commands.push((*it).first);
+            Command command;
+            command.category = Category::ItemScene;
+            command.action = [this, it, &commands] (SceneNode& graph, sf::Time)
+            {
+                if ((*it).first == Item::Coin)
+                {
+                    return;
+                }
+                std::unique_ptr<Item> item = ItemFactory::createItem((*it).first, getWorldPosition() + sf::Vector2f(0.f, -32.f));
+                graph.attachChild(std::move(item));
+            };
+            commands.push(command);
             it = nQueueItems.erase(it);
         }
         else
@@ -81,23 +94,7 @@ void LuckyBlock::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) 
 void LuckyBlock::addItem(Item::Type type)
 {
     nIsEmpty = false;
-    Command command;
-    command.category = Category::ItemScene;
-    command.action = [this, type](SceneNode& graph, sf::Time)
-    {
-        if (type == Item::Coin)
-        {
-            return;
-        }
-        std::unique_ptr<Item> item = ItemFactory::createItem(type, getWorldPosition() + sf::Vector2f(0.f, -32.f));
-        graph.attachChild(std::move(item));
-    };
-    ItemPair itemPair;
-    itemPair.first = command;
-    itemPair.second = ItemFactory::createAppearAnimation(type);
-
-    nItems.push(std::move(itemPair));
-    nItemTypes.push(type);
+    nItems.push_back(type);    
 }
 
 void LuckyBlock::handleBottomCollision(Entity& player)
@@ -113,7 +110,7 @@ void LuckyBlock::handleBottomCollision(Entity& player)
             dough.setVelocity(dough.getVelocity().x, 0);
             return;
         }
-        if (!nItemTypes.empty() && nItemTypes.top() == Item::Coin)
+        if ((int)nItems.size() && nItems.back() == Item::Coin)
         {
             dough.addCoins(1);
         }
@@ -132,6 +129,7 @@ void LuckyBlock::dropItem()
 void LuckyBlock::randomItem(int num)
 {
     if (num == -1) num = randomInt(5) + 1;
+    nIsEmpty = false;
     bool isGrowUp = false;
     while(num--)
     {
@@ -149,5 +147,47 @@ void LuckyBlock::randomItem(int num)
         }
 
         addItem(type);
+    }
+}
+
+void LuckyBlock::save(std::ofstream& file)
+{
+    Block::save(file);
+    file.write(reinterpret_cast<const char*>(&nIsEmpty), sizeof(nIsEmpty));
+    int size = nItems.size();
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    for (auto& item : nItems)
+    {
+        file.write(reinterpret_cast<const char*>(&item), sizeof(item));
+    }
+    size = nQueueItems.size();
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    for (auto& item : nQueueItems)
+    {
+        file.write(reinterpret_cast<const char*>(&item.first), sizeof(item.first));
+    }
+}
+
+void LuckyBlock::load(std::ifstream& file)
+{
+    Block::load(file);
+    file.read(reinterpret_cast<char*>(&nIsEmpty), sizeof(nIsEmpty));
+    int size;
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    for (int i = 0; i < size; ++i)
+    {
+        Item::Type type;
+        file.read(reinterpret_cast<char*>(&type), sizeof(type));
+        nItems.push_back(type);
+    }
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    for (int i = 0; i < size; ++i)
+    {
+        Item::Type type;
+        file.read(reinterpret_cast<char*>(&type), sizeof(type));
+        ItemPair item;
+        item.first = type;
+        item.second = ItemFactory::createAppearAnimation(type);
+        nQueueItems.push_back(std::move(item));
     }
 }

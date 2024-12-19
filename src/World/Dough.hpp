@@ -49,6 +49,8 @@ class Dough : public Entity
 		int getHitPoints() const;
 		void setCheckPoint(sf::Vector2f checkPoint);
 		void resetCheckPoint();
+		virtual void load(std::ifstream& file);
+		virtual void save(std::ofstream& file);
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -70,4 +72,5 @@ class Dough : public Entity
 		sf::Vector2f nBigHitBox;
 		int nCoinsCount;
 		sf::Vector2f nCheckPoint;
+		int nScore;
 };

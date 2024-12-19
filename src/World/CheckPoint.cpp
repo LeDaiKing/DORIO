@@ -93,3 +93,19 @@ void CheckPoint::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) 
 {
     target.draw(nSprite, states);
 }
+
+void CheckPoint::save(std::ofstream& file)
+{
+    file.write(reinterpret_cast<const char*>(&nType), sizeof(nType));
+    sf::Vector2f pos = nSprite.getPosition();
+    file.write(reinterpret_cast<char*>(&pos), sizeof(pos));
+    int currentAnimation = nSprite.getCurrentAnimationID();
+    file.write(reinterpret_cast<char*>(&currentAnimation), sizeof(currentAnimation));
+}
+
+void CheckPoint::load(std::ifstream& file)
+{
+    int currentAnimation;
+    file.read(reinterpret_cast<char*>(&currentAnimation), sizeof(currentAnimation));
+    nSprite.setAnimationState(currentAnimation);
+}

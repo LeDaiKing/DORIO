@@ -31,6 +31,7 @@ Dough::Dough(Type type)
 , nFireBig(TextureHolder::getInstance().get(Textures::FireBigDough))
 , stateJump(0)
 , nCoinsCount(0)
+, nScore(0)
 {
 	setUpEntity();
 	setAnimationState(State::Idle);
@@ -402,18 +403,18 @@ void Dough::setAnimationState(State type)
 
 void Dough::growUPBig()
 {
+	addHitPoints(1);
 	if (nGrowUp == Big || nGrowUp == FireBig) return;
 	nGrowUp = Big;
-	addHitPoints(1);
 	nCurrentState = State::Idle;
 	nBig.setAnimationState(State::Idle);
 }
 
 void Dough::growUPFireBig()
 {
+	addHitPoints(1);
 	if (nGrowUp == FireBig) return;
 	nGrowUp = FireBig;
-	addHitPoints(1);
 	nCurrentState = State::Appear;
 	nFireBig.setAnimationState(State::Appear);
 }
@@ -502,4 +503,51 @@ void Dough::setCheckPoint(sf::Vector2f checkPoint)
 void Dough::resetCheckPoint()
 {
 	setPosition(nCheckPoint);
+}
+
+void Dough::save(std::ofstream& file)
+{
+	/*
+	    type
+		growUp
+		nCoinsCount
+		nScore
+		nCheckPoint
+	*/
+	int type = nType;
+	file.write(reinterpret_cast<char*>(&type), sizeof(type));
+	file.write(reinterpret_cast<char*>(&nGrowUp), sizeof(nGrowUp));
+	file.write(reinterpret_cast<char*>(&nCoinsCount), sizeof(nCoinsCount));
+	file.write(reinterpret_cast<char*>(&nScore), sizeof(nScore));
+	file.write(reinterpret_cast<char*>(&nCheckPoint), sizeof(nCheckPoint));
+	sf::Vector2f pos = getPosition();
+	file.write(reinterpret_cast<char*>(&pos), sizeof(pos));
+}
+
+void Dough::load(std::ifstream& file)
+{
+	/*
+	    type
+		growUp
+		nCoinsCount
+		nScore
+		nCheckPoint
+	*/
+	file.read(reinterpret_cast<char*>(&nGrowUp), sizeof(nGrowUp));
+	file.read(reinterpret_cast<char*>(&nCoinsCount), sizeof(nCoinsCount));
+	file.read(reinterpret_cast<char*>(&nScore), sizeof(nScore));
+	file.read(reinterpret_cast<char*>(&nCheckPoint), sizeof(nCheckPoint));
+
+	sf::Vector2f pos;
+	file.read(reinterpret_cast<char*>(&pos), sizeof(pos));
+	setPosition(pos);
+
+	if (nGrowUp == Big)
+	{
+		growUPBig();
+	}
+	else if (nGrowUp == FireBig)
+	{
+		growUPFireBig();
+	}
 }

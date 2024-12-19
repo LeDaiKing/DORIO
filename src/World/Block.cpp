@@ -161,3 +161,23 @@ void Block::applyNormal(SceneNode& graph)
 //     entity.accelerate(0.f, -World::getGravity());
 //     entity.setOnGround(true);
 // }
+
+
+void Block::save(std::ofstream& file)
+{
+    if (isBroken()) 
+    {
+        int type = -1;
+        file.write(reinterpret_cast<const char*>(&type), sizeof(type));
+        return;
+    }
+    file.write(reinterpret_cast<const char*>(&nType), sizeof(nType));
+    sf::Vector2f pos = getPosition();
+    file.write(reinterpret_cast<char*>(&pos), sizeof(pos));
+}
+void Block::load(std::ifstream& file)
+{
+    // sf::Vector2f position;
+    // file.read(reinterpret_cast<char*>(&position), sizeof(position));
+    // setPosition(position);
+}

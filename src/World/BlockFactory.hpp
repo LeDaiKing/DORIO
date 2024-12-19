@@ -5,6 +5,7 @@ class BlockFactory
 {
     public:
         static std::unique_ptr<Block> createBlock(const std::string& type, sf::Vector2f position);
+        static std::unique_ptr<Block> createBlock(Block::Type type, sf::Vector2f position);
 
     private:
         BlockFactory() = default;

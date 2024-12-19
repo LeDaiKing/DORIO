@@ -13,6 +13,8 @@ class CheckPoint: public SceneNode
     public:
         CheckPoint(Type type, sf::Vector2f position);
         virtual sf::FloatRect getBoundingRect() const;
+        virtual void load(std::ifstream& file);
+        virtual void save(std::ofstream& file);
         // virtual unsigned int getCategory() const;
 
     protected:

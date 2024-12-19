@@ -64,3 +64,19 @@ void Item::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(nAnimation, states);
     }
 }
+
+
+void Item::save(std::ofstream& file)
+{
+    int type = nType;
+    file.write(reinterpret_cast<char*>(&type), sizeof(type));
+    if (nType == FireBall) return;
+    sf::Vector2f pos = getPosition();
+    file.write(reinterpret_cast<char*>(&pos), sizeof(pos));
+    file.write(reinterpret_cast<char*>(&nIsCollected), sizeof(nIsCollected));
+}
+
+void Item::load(std::ifstream& file)
+{
+    file.read(reinterpret_cast<char*>(&nIsCollected), sizeof(nIsCollected));
+}

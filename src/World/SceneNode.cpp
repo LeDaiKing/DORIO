@@ -120,3 +120,13 @@ bool SceneNode::isMarkedForRemoval() const
 {
 	return false;
 }
+
+void SceneNode::save(std::ofstream& file)
+{
+	//somthing
+}
+
+void SceneNode::load(std::ifstream& file)
+{
+	//somthing
+}

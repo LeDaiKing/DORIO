@@ -11,7 +11,7 @@ PauseState::PauseState(StateStack& stack, Context context)
 , nBackgroundSprite()
 , nPausedText()
 , nInstructionText() 
-, nBar()
+// , nBar()
 {
     sf::Font& font = FontHolder::getInstance().get(Fonts::Main);
     sf::Vector2f viewSize = context.window->getView().getSize();
@@ -28,10 +28,10 @@ PauseState::PauseState(StateStack& stack, Context context)
     this->nInstructionText.setPosition(0.5f * viewSize.x, 0.6f * viewSize.y);
 
 
-    auto homeBut = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    homeBut->setButtonSize(20, 20);
-    homeBut->setPosition(0.5f * viewSize.x - 100, 0.7f * viewSize.y);
-    nBar.pack(homeBut);
+    // auto homeBut = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
+    // homeBut->setButtonSize(20, 20);
+    // homeBut->setPosition(0.5f * viewSize.x - 100, 0.7f * viewSize.y);
+    // nBar.pack(homeBut);
 
 }
 
@@ -46,7 +46,7 @@ void PauseState::draw() {
     window.draw(backgroundShape);
     window.draw(this->nPausedText);
     window.draw(this->nInstructionText);
-    window.draw(this->nBar);
+    // window.draw(this->nBar);
 }
 
 bool PauseState::update(sf::Time dt) {

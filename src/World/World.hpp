@@ -37,6 +37,9 @@ class World : private sf::NonCopyable
 		CommandQueue& getCommandQueue();
 
 		static int getGravity();
+		void save();
+		void load();
+		void loadMap();
 
 	private:
 		// void loadTextures();
@@ -44,7 +47,6 @@ class World : private sf::NonCopyable
 		void applyGravity();
 		void applyNormal();
 		void adaptCameraPosition();
-		void loadMap();
 
 		void handleCollisions();
 		void removeSceneNode();
@@ -54,6 +56,7 @@ class World : private sf::NonCopyable
 		{
 			Background,
 			Map,
+			Checkpoints,
 			Enemies,
 			Items,
 			Player,
