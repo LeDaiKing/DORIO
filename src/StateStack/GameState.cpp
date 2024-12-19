@@ -7,7 +7,7 @@ GameState::GameState(StateStack& stack, Context context)
 , nWorld(*context.window)
 , nPlayer(*context.player)
 {
-    nWorld.load();
+    // nWorld.load();
     nWorld.loadMap();
 }
 
