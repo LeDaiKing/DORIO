@@ -13,8 +13,9 @@ namespace GUI
     {
     }
 
-    void Container::pack(Component::Ptr component) {
+    void Container::pack(Component::Ptr component, bool isAuto) {
         nChildren.push_back(component);
+        nIsAuto.push_back(isAuto);
         if (!hasSelection() && component->isSelectable()) {
             select(nChildren.size() - 1);
         }
@@ -90,6 +91,9 @@ namespace GUI
                 nChildren[nSelectedChild]->deselect();
             }
             nChildren[index]->select();
+            if (nIsAuto[index]) {
+                nChildren[index]->activate();
+            }
             nSelectedChild = index;
         }
     }

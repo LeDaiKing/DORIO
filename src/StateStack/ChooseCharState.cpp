@@ -97,8 +97,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         requestStackPush(States::ChooseMode);
     });
 
-    nGUIContainer.pack(charSlot1);
-    nGUIContainer.pack(charSlot2);
+    nGUIContainer.pack(charSlot1, true);
+    nGUIContainer.pack(charSlot2, true);
 }
 
 

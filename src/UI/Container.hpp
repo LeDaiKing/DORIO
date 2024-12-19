@@ -11,7 +11,7 @@ namespace GUI{
 
         public: 
         Container();
-        void pack(Component::Ptr component);
+        void pack(Component::Ptr component, bool isAuto = false);
         
         virtual void update(sf::Time dt);
         virtual bool isSelectable() const;
@@ -28,6 +28,7 @@ namespace GUI{
 
         private:
         std::vector<Component::Ptr> nChildren;
+        std::vector<bool> nIsAuto;
         int nSelectedChild;
     };
 }
