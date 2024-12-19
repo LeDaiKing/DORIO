@@ -204,7 +204,7 @@ void World::loadMap()
 	nSceneLayers[Background]->attachChild(std::move(background));
 
 	//Map
-	for (int x = 0; x < 3000; x += 32)
+	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
 		sf::Color color = map.getPixel(x + 5, y + 5);

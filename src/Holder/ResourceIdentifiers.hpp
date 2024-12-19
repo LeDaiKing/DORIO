@@ -31,11 +31,11 @@ namespace Textures
         // Background
 		BackGround1,
 		BackGround2,
-		TitleScreen,
-		ChooseModeScreen,
-		ChooseCharScreen,
+
 		
 		// Button
+		TitleScreen,
+		ChooseModeScreen,
 		RectButtonNormal,
 		RectButtonSelected,
 		RectButtonPressed,
