@@ -3,6 +3,8 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/System/Time.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include <memory>
 
@@ -28,6 +30,7 @@ namespace GUI
             virtual void deactivate();
             virtual void handleEvent(const sf::Event& event) = 0;
             virtual bool contains(const sf::Vector2f& point) const;
+            virtual bool isMouseOver(sf::RenderWindow& window) const;
         private:
             bool nIsSelected;
             bool nIsActive;

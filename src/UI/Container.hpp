@@ -20,6 +20,7 @@ namespace GUI{
         void selectNext();
         void selectPrevious();
         Component::Ptr getSelectedChild() const;
+        int getSelectedIndex() const;
 
         private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

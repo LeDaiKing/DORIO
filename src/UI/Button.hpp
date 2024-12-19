@@ -15,9 +15,11 @@ namespace GUI{
 
         public:
         enum Type{
-            SquareButton, 
             RectangleButton,
+            SquareButton,
+            SlotButton,
             BackButton,
+            StartButton,
             charSlot1,
             charSlot2,
             previousButton,

@@ -87,179 +87,144 @@ namespace GUI{
     }
 
     Textures::ID Button::getNormalTexture(Type type) const {
-        if (type == Type::RectangleButton) {
-            return Textures::RectButtonNormal;
+        switch (type) {
+            case Type::RectangleButton:
+                return Textures::RectButtonNormal;
+            case Type::SquareButton:
+                return Textures::SquareButtonNormal;
+            case Type::SlotButton:
+                return Textures::slotButtonNormal;
+            case Type::StartButton:
+                return Textures::StartButtonNormal;
+            case Type::BackButton:
+                return Textures::BackButtonNormal;
+            case Type::charSlot1:
+                return Textures::charSlot1Normal;
+            case Type::charSlot2:
+                return Textures::charSlot2Normal;
+            case Type::previousButton:
+                return Textures::previousButton;
+            case Type::nextButton:
+                return Textures::nextButton;
+            case Type::saveButton:
+                return Textures::saveButtonNormal;
+            case Type::choosePlayerButton:
+                return Textures::choosePlayerButtonNormal;
+            case Type::chooseCharButton:
+                return Textures::chooseCharButtonNormal;
+            case Type::chooseModeButton:
+                return Textures::chooseModeButtonNormal;
+            case Type::playStartButton:
+                return Textures::playStartButtonNormal;
+            case Type::kitchenMode:
+                return Textures::kitchenModeNormal;
+            case Type::hallwayMode:
+                return Textures::hallwayModeNormal;
+            case Type::gardenMode:
+                return Textures::gardenModeNormal;
+            case Type::creativeMode:
+                return Textures::creativeModeNormal;
+            case Type::onePlayerButton:
+                return Textures::onePlayerButton;
+            case Type::twoPlayerButton:
+                return Textures::twoPlayerButton;
+            default:
+                assert(false);
         }
-        if (type == Type::SquareButton) {
-            return Textures::SquareButtonNormal;
-        }
-        if (type == Type::BackButton) {
-            return Textures::BackButtonNormal;
-        }
-        if (type == Type::charSlot1) {
-            return Textures::charSlot1Normal;
-        }
-        if (type == Type::charSlot2) {
-            return Textures::charSlot2Normal;
-        }
-        if (type == Type::previousButton) {
-            return Textures::previousButton;
-        }
-        if (type == Type::nextButton) {
-            return Textures::nextButton;
-        }
-        if (type == Type::saveButton) {
-            return Textures::saveButtonNormal;
-        }
-         if (type == Type::choosePlayerButton) {
-            return Textures::choosePlayerButtonNormal;
-        }
-        if (type == Type::chooseCharButton) {
-            return Textures::chooseCharButtonNormal;
-        }
-        if(type == Type::chooseModeButton) {
-            return Textures::chooseModeButtonNormal;
-        }
-        if (type == Type::playStartButton) {
-            return Textures::playStartButtonNormal;
-        }
-        if (type == Type::kitchenMode) {
-            return Textures::kitchenModeNormal;
-        }
-        if (type == Type::hallwayMode) {
-            return Textures::hallwayModeNormal;
-        }
-        if (type == Type::gardenMode) {
-            return Textures::gardenModeNormal;
-        }
-        if (type == Type::creativeMode) {
-            return Textures::creativeModeNormal;
-        }
-        if (type == Type::onePlayerButton) {
-            return Textures::onePlayerButton;
-        }
-        if (type == Type::twoPlayerButton) {
-            return Textures::twoPlayerButton;
-        }
-
-        assert(false);
     }
 
     Textures::ID Button::getSelectedTexture(Type type) const {
-        if (type == Type::RectangleButton) {
-            return Textures::RectButtonSelected;
+        switch (type) {
+            case Type::RectangleButton:
+                return Textures::RectButtonSelected;
+            case Type::SquareButton:
+                return Textures::SquareButtonSelected;
+            case Type::SlotButton:
+                return Textures::slotButtonSelected;
+            case Type::StartButton:
+                return Textures::StartButtonSelected;
+            case Type::BackButton:
+                return Textures::BackButtonSelected;
+            case Type::charSlot1:
+                return Textures::charSlot1Selected;
+            case Type::charSlot2:
+                return Textures::charSlot2Selected;
+            case Type::previousButton:
+                return Textures::previousButton;
+            case Type::nextButton:
+                return Textures::nextButton;
+            case Type::saveButton:
+                return Textures::saveButtonSelected;
+            case Type::choosePlayerButton:
+                return Textures::choosePlayerButtonSelected;
+            case Type::chooseCharButton:
+                return Textures::chooseCharButtonSelected;
+            case Type::chooseModeButton:
+                return Textures::chooseModeButtonSelected;
+            case Type::playStartButton:
+                return Textures::playStartButtonSelected;
+            case Type::kitchenMode:
+                return Textures::kitchenModeSelected;
+            case Type::hallwayMode:
+                return Textures::hallwayModeSelected;
+            case Type::gardenMode:
+                return Textures::gardenModeSelected;
+            case Type::creativeMode:
+                return Textures::creativeModeSelected;
+            case Type::onePlayerButton:
+                return Textures::onePlayerButton;
+            case Type::twoPlayerButton:
+                return Textures::twoPlayerButton;
+            default:
+                assert(false);
         }
-        if (type == Type::SquareButton) {
-            return Textures::SquareButtonSelected;
-        }
-        if (type == Type::BackButton) {
-            return Textures::BackButtonSelected;
-        }
-         if (type == Type::charSlot1) {
-            return Textures::charSlot1Selected;
-        }
-        if (type == Type::charSlot2) {
-            return Textures::charSlot2Selected;
-        }
-         if (type == Type::previousButton) {
-            return Textures::previousButton;
-        }
-        if (type == Type::nextButton) {
-            return Textures::nextButton;
-        }
-        if (type == Type::saveButton) {
-            return Textures::saveButtonSelected;
-        }
-        if (type == Type::choosePlayerButton) {
-            return Textures::choosePlayerButtonSelected;
-        }
-        if (type == Type::chooseCharButton) {
-            return Textures::chooseCharButtonSelected;
-        }
-        if (type == Type::chooseModeButton) {
-            return Textures::chooseModeButtonSelected;
-        }
-        if (type == Type::playStartButton) {
-            return Textures::playStartButtonSelected;
-        }
-        if (type == Type::kitchenMode) {
-            return Textures::kitchenModeSelected;
-        }
-        if (type == Type::hallwayMode) {
-            return Textures::hallwayModeSelected;
-        }
-        if (type == Type::gardenMode) {
-            return Textures::gardenModeSelected;
-        }
-        if (type == Type::creativeMode) {
-            return Textures::creativeModeSelected;
-        }
-        if (type == Type::onePlayerButton) {
-            return Textures::onePlayerButton;
-        }
-        if (type == Type::twoPlayerButton) {
-            return Textures::twoPlayerButton;
-        }
-    
-        assert(false);
     }
 
     Textures::ID Button::getPressedTexture(Type type) const {
-        if (type == Type::RectangleButton) {
-            return Textures::RectButtonPressed;
+        switch (type) {
+            case Type::RectangleButton:
+                return Textures::RectButtonPressed;
+            case Type::SquareButton:
+                return Textures::SquareButtonPressed;
+            case Type::SlotButton:
+                return Textures::slotButtonPressed;
+            case Type::StartButton:
+                return Textures::StartButtonPressed;
+            case Type::BackButton:
+                return Textures::BackButtonPressed;
+            case Type::charSlot1:
+                return Textures::charSlot1Pressed;
+            case Type::charSlot2:
+                return Textures::charSlot2Pressed;
+            case Type::previousButton:
+                return Textures::previousButton;
+            case Type::nextButton:
+                return Textures::nextButton;
+            case Type::saveButton:
+                return Textures::saveButtonSelected;
+            case Type::choosePlayerButton:
+                return Textures::choosePlayerButtonSelected;
+            case Type::chooseCharButton:
+                return Textures::chooseCharButtonSelected;
+            case Type::chooseModeButton:
+                return Textures::chooseModeButtonSelected;
+            case Type::playStartButton:
+                return Textures::playStartButtonSelected;
+            case Type::kitchenMode:
+                return Textures::kitchenModeSelected;
+            case Type::hallwayMode:
+                return Textures::hallwayModeSelected;
+            case Type::gardenMode:
+                return Textures::gardenModeSelected;
+            case Type::creativeMode:
+                return Textures::creativeModeSelected;
+            case Type::onePlayerButton:
+                return Textures::onePlayerButton;
+            case Type::twoPlayerButton:
+                return Textures::twoPlayerButton;
+            default:
+                assert(false);
         }
-        if (type == Type::SquareButton) {
-            return Textures::SquareButtonPressed;
-        }
-        if (type == Type::BackButton) {
-            return Textures::BackButtonPressed;
-        }
-         if (type == Type::charSlot1) {
-            return Textures::charSlot1Pressed;
-        }
-        if (type == Type::charSlot2) {
-            return Textures::charSlot2Pressed;
-        }
-         if (type == Type::previousButton) {
-            return Textures::previousButton;
-        }
-        if (type == Type::nextButton) {
-            return Textures::nextButton;
-        }
-        if (type == Type::saveButton) {
-            return Textures::saveButtonSelected;
-        }
-         if (type == Type::choosePlayerButton) {
-            return Textures::choosePlayerButtonSelected;
-        }
-        if (type == Type::chooseCharButton) {
-            return Textures::chooseCharButtonSelected;
-        }
-        if (type == Type::chooseModeButton) {
-            return Textures::chooseModeButtonSelected;
-        }
-        if (type == Type::playStartButton) {
-            return Textures::playStartButtonSelected;
-        }
-        if (type == Type::kitchenMode) {
-            return Textures::kitchenModeSelected;
-        }
-        if (type == Type::hallwayMode) {
-            return Textures::hallwayModeSelected;
-        }
-        if (type == Type::gardenMode) {
-            return Textures::gardenModeSelected;
-        }
-        if (type == Type::creativeMode) {
-            return Textures::creativeModeSelected;
-        }
-        if (type == Type::onePlayerButton) {
-            return Textures::onePlayerButton;
-        }
-        if (type == Type::twoPlayerButton) {
-            return Textures::twoPlayerButton;
-        }
-        assert(false);
     }
 
     void Button::setIsSelected(bool flag) {

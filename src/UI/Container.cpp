@@ -63,6 +63,15 @@ namespace GUI
                 }
             }
         }
+        else if (event.type == sf::Event::MouseMoved) {
+            sf::Vector2f mousePos = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
+            for (std::size_t i = 0; i < nChildren.size(); ++i) if (nChildren[i]->isSelectable()) {
+                if (nChildren[i]->contains(mousePos) == true) {
+                    select(i);
+                    break;
+                }
+            }
+        }
     }
 
 /*
@@ -129,6 +138,10 @@ namespace GUI
     }
 
     Component::Ptr Container::getSelectedChild() const {
+        if (nSelectedChild == -1) return nullptr;
         return nChildren[nSelectedChild];
+    }
+    int Container::getSelectedIndex() const {
+        return nSelectedChild;
     }
 }

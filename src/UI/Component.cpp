@@ -51,4 +51,7 @@ namespace GUI{
     bool Component::contains(const sf::Vector2f& point) const {
         return false;
     }
-}  // namespace GUI
+    bool Component::isMouseOver(sf::RenderWindow& window) const {
+      return false;
+    }
+    }  // namespace GUI
