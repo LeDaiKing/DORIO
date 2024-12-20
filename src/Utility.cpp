@@ -8,6 +8,8 @@
 #include <cmath>
 #include <ctime>
 #include <cassert>
+#include <fstream>
+#include <filesystem>
 
 
 namespace
@@ -213,3 +215,21 @@ float getAngle(sf::Vector2f vector)
 	return std::atan2(vector.y, vector.x) * 180.f / PI;
 }
 
+bool isFileEmpty(const std::string& fileName)
+{
+	if (!std::filesystem::exists(fileName))
+	{
+		return true;
+	}
+	std::ifstream file(fileName);
+	return file.peek() == std::ifstream::traits_type::eof();
+}
+
+bool isFolderEmpty(const std::string& folderName)
+{
+	if (!std::filesystem::exists(folderName))
+	{
+		return true;
+	}
+	return std::filesystem::is_empty(folderName);
+}

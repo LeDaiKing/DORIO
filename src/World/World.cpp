@@ -122,7 +122,8 @@ void World::buildScene()
 	nCategoryLayers[Enemies] |= Category::Enemy;
 	nCategoryLayers[Items] |= Category::Item;
 	nCategoryLayers[Player] |= Category::PlayerDough;
-	// loadMap();
+	
+
 	
 	
 }
@@ -174,15 +175,8 @@ void World::adaptCameraPosition()
 	if (postiion.x > nWorldBounds.width - 10) nPlayerDough->setPosition(nWorldBounds.width - 10, postiion.y);
 }
 
-void World::loadMap()
+void World::loadMap(std::string level)
 {
-	
-	std::string level;
-	std::ifstream file("file/Map/map.txt");
-	file >> level;
-	file.close();
-	// std::cout << level << std::endl;
-
 	std::string key = "Map/Level" + level;
 	nlohmann::json config = ConfigLoader::getInstance().getConfig(key.c_str());
 
@@ -353,18 +347,8 @@ void World::removeSceneNode()
 	}
 }
 
-void World::save()
+void World::save(std::ofstream& saveFile)
 {
-	std::ifstream file("file/CurSave/save.txt");
-	std::string save;
-	file >> save;
-	file.close();
-	file.open("file/Map/map.txt");
-	std::string level;
-	file >> level;
-	file.close();
-	save += "level" + level;
-
 	/*
 		Format:
 		- WorlBound
@@ -379,7 +363,6 @@ void World::save()
 		- Blocks
 	*/
 
-	std::ofstream saveFile(save, std::ios::binary);
 	saveFile.write(reinterpret_cast<char*>(&nWorldBounds), sizeof(nWorldBounds));
 	saveFile.write(reinterpret_cast<char*>(&nSpawnPosition), sizeof(nSpawnPosition));
 	saveFile.write(reinterpret_cast<char*>(&nTime), sizeof(nTime));
@@ -416,27 +399,12 @@ void World::save()
 	{
 		checkPoint->save(saveFile);
 	}
-	saveFile.close();
 }
 
-void World::load()
+void World::load(std::ifstream& saveFile, int lev)
 {
-	std::ifstream file("file/CurSave/save.txt");
-	std::string save;
-	file >> save;
-	file.close();
-	file.open("file/Map/map.txt");
-	std::string level;
-	file >> level;
-	file.close();
-	save += "level" + level;
-
-	std::ifstream saveFile(save, std::ios::binary);
 	saveFile.read(reinterpret_cast<char*>(&nWorldBounds), sizeof(nWorldBounds));
-
-	
-	Textures::ID lev = static_cast<Textures::ID>(level[0] - '0'); 
-	sf::Texture& texture = TextureHolder::getInstance().get(lev);
+	sf::Texture& texture = TextureHolder::getInstance().get(static_cast<Textures::ID>(lev));
 	sf::IntRect textureRect(nWorldBounds);
 	texture.setRepeated(true);
 	std::unique_ptr<SpriteNode> background(new SpriteNode(texture, textureRect));
@@ -516,5 +484,4 @@ void World::load()
 		nSceneLayers[Checkpoints]->attachChild(std::move(checkPoint));
 	}
 	
-	saveFile.close();
 }

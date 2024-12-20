@@ -1,6 +1,7 @@
 #include "ChooseModeState.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
+#include <fstream>
 
 
 ChooseModeState::ChooseModeState(StateStack& stack, Context context)
@@ -17,7 +18,10 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     auto kitchenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::kitchenMode);
     kitchenMode->setPosition({407, 347});
     kitchenMode->setCallback([this] ()
-    {
+    {   
+        std::ofstream file("file/CurSave/save.txt", std::ios::app);
+        file << "/level1";
+        file.close();
         requestStackPop();
         requestStackPush(States::Game);
         requestStackPush(States::Loading);
@@ -27,6 +31,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     hallwayMode->setPosition({655.565, 165.5});
     hallwayMode->setCallback([this] ()
     {
+        std::ofstream file("file/CurSave/save.txt", std::ios::app);
+        file << "/level2";
+        file.close();
         requestStackPop();
         requestStackPush(States::Game);
         requestStackPush(States::Loading);
@@ -36,6 +43,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     gardenMode->setPosition({912.77, 345});
     gardenMode->setCallback([this] ()
     {
+        std::ofstream file("file/CurSave/save.txt", std::ios::app);
+        file << "/level3";
+        file.close();
         requestStackPop();
         requestStackPush(States::Game);
         requestStackPush(States::Loading);

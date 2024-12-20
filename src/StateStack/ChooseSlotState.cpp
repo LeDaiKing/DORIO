@@ -1,6 +1,7 @@
 #include "ChooseSlotState.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
+#include <fstream>
 
 
 ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
@@ -45,22 +46,25 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     });
 
     auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
-    startButton->setPosition(891, 615);
+    startButton->setPosition(373, 615);
     startButton->setCallback([this] ()
     {
+        std::ofstream file("file/CurSave/save.txt");
+        file << "file/Save" + std::to_string(nSelectedSlot);
+        file.close();
         requestStackPop();
         requestStackPush(States::ID::ChoosePlayer);
     });
 
     auto deleteButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::DeleteButton);
-    deleteButton->setPosition({632, 615});
+    deleteButton->setPosition({891, 615});
     deleteButton->setCallback([this] ()
     {
         // delete file
     });
 
     auto resetButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::ResetButton);
-    resetButton->setPosition({373, 615});
+    resetButton->setPosition({632, 615});
     resetButton->setCallback([this] ()
     {
         nSelectedSlot = -1;

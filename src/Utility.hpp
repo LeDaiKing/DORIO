@@ -71,5 +71,11 @@ collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRec
 template <typename T>
 sf::Vector2<T> toVector2(const nlohmann::json& json);
 
+
+//file/folder
+
+bool isFileEmpty(const std::string& fileName);
+bool isFolderEmpty(const std::string& folderName);
+
 #include "Utility.inl"
 
