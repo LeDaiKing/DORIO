@@ -7,6 +7,7 @@ ConfigLoader::ConfigLoader()
     loadConfig("Enemy", "file/Enemy/abilities.json");
     loadConfig("Map", "file/Map/loadmap.json");
     loadConfig("EnemySpawn1", "file/Enemy/EnemySpawn1.json");
+    loadConfig("EnemySpawn2", "file/Enemy/EnemySpawn2.json");
 }
 
 ConfigLoader& ConfigLoader::getInstance()

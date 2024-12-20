@@ -61,6 +61,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     deleteButton->setCallback([this] ()
     {
         // delete file
+        clearFolder("file/Save" + std::to_string(nSelectedSlot));
     });
 
     auto resetButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::ResetButton);

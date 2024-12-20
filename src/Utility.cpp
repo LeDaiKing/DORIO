@@ -233,3 +233,15 @@ bool isFolderEmpty(const std::string& folderName)
 	}
 	return std::filesystem::is_empty(folderName);
 }
+
+void clearFolder(const std::string& folderName)
+{
+	if (!std::filesystem::exists(folderName))
+	{
+		return;
+	}
+	for (const auto& entry : std::filesystem::directory_iterator(folderName))
+	{
+		std::filesystem::remove_all(entry.path());
+	}
+}
