@@ -10,7 +10,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , nGUIContainer()
 , backButton(context, GUI::Button::Type::BackButton)
 // , playStartButton(context, GUI::Button::Type::playStartButton)
-, choosePlayerButton(context, GUI::Button::Type::choosePlayerButton)
+, instructionButton(context, GUI::Button::Type::instructionButton)
 , chooseCharButton(context, GUI::Button::Type::chooseCharButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
@@ -87,12 +87,11 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     //     requestStackPush(States::Loading);
     // });
 
-    choosePlayerButton.setPosition({75, 92});
-    choosePlayerButton.setIsSelected(false);
-    choosePlayerButton.setCallback([this] ()
+    instructionButton.setPosition({75, 92});
+    instructionButton.setIsSelected(false);
+    instructionButton.setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Instruction);
     });
     chooseCharButton.setPosition({75, 221});
     chooseCharButton.setIsSelected(false);
@@ -116,7 +115,7 @@ void ChooseModeState::draw()
     window.draw(nGUIContainer);
     window.draw(backButton);
     // window.draw(playStartButton);
-    window.draw(choosePlayerButton);
+    window.draw(instructionButton);
     window.draw(chooseCharButton);
     for (auto& badge : kitchenModeBadge)
         window.draw(badge);
@@ -137,9 +136,9 @@ bool ChooseModeState::update(sf::Time dt)
     //     playStartButton.setSelectedSprite();
     // else playStartButton.setNormalSprite();
 
-    if (choosePlayerButton.isMouseOver(window))
-        choosePlayerButton.setSelectedSprite();
-    else choosePlayerButton.setNormalSprite();
+    if (instructionButton.isMouseOver(window))
+        instructionButton.setSelectedSprite();
+    else instructionButton.setNormalSprite();
 
     if (chooseCharButton.isMouseOver(window))
         chooseCharButton.setSelectedSprite();
@@ -152,7 +151,7 @@ bool ChooseModeState::handleEvent(const sf::Event& event)
     nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
     // playStartButton.handleEvent(event);
-    choosePlayerButton.handleEvent(event);
+    instructionButton.handleEvent(event);
     chooseCharButton.handleEvent(event);
     return false;
 }

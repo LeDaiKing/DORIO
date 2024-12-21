@@ -9,6 +9,7 @@
 #include "StateStack/LoadingState.hpp"
 #include "StateStack/ChooseCharState.hpp"
 #include "StateStack/ChooseSlotState.hpp"
+#include "StateStack/InstructionState.hpp"
 
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
@@ -88,6 +89,22 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::ResetButtonNormal, "res/UI/resetButton.png");
 	TextureHolder::getInstance().load(Textures::ID::ResetButtonSelected, "res/UI/resetButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::ResetButtonPressed, "res/UI/resetButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::UpButtonNormal, "res/UI/upButton.png");
+	TextureHolder::getInstance().load(Textures::ID::UpButtonSelected, "res/UI/upButton.png");
+	TextureHolder::getInstance().load(Textures::ID::UpButtonPressed, "res/UI/upButton.png");
+	TextureHolder::getInstance().load(Textures::ID::LeftButtonNormal, "res/UI/leftButton.png");
+	TextureHolder::getInstance().load(Textures::ID::LeftButtonSelected, "res/UI/leftButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RightButtonNormal, "res/UI/rightButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RightButtonSelected, "res/UI/rightButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DownButtonNormal, "res/UI/downButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DownButtonSelected, "res/UI/downButton.png");
+	TextureHolder::getInstance().load(Textures::ID::AttackButtonNormal, "res/UI/attackButton.png");
+	TextureHolder::getInstance().load(Textures::ID::AttackButtonSelected, "res/UI/attackButton.png");
+	TextureHolder::getInstance().load(Textures::ID::AttackButtonPressed, "res/UI/attackButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonNormal, "res/UI/doubleUpButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonSelected, "res/UI/doubleUpButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonPressed, "res/UI/doubleUpButton.png");
+
 
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Normal, "res/UI/charSlot.png");
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Pressed, "res/UI/charSlot_s.png");
@@ -101,8 +118,8 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::char2Sprite, "res/UI/char2Sprite.png");
 	TextureHolder::getInstance().load(Textures::ID::saveButtonNormal, "res/UI/saveButton.png");
 	TextureHolder::getInstance().load(Textures::ID::saveButtonSelected, "res/UI/saveButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::choosePlayerButtonNormal, "res/UI/choosePlayerButton.png");
-	TextureHolder::getInstance().load(Textures::ID::choosePlayerButtonSelected, "res/UI/choosePlayerButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::instructionButtonNormal, "res/UI/instructionButton.png");
+	TextureHolder::getInstance().load(Textures::ID::instructionButtonSelected, "res/UI/instructionButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::chooseCharButtonNormal, "res/UI/chooseCharButton.png");
 	TextureHolder::getInstance().load(Textures::ID::chooseCharButtonSelected, "res/UI/chooseCharButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::charIntro, "res/UI/charIntro.png");
@@ -236,6 +253,7 @@ void Game::registerStates() {
 	nGameStateStack.registerState<LoadingState>(States::ID::Loading);	
 	nGameStateStack.registerState<ChooseCharState>(States::ID::ChooseCharacter);
 	nGameStateStack.registerState<ChooseSlotState>(States::ID::ChooseSlot);
+	nGameStateStack.registerState<InstructionState>(States::ID::Instruction);
 }
 
 

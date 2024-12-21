@@ -24,7 +24,7 @@ namespace GUI{
             previousButton,
             nextButton,
             saveButton,
-            choosePlayerButton,
+            instructionButton,
             chooseCharButton,
             chooseModeButton,
             playStartButton,
@@ -36,7 +36,13 @@ namespace GUI{
             twoPlayerButton,
             DeleteButton,
             ResetButton, 
-            StartButton
+            StartButton,
+            UpButton, 
+            LeftButton,
+            RightButton,
+            DownButton,
+            AttackButton,
+            DoubleUpButton,
         };
         Button(State::Context context, Type type);
 

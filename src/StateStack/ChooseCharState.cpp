@@ -11,7 +11,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , previousButton(context, GUI::Button::Type::previousButton)
 , nextButton(context, GUI::Button::Type::nextButton)
 , saveButton(context, GUI::Button::Type::saveButton)
-, choosePlayerButton(context, GUI::Button::Type::choosePlayerButton)
+, instructionButton(context, GUI::Button::Type::instructionButton)
 , chooseModeButton(context, GUI::Button::Type::chooseModeButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
@@ -82,12 +82,11 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         requestStackPush(States::ChooseMode);
     });
 
-    choosePlayerButton.setPosition({75, 92});
-    choosePlayerButton.setIsSelected(false);
-    choosePlayerButton.setCallback([this] ()
+    instructionButton.setPosition({75, 92});
+    instructionButton.setIsSelected(false);
+    instructionButton.setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Instruction);
     });
 
     chooseModeButton.setPosition({75, 221});
@@ -115,7 +114,7 @@ void ChooseCharState::draw()
     window.draw(nChar);
     window.draw(nCharIntro);
     window.draw(saveButton);
-    window.draw(choosePlayerButton);
+    window.draw(instructionButton);
     window.draw(chooseModeButton);
 }
 
@@ -130,9 +129,9 @@ bool ChooseCharState::update(sf::Time dt)
         saveButton.setSelectedSprite();
     else saveButton.setNormalSprite();
 
-    if (choosePlayerButton.isMouseOver(window))
-        choosePlayerButton.setSelectedSprite();
-    else choosePlayerButton.setNormalSprite();
+    if (instructionButton.isMouseOver(window))
+        instructionButton.setSelectedSprite();
+    else instructionButton.setNormalSprite();
 
     if (chooseModeButton.isMouseOver(window))
         chooseModeButton.setSelectedSprite();
@@ -153,7 +152,7 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     previousButton.handleEvent(event);
     nextButton.handleEvent(event);
     saveButton.handleEvent(event);
-    choosePlayerButton.handleEvent(event);
+    instructionButton.handleEvent(event);
     chooseModeButton.handleEvent(event);
     return false;
 }

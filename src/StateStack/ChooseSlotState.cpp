@@ -10,6 +10,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
 , nGUIContainerSlot()
 , nGUIContainerConfirm()
 , backButton(context, GUI::Button::Type::BackButton)
+, instructionButton(context, GUI::Button::Type::instructionButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     
@@ -43,6 +44,13 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::Title);
+    });
+
+    instructionButton.setPosition({75, 92});
+    instructionButton.setIsSelected(false);
+    instructionButton.setCallback([this] ()
+    {
+        requestStackPush(States::Instruction);
     });
 
     auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
@@ -91,16 +99,20 @@ void ChooseSlotState::draw()
     window.draw(nBackgroundSprite);
     window.draw(nGUIContainerSlot);
     window.draw(backButton);
+    window.draw(instructionButton);
     if (nSelectedSlot != -1)
         window.draw(nGUIContainerConfirm);
 }
 
 bool ChooseSlotState::update(sf::Time dt)
 {
-    if (backButton.isMouseOver(*getContext().window))
-        backButton.setIsSelected(true);
-    else
-        backButton.setIsSelected(false);
+    sf::RenderWindow& window = *getContext().window;
+    if (backButton.isMouseOver(window))
+        backButton.setSelectedSprite();
+    else backButton.setNormalSprite();
+    if (instructionButton.isMouseOver(window))
+        instructionButton.setSelectedSprite();
+    else instructionButton.setNormalSprite();
     return true;
 }
 
@@ -113,5 +125,6 @@ bool ChooseSlotState::handleEvent(const sf::Event& event)
         nGUIContainerSlot.handleEvent(event);
     }
     backButton.handleEvent(event);
+    instructionButton.handleEvent(event);
     return false;
 }

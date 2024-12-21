@@ -7,24 +7,31 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "../Utility.hpp"
+#include <vector>
+
+
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-class ChooseCharState : public State{
+class InstructionState : public State{
     public:
-        ChooseCharState(StateStack& stack, Context context);
+        InstructionState(StateStack& stack, Context context);
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
     private:
+        int nSelectedSlot = -1;
         sf::Sprite nBackgroundSprite;
-        sf::Sprite nChar, nCharIntro;
-        GUI::Container nGUIContainer;
+        GUI::Button upButton;
+        GUI::Button leftButton;
+        GUI::Button rightButton;
+        GUI::Button downButton;
+        GUI::Button attackButton;
         GUI::Button backButton;
-        GUI::Button previousButton;
-        GUI::Button nextButton;
-        GUI::Button saveButton;
-        GUI::Button instructionButton;
-        GUI::Button chooseModeButton;
+        GUI::Button doubleUpButton;
+        GUI::Container nGUIContainerText;
+        // GUI::Button startButton;
+        // GUI::Button deleteButton;
+        // GUI::Button resetButton;
 };
