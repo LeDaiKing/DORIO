@@ -1,15 +1,16 @@
 #include "ChooseSlotState.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
+#include <fstream>
 
 
 ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
-, nGUIContainer()
+, nGUIContainerSlot()
+, nGUIContainerConfirm()
 , backButton(context, GUI::Button::Type::BackButton)
-, saveButton(context, GUI::Button::Type::saveButton)
-, startButton(context, GUI::Button::Type::StartButton)
+, instructionButton(context, GUI::Button::Type::instructionButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     
@@ -18,8 +19,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     slotButton1->setText("NEW !");
     slotButton1->setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ID::ChoosePlayer);
+        nSelectedSlot = 1;
     });
 
     auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
@@ -27,8 +27,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     slotButton2->setText("NEW !");
     slotButton2->setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ID::ChoosePlayer);
+        nSelectedSlot = 2;
     });
 
     auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
@@ -36,8 +35,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     slotButton3->setText("NEW !");
     slotButton3->setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ID::ChoosePlayer);
+        nSelectedSlot = 3;
     });
 
     backButton.setPosition({75, 705});
@@ -48,25 +46,50 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         requestStackPush(States::Title);
     });
 
-    saveButton.setPosition({500, 620});
-    saveButton.setIsSelected(false);
-    saveButton.setCallback([this] ()
+    instructionButton.setPosition({75, 92});
+    instructionButton.setIsSelected(false);
+    instructionButton.setCallback([this] ()
     {
-        // save file 
+        requestStackPush(States::Instruction);
     });
 
-    startButton.setPosition(759, 620);
-    startButton.setIsSelected(false);
-    startButton.setCallback([this] ()
+    auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
+    startButton->setPosition(373, 615);
+    startButton->setCallback([this] ()
     {
+        std::ofstream file("file/CurSave/save.txt");
+        file << "file/Save" + std::to_string(nSelectedSlot);
+        file.close();
         requestStackPop();
-        requestStackPush(States::ID::ChooseMode);
+        requestStackPush(States::ID::ChoosePlayer);
     });
-    
 
-    nGUIContainer.pack(slotButton1);
-    nGUIContainer.pack(slotButton2);
-    nGUIContainer.pack(slotButton3);
+    auto deleteButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::DeleteButton);
+    deleteButton->setPosition({891, 615});
+    deleteButton->setCallback([this] ()
+    {
+        // delete file
+        clearFolder("file/Save" + std::to_string(nSelectedSlot));
+    });
+
+    auto resetButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::ResetButton);
+    resetButton->setPosition({632, 615});
+    resetButton->setCallback([this] ()
+    {
+        nSelectedSlot = -1;
+    });
+    // pass
+
+
+    nGUIContainerSlot.pack(slotButton1);
+    nGUIContainerSlot.pack(slotButton2);
+    nGUIContainerSlot.pack(slotButton3);
+
+    nGUIContainerConfirm.pack(resetButton);
+    nGUIContainerConfirm.pack(deleteButton);
+    nGUIContainerConfirm.pack(startButton);
+    nGUIContainerConfirm.selectNext();
+    nGUIContainerConfirm.selectNext();
 }
 
 void ChooseSlotState::draw()
@@ -74,25 +97,34 @@ void ChooseSlotState::draw()
     sf::RenderWindow& window = *getContext().window;
     window.setView(window.getDefaultView());
     window.draw(nBackgroundSprite);
-    window.draw(nGUIContainer);
+    window.draw(nGUIContainerSlot);
     window.draw(backButton);
-    window.draw(saveButton);
-    window.draw(startButton);
+    window.draw(instructionButton);
+    if (nSelectedSlot != -1)
+        window.draw(nGUIContainerConfirm);
 }
 
 bool ChooseSlotState::update(sf::Time dt)
 {
-    if (backButton.isMouseOver(*getContext().window))
-        backButton.setIsSelected(true);
-    else
-        backButton.setIsSelected(false);
+    sf::RenderWindow& window = *getContext().window;
+    if (backButton.isMouseOver(window))
+        backButton.setSelectedSprite();
+    else backButton.setNormalSprite();
+    if (instructionButton.isMouseOver(window))
+        instructionButton.setSelectedSprite();
+    else instructionButton.setNormalSprite();
     return true;
 }
 
 bool ChooseSlotState::handleEvent(const sf::Event& event)
 {
-    nGUIContainer.handleEvent(event);
+    if (nSelectedSlot != -1) {
+        nGUIContainerConfirm.handleEvent(event);
+    }
+    else {
+        nGUIContainerSlot.handleEvent(event);
+    }
     backButton.handleEvent(event);
-    saveButton.handleEvent(event);
+    instructionButton.handleEvent(event);
     return false;
 }

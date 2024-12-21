@@ -8,31 +8,40 @@
 
 PauseState::PauseState(StateStack& stack, Context context)
 : State(stack, context)
-, nBackgroundSprite()
-, nPausedText()
-, nInstructionText() 
+, rectButton(context, GUI::Button::Type::RectangleButton)
 , nBar()
 {
-    sf::Font& font = FontHolder::getInstance().get(Fonts::Main);
-    sf::Vector2f viewSize = context.window->getView().getSize();
+    rectButton.setPosition(600.5, 400);
+    rectButton.setIsSelected(false);
 
-    this->nPausedText.setFont(font);
-    this->nPausedText.setString("Game Paused");
-    this->nPausedText.setCharacterSize(70);
-    centerOrigin(this->nPausedText);
-    this->nPausedText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
+    auto homeButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::HomeButton);
+    homeButton->setPosition(386, 400);
+    homeButton->setCallback([this] ()
+    {
+        requestStackClear();
+        requestStackPush(States::Title);
+    });
 
-    this->nInstructionText.setFont(font);
-    this->nInstructionText.setString("Press Back to return to the game");
-    centerOrigin(this->nInstructionText);
-    this->nInstructionText.setPosition(0.5f * viewSize.x, 0.6f * viewSize.y);
+    auto saveButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::SaveButton);
+    saveButton->setPosition(600, 400);
+    saveButton->setCallback([this] ()
+    {
+        // save game
+    });
+
+    auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
+    startButton->setPosition(814, 400); 
+    startButton->setCallback([this] ()
+    {
+        requestStackPop();
+    });
 
 
-    auto homeBut = std::make_shared<GUI::Button>(context, GUI::Button::Type::SquareButton);
-    homeBut->setButtonSize(20, 20);
-    homeBut->setPosition(0.5f * viewSize.x - 100, 0.7f * viewSize.y);
-    nBar.pack(homeBut);
-
+    nBar.pack(homeButton);
+    nBar.pack(saveButton);
+    nBar.pack(startButton);
+    nBar.selectNext();
+    nBar.selectNext();
 }
 
 void PauseState::draw() {
@@ -44,8 +53,7 @@ void PauseState::draw() {
     backgroundShape.setSize(window.getView().getSize());
 
     window.draw(backgroundShape);
-    window.draw(this->nPausedText);
-    window.draw(this->nInstructionText);
+    window.draw(rectButton);
     window.draw(this->nBar);
 }
 
@@ -54,19 +62,7 @@ bool PauseState::update(sf::Time dt) {
 }
 
 bool PauseState::handleEvent(const sf::Event& event) {
-    if (event.type != sf::Event::KeyPressed) {
-        return false;
-    }
-
-    if (event.key.code == sf::Keyboard::Escape) {
-        requestStackPop();
-    }
-
-    if (event.key.code == sf::Keyboard::BackSpace) {
-        requestStackClear();
-        requestStackPush(States::ID::Menu);
-    }
-
+    nBar.handleEvent(event);
     return false;
 }
 

@@ -1,14 +1,16 @@
 {
     "Level1":
     {
-        "MapImage": "res/Background/Map/map1_11.png",
+        "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 0,
-        "Time": 300
+        "Time": 300,
+        "StartPoint": [96, 480]
     },
     "Level2":
     {
-        "MapImage": "res/Background/Map/map1_12.png",
+        "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 1,
-        "Time": 100
+        "Time": 100,
+        "StartPoint": [96, 480]
     }
 }

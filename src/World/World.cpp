@@ -1,5 +1,4 @@
 #include "World.hpp"
-
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "BreakableBlock.hpp"
 #include "StaticBlock.hpp"
@@ -11,13 +10,17 @@
 #include "Ghost.hpp"
 #include "Chicken.hpp"
 #include "Snail.hpp"
+#include "CheckPoint.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <fstream>
 #include "../ConfigLoader.hpp"
 #include "BlockFactory.hpp"
+#include "EnemyFactory.hpp"
+#include "ItemFactory.hpp"
 #include "nlohmann/json.hpp"
+
 
 int World::nGravity = 700;
 
@@ -115,17 +118,13 @@ void World::buildScene()
 	}
 	nCategoryLayers[Background] |= Category::Scene;
 	nCategoryLayers[Map] |= Category::Block;
+	nCategoryLayers[Checkpoints] |= Category::Scene;
 	nCategoryLayers[Enemies] |= Category::Enemy;
 	nCategoryLayers[Items] |= Category::Item;
 	nCategoryLayers[Player] |= Category::PlayerDough;
-	loadMap();
+	
 
-
-	// Add player's Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
-	nPlayerDough = leader.get();
-	nPlayerDough->setPosition(nSpawnPosition);
-	nSceneLayers[Player]->attachChild(std::move(leader));
+	
 	
 }
 
@@ -176,15 +175,8 @@ void World::adaptCameraPosition()
 	if (postiion.x > nWorldBounds.width - 10) nPlayerDough->setPosition(nWorldBounds.width - 10, postiion.y);
 }
 
-void World::loadMap()
+void World::loadMap(std::string level)
 {
-	
-	std::string level;
-	std::ifstream file("file/Map/map.txt");
-	file >> level;
-	file.close();
-	// std::cout << level << std::endl;
-
 	std::string key = "Map/Level" + level;
 	nlohmann::json config = ConfigLoader::getInstance().getConfig(key.c_str());
 
@@ -207,7 +199,7 @@ void World::loadMap()
 	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
-		sf::Color color = map.getPixel(x + 5, y + 5);
+		sf::Color color = map.getPixel(x + 10, y + 10);
 		if (color.toInteger() == 0xFF)
 		{
 			std::unique_ptr<Block> block = BlockFactory::createBlock("Floor" + level, sf::Vector2f(x + 16, y + 16));
@@ -250,9 +242,21 @@ void World::loadMap()
 			std::unique_ptr<Coin> coin(new Coin(Item::Coin, sf::Vector2f(x + 16, y + 16)));
 			nSceneLayers[Items]->attachChild(std::move(coin));
 		}
+		else if (color.toInteger() == 0xFFAAD5FF)
+		{
+			std::unique_ptr<CheckPoint> checkpoint(new CheckPoint(CheckPoint::Checkpoint, sf::Vector2f(x + 32, y)));
+			nSceneLayers[Checkpoints]->attachChild(std::move(checkpoint));
+		}
 	}
 
+	nSpawnPosition = toVector2<float>(config["StartPoint"]);
+	std::unique_ptr<CheckPoint> start(new CheckPoint(CheckPoint::Start, nSpawnPosition));
+	nSceneLayers[Checkpoints]->attachChild(std::move(start));
 
+
+
+
+	//Enemy
 	std::string enemySpawn = "EnemySpawn" + level;
 	std::cout << enemySpawn << std::endl;
 	nlohmann::json enemyConfig = ConfigLoader::getInstance().getConfig(enemySpawn.c_str());
@@ -262,22 +266,17 @@ void World::loadMap()
 		std::unique_ptr<CockRoach> enemy(new CockRoach(Enemy::CockRoach, toVector2<float>(cockroach["Position"])));
 		for (auto& ai : cockroach["AI"])
 		{
-			if (ai.at(0) == 0)
-			{
-				enemy->addMoveBehavior(sf::Vector2f(ai[1], ai[2]));
-			}
-			else if (ai.at(0) == 1)
-			{
-				enemy->addWaitBehavior(sf::seconds(ai[1]));
-			}
-			else if (ai.at(0) == 2)
-			{
-				enemy->addTurnBehavior();
-			}
+			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
 		}
 		nSceneLayers[Enemies]->attachChild(std::move(enemy));
 	}
 	
+	// Dough
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
+	nPlayerDough = leader.get();
+	nPlayerDough->setPosition(nSpawnPosition);
+	nPlayerDough->setCheckPoint(nSpawnPosition);
+	nSceneLayers[Player]->attachChild(std::move(leader));
 
 }
 
@@ -319,9 +318,16 @@ void World::removeSceneNode()
 	std::vector<SceneNode*> nodes;
 	removeSceneNode.action = derivedAction<SceneNode>([this, &nodes] (SceneNode& node, sf::Time)
 	{
-		if (node.isMarkedForRemoval())
+		if ((node.getCategory() & Category::PlayerDough) && !node.isMarkedForRemoval() && !nWorldBounds.intersects(node.getBoundingRect()))
 		{
-			if ((node.getCategory()  & Category::Entity))
+			Dough* nPlayerDough = static_cast<Dough*>(&node);
+			nPlayerDough->getDamage(1);
+			nPlayerDough->resetCheckPoint();
+		}
+
+		if (node.isMarkedForRemoval())
+		{	
+			if ((node.getCategory() & Category::Entity))
 			{
 				// sf::FloatRect bound = 
 				if (!nWorldBounds.intersects(node.getBoundingRect()))
@@ -339,4 +345,143 @@ void World::removeSceneNode()
 	{
 		node->remove();
 	}
+}
+
+void World::save(std::ofstream& saveFile)
+{
+	/*
+		Format:
+		- WorlBound
+		- SpawnPosition
+		- Time
+		- Player
+		- number of enemies
+		- Enemies
+		- number of items
+		- Items
+		- number of blocks
+		- Blocks
+	*/
+
+	saveFile.write(reinterpret_cast<char*>(&nWorldBounds), sizeof(nWorldBounds));
+	saveFile.write(reinterpret_cast<char*>(&nSpawnPosition), sizeof(nSpawnPosition));
+	saveFile.write(reinterpret_cast<char*>(&nTime), sizeof(nTime));
+	nPlayerDough->save(saveFile);
+
+	//Enemies
+	int enemies = nSceneLayers[Enemies]->getChildren().size();
+	saveFile.write(reinterpret_cast<char*>(&enemies), sizeof(enemies));
+	for (SceneNode::Ptr& enemy : nSceneLayers[Enemies]->getChildren())
+	{
+		enemy->save(saveFile);
+	}
+
+	//Items
+	int items = nSceneLayers[Items]->getChildren().size();
+	saveFile.write(reinterpret_cast<char*>(&items), sizeof(items));
+	for (SceneNode::Ptr& item : nSceneLayers[Items]->getChildren())
+	{
+		item->save(saveFile);
+	}
+
+	//Blocks
+	int blocks = nSceneLayers[Map]->getChildren().size();
+	saveFile.write(reinterpret_cast<char*>(&blocks), sizeof(blocks));
+	for (SceneNode::Ptr& block : nSceneLayers[Map]->getChildren())
+	{
+		block->save(saveFile);
+	}
+
+	//Checkpoints
+	int checkPoints = nSceneLayers[Checkpoints]->getChildren().size();
+	saveFile.write(reinterpret_cast<char*>(&checkPoints), sizeof(checkPoints));
+	for (SceneNode::Ptr& checkPoint : nSceneLayers[Checkpoints]->getChildren())
+	{
+		checkPoint->save(saveFile);
+	}
+}
+
+void World::load(std::ifstream& saveFile, int lev)
+{
+	saveFile.read(reinterpret_cast<char*>(&nWorldBounds), sizeof(nWorldBounds));
+	sf::Texture& texture = TextureHolder::getInstance().get(static_cast<Textures::ID>(lev));
+	sf::IntRect textureRect(nWorldBounds);
+	texture.setRepeated(true);
+	std::unique_ptr<SpriteNode> background(new SpriteNode(texture, textureRect));
+	background->setPosition(nWorldBounds.left, nWorldBounds.top);
+	nSceneLayers[Background]->attachChild(std::move(background));
+
+	saveFile.read(reinterpret_cast<char*>(&nSpawnPosition), sizeof(nSpawnPosition));
+	saveFile.read(reinterpret_cast<char*>(&nTime), sizeof(nTime));
+	
+	int type;
+	saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+	std::unique_ptr<Dough> leader(new Dough(static_cast<Dough::Type>(type)));
+	nPlayerDough = leader.get();
+	nPlayerDough->load(saveFile);
+	nSceneLayers[Player]->attachChild(std::move(leader));
+	
+	int enemies;
+	
+	saveFile.read(reinterpret_cast<char*>(&enemies), sizeof(enemies));
+	for (int i = 0; i < enemies; ++i)
+	{
+		int type;
+		saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+		if(type == -1) continue;
+		sf::Vector2f position;
+		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
+
+		std::unique_ptr<Enemy> enemy = EnemyFactory::createEnemy(static_cast<Enemy::Type>(type), position);
+
+		enemy->load(saveFile);
+
+		nSceneLayers[Enemies]->attachChild(std::move(enemy));
+	}
+
+
+	int items;
+	saveFile.read(reinterpret_cast<char*>(&items), sizeof(items));
+	for (int i = 0; i < items; ++i)
+	{
+		int type;
+		saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+		if (type == -1) continue;
+		sf::Vector2f position;
+		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
+
+		std::unique_ptr<Item> item = ItemFactory::createItem(static_cast<Item::Type>(type), position);
+		item->load(saveFile);
+		nSceneLayers[Items]->attachChild(std::move(item));
+	}
+
+	int blocks;
+	saveFile.read(reinterpret_cast<char*>(&blocks), sizeof(blocks));
+	for (int i = 0; i < blocks; ++i)
+	{
+		int type;
+		saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+		if (type == -1) continue;
+		sf::Vector2f position;
+		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
+		std::unique_ptr<Block> block = BlockFactory::createBlock(static_cast<Block::Type>(type), position);
+		block->load(saveFile);
+		nSceneLayers[Map]->attachChild(std::move(block));
+	}
+	// return;
+
+	int checkPoints;
+	saveFile.read(reinterpret_cast<char*>(&checkPoints), sizeof(checkPoints));
+	for (int i = 0; i < checkPoints; ++i)
+	{
+		int type;
+		// std::cout << "checkpoint" << std::endl;
+		saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+		sf::Vector2f position;
+		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
+		std::unique_ptr<CheckPoint> checkPoint = std::make_unique<CheckPoint>(static_cast<CheckPoint::Type>(type), position);
+		checkPoint->load(saveFile);
+		nSceneLayers[Checkpoints]->attachChild(std::move(checkPoint));
+	}
+	
 }

@@ -39,9 +39,12 @@ class Enemy : public Entity
 		virtual void addMoveBehavior(sf::Vector2f offset);
 		virtual void addWaitBehavior(sf::Time time);
 		virtual void addTurnBehavior();
+		void addBehavior(int type, float x, float y);
 		virtual void isTargetInRange(const sf::Vector2f& target);
 		virtual sf::FloatRect getBoundingRect() const;
 		virtual bool isAutoAI();
+		virtual void load(std::ifstream& file);
+		virtual void save(std::ofstream& file);
 	protected:
 		void setAIState(AIState state);
 		virtual void moveToPosition(sf::Time dt);
@@ -57,6 +60,7 @@ class Enemy : public Entity
 		Type nType;
 	protected:
 		std::vector<std::function<void()>> nBehaviors;
+		std::vector<std::pair<int, std::pair<float, float>>> nBeList;
 		int nCurBehavior;
 		int nDirLoop;
 		AIState nAIState;

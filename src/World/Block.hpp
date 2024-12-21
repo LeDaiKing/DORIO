@@ -42,6 +42,8 @@ class Block : public SpriteNode
 
         virtual sf::FloatRect getBoundingRect() const;
         virtual bool isBroken() const;
+        virtual void load(std::ifstream& file);
+        virtual void save(std::ofstream& file);
 
     private:
         Type nType;

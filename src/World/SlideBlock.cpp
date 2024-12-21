@@ -102,3 +102,36 @@ void SlideBlock::handleTopCollision(Entity& entity)
     nEntities.push_back(&entity);
     
 }
+
+void SlideBlock::save(std::ofstream& file)
+{
+    Block::save(file);
+    // file.write(reinterpret_cast<const char*>(&nSpeedSlide), sizeof(nSpeedSlide));
+    file.write(reinterpret_cast<const char*>(&nIsLoop), sizeof(nIsLoop));
+    file.write(reinterpret_cast<const char*>(&nDirLoop), sizeof(nDirLoop));
+    file.write(reinterpret_cast<const char*>(&nCurrentPath), sizeof(nCurrentPath));
+    int size = nPath.size();
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    for (sf::Vector2f& path : nPath)
+    {
+        file.write(reinterpret_cast<const char*>(&path), sizeof(path));
+    }
+}
+
+void SlideBlock::load(std::ifstream& file)
+{
+    Block::load(file);
+    // file.read(reinterpret_cast<char*>(&nSpeedSlide), sizeof(nSpeedSlide));
+    file.read(reinterpret_cast<char*>(&nIsLoop), sizeof(nIsLoop));
+    file.read(reinterpret_cast<char*>(&nDirLoop), sizeof(nDirLoop));
+    file.read(reinterpret_cast<char*>(&nCurrentPath), sizeof(nCurrentPath));
+    int size;
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    for (int i = 0; i < size; ++i)
+    {
+        sf::Vector2f path;
+        file.read(reinterpret_cast<char*>(&path), sizeof(path));
+        nPath.push_back(path);
+    }
+}
+

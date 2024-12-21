@@ -10,6 +10,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 , handSprite()
 , choosePlayerDeco()
 , backButton(context, GUI::Button::Type::BackButton)
+, instructionButton(context, GUI::Button::Type::instructionButton)
 // , onePlayerButton(context, GUI::Button::Type::onePlayerButton)
 // , twoPlayerButton(context, GUI::Button::Type::twoPlayerButton)
 , drawHand(false)
@@ -45,6 +46,13 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
         requestStackPush(States::ChooseSlot);
     });  
 
+    instructionButton.setPosition({75, 92});
+    instructionButton.setIsSelected(false);
+    instructionButton.setCallback([this] ()
+    {
+        requestStackPush(States::Instruction);
+    });
+
     nGUIContainer.pack(onePlayerButton);
     nGUIContainer.pack(twoPlayerButton);
 }
@@ -56,6 +64,7 @@ void ChoosePlayerState::draw()
     window.draw(nBackgroundSprite);
     window.draw(choosePlayerDeco);
     window.draw(backButton);
+    window.draw(instructionButton);
     window.draw(nGUIContainer);
     // window.draw(onePlayerButton);
     // window.draw(twoPlayerButton);
@@ -69,6 +78,9 @@ bool ChoosePlayerState::update(sf::Time dt)
     if (backButton.isMouseOver(window))
         backButton.setSelectedSprite();
     else backButton.setNormalSprite();
+    if (instructionButton.isMouseOver(window))
+        instructionButton.setSelectedSprite();
+    else instructionButton.setNormalSprite();
     int index = nGUIContainer.getSelectedIndex();
     auto selected = nGUIContainer.getSelectedChild();
     drawHand = true;
@@ -96,6 +108,7 @@ bool ChoosePlayerState::update(sf::Time dt)
 bool ChoosePlayerState::handleEvent(const sf::Event& event)
 {
     backButton.handleEvent(event);
+    instructionButton.handleEvent(event);
     nGUIContainer.handleEvent(event);
     // onePlayerButton.handleEvent(event);
     // twoPlayerButton.handleEvent(event);

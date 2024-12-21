@@ -6,7 +6,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-
+#include <fstream>
 #include <vector>
 #include <memory>
 
@@ -39,7 +39,9 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 		virtual bool isMarkedForRemoval() const;
 		void remove();
 
-	public:
+		virtual void save(std::ofstream& file);
+		virtual void load(std::ifstream& file);
+
 		std::vector<Ptr>& getChildren();
 
 	protected:

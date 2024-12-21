@@ -9,17 +9,18 @@
 // #include "../Comman
 
 class Entity;
-class Item;
 class LuckyBlock :  public BouncingBlock
 {
     public:
-        typedef std::pair<Command, std::unique_ptr<Animation>> ItemPair;
+        typedef std::pair<Item::Type, std::unique_ptr<Animation>> ItemPair;
     public:
         LuckyBlock(Type type, sf::Vector2f position);
         virtual void handleBottomCollision(Entity& player);
         void dropItem();
         void addItem(Item::Type type);
         void randomItem(int num);
+        virtual void load(std::ifstream& file);
+        virtual void save(std::ofstream& file);
 
     protected:
         virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -29,8 +30,7 @@ class LuckyBlock :  public BouncingBlock
     private:
         bool nIsEmpty;
         sf::Texture nTexture;
-        std::stack<ItemPair> nItems;
+        std::vector<Item::Type> nItems;
         bool nIsDropping;
         std::vector<ItemPair> nQueueItems;
-        std::stack<Item::Type> nItemTypes;
 };

@@ -1,6 +1,7 @@
 #include "ChooseCharState.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
+#include <iostream>
 
 ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 : State(stack, context)
@@ -9,8 +10,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , backButton(context, GUI::Button::Type::BackButton)
 , previousButton(context, GUI::Button::Type::previousButton)
 , nextButton(context, GUI::Button::Type::nextButton)
-, saveButton(context, GUI::Button::Type::saveButton)
-, choosePlayerButton(context, GUI::Button::Type::choosePlayerButton)
+, saveButton(context, GUI::Button::Type::SaveButton)
+, instructionButton(context, GUI::Button::Type::instructionButton)
 , chooseModeButton(context, GUI::Button::Type::chooseModeButton)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
@@ -81,12 +82,11 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         requestStackPush(States::ChooseMode);
     });
 
-    choosePlayerButton.setPosition({75, 92});
-    choosePlayerButton.setIsSelected(false);
-    choosePlayerButton.setCallback([this] ()
+    instructionButton.setPosition({75, 92});
+    instructionButton.setIsSelected(false);
+    instructionButton.setCallback([this] ()
     {
-        requestStackPop();
-        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Instruction);
     });
 
     chooseModeButton.setPosition({75, 221});
@@ -114,7 +114,7 @@ void ChooseCharState::draw()
     window.draw(nChar);
     window.draw(nCharIntro);
     window.draw(saveButton);
-    window.draw(choosePlayerButton);
+    window.draw(instructionButton);
     window.draw(chooseModeButton);
 }
 
@@ -129,9 +129,9 @@ bool ChooseCharState::update(sf::Time dt)
         saveButton.setSelectedSprite();
     else saveButton.setNormalSprite();
 
-    if (choosePlayerButton.isMouseOver(window))
-        choosePlayerButton.setSelectedSprite();
-    else choosePlayerButton.setNormalSprite();
+    if (instructionButton.isMouseOver(window))
+        instructionButton.setSelectedSprite();
+    else instructionButton.setNormalSprite();
 
     if (chooseModeButton.isMouseOver(window))
         chooseModeButton.setSelectedSprite();
@@ -142,12 +142,17 @@ bool ChooseCharState::update(sf::Time dt)
 
 bool ChooseCharState::handleEvent(const sf::Event& event)
 {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
+        requestStackPop();
+        requestStackPush(States::ChooseMode);
+        return false;
+    }
     nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
     previousButton.handleEvent(event);
     nextButton.handleEvent(event);
     saveButton.handleEvent(event);
-    choosePlayerButton.handleEvent(event);
+    instructionButton.handleEvent(event);
     chooseModeButton.handleEvent(event);
     return false;
 }

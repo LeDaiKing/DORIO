@@ -109,6 +109,8 @@ void Enemy::addMoveBehavior(sf::Vector2f offset)
         nDestination = getPosition() + noffset;
         setAIState(Patrolling);
     });
+
+    nBeList.push_back({0, {offset.x, offset.y}});  
     // nDestination = temp;
 }
 
@@ -119,6 +121,8 @@ void Enemy::addWaitBehavior(sf::Time time)
         nWaitingTime = time;
         setAIState(Waiting);
     });
+
+    nBeList.push_back({1, {time.asSeconds(), 0}});
 }
 
 void Enemy::addTurnBehavior()
@@ -127,6 +131,8 @@ void Enemy::addTurnBehavior()
     {
         setAIState(Turning);
     });
+
+    nBeList.push_back({2, {0, 0}});
 }
 
 void Enemy::moveToPosition(sf::Time dt)
@@ -211,4 +217,63 @@ bool Enemy::isAutoAI()
 void Enemy::autoMove()
 {
     walk(nDirection);
+}
+
+void Enemy::addBehavior(int type, float x, float y)
+{
+    switch (type)
+    {
+    case 0:
+        addMoveBehavior({x, y});
+        break;
+    case 1:
+        addWaitBehavior(sf::seconds(x));
+        break;
+    case 2:
+        addTurnBehavior();
+        break;
+    default:
+        break;
+    }
+}
+
+void Enemy::save(std::ofstream& file)
+{
+    if (nCurrentState == State::Dead) 
+    {
+        int type = -1;
+        file.write(reinterpret_cast<const char*>(&type), sizeof(type));
+        return;
+    }
+    file.write(reinterpret_cast<const char*>(&nType), sizeof(nType));
+    sf::Vector2f pos = getPosition();
+    file.write(reinterpret_cast<const char*>(&pos), sizeof(pos));
+
+    file.write(reinterpret_cast<const char*>(&nCurBehavior), sizeof(nCurBehavior));
+    file.write(reinterpret_cast<const char*>(&nDirLoop), sizeof(nDirLoop));
+    int size = nBeList.size(); 
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    for (auto& be : nBeList)
+    {
+        file.write(reinterpret_cast<const char*>(&be.first), sizeof(be.first));
+        file.write(reinterpret_cast<const char*>(&be.second.first), sizeof(be.second.first));
+        file.write(reinterpret_cast<const char*>(&be.second.second), sizeof(be.second.second));
+    }
+}
+
+void Enemy::load(std::ifstream& file)
+{
+    file.read(reinterpret_cast<char*>(&nCurBehavior), sizeof(nCurBehavior));
+    file.read(reinterpret_cast<char*>(&nDirLoop), sizeof(nDirLoop));
+    int size;
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    for (int i = 0; i < size; ++i)
+    {
+        int type;
+        float x, y;
+        file.read(reinterpret_cast<char*>(&type), sizeof(type));
+        file.read(reinterpret_cast<char*>(&x), sizeof(x));
+        file.read(reinterpret_cast<char*>(&y), sizeof(y));
+        addBehavior(type, x, y);
+    }
 }

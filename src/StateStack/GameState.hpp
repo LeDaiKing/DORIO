@@ -3,6 +3,7 @@
 #include "StateStack.hpp"
 #include "../Player.hpp"    
 #include "../World/World.hpp"
+#include <string>
 
 class GameState : public State{
     public:
@@ -13,4 +14,5 @@ class GameState : public State{
     private:
         World nWorld;
         Player& nPlayer;
+        std::string saveFile;
 };

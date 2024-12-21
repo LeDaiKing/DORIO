@@ -56,10 +56,11 @@ namespace Textures
 		nextButton,
 		char1Sprite,
 		char2Sprite,
-		saveButtonNormal,
-		saveButtonSelected,
-		choosePlayerButtonNormal,
-		choosePlayerButtonSelected,
+		SaveButtonNormal,
+		SaveButtonSelected,
+		SaveButtonPressed,
+		instructionButtonNormal,
+		instructionButtonSelected,
 		chooseCharButtonNormal,
 		chooseCharButtonSelected,
 		chooseModeButtonNormal,
@@ -90,6 +91,35 @@ namespace Textures
 		StartButtonNormal, 
 		StartButtonSelected,
 		StartButtonPressed,
+		DeleteButtonNormal,
+		DeleteButtonSelected,
+		DeleteButtonPressed,
+		ResetButtonNormal,
+		ResetButtonSelected,
+		ResetButtonPressed,
+		UpButtonNormal,
+		UpButtonSelected,
+		UpButtonPressed,
+		LeftButtonNormal,
+		LeftButtonSelected,
+		LeftButtonPressed,
+		RightButtonNormal,
+		RightButtonSelected,
+		RightButtonPressed,
+		DownButtonNormal,
+		DownButtonSelected,
+		DownButtonPressed,
+		AttackButtonNormal,
+		AttackButtonSelected,
+		AttackButtonPressed,
+		DoubleUpButtonNormal,
+		DoubleUpButtonSelected,
+		DoubleUpButtonPressed,
+		HomeButtonNormal,
+		HomeButtonSelected,
+		HomeButtonPressed,
+
+	
 		
 		// Dough
 		Dough1,
@@ -139,6 +169,11 @@ namespace Textures
 		SettingBut,
 		WhiteText,
 		BlackText,
+
+		// CheckPoint
+		Start,
+		Checkpoint,
+		End,
 	};
 }
 

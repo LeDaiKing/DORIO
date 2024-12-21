@@ -6,6 +6,7 @@
 #include "../Holder/ResourceHolder.hpp"
 #include "../Utility.hpp"
 #include "../UI/Container.hpp"
+#include "../UI/Button.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -17,8 +18,6 @@ class PauseState : public State{
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
     private:
-        sf::Sprite nBackgroundSprite;
-        sf::Text nPausedText;
-        sf::Text nInstructionText;
+        GUI::Button rectButton;
         GUI::Container nBar;
 };

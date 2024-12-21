@@ -25,6 +25,6 @@ class ChooseCharState : public State{
         GUI::Button previousButton;
         GUI::Button nextButton;
         GUI::Button saveButton;
-        GUI::Button choosePlayerButton;
+        GUI::Button instructionButton;
         GUI::Button chooseModeButton;
 };

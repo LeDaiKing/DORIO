@@ -24,6 +24,7 @@ class ChoosePlayerState : public State{
         sf::Sprite handSprite;
         sf::Sprite choosePlayerDeco;
         GUI::Button backButton;
+        GUI::Button instructionButton;
         // GUI::Button onePlayerButton;
         // GUI::Button twoPlayerButton;
         GUI::Container nGUIContainer;

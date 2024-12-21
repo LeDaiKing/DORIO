@@ -106,10 +106,10 @@ namespace GUI{
                 return Textures::previousButton;
             case Type::nextButton:
                 return Textures::nextButton;
-            case Type::saveButton:
-                return Textures::saveButtonNormal;
-            case Type::choosePlayerButton:
-                return Textures::choosePlayerButtonNormal;
+            case Type::SaveButton:
+                return Textures::SaveButtonNormal;
+            case Type::instructionButton:
+                return Textures::instructionButtonNormal;
             case Type::chooseCharButton:
                 return Textures::chooseCharButtonNormal;
             case Type::chooseModeButton:
@@ -128,6 +128,24 @@ namespace GUI{
                 return Textures::onePlayerButton;
             case Type::twoPlayerButton:
                 return Textures::twoPlayerButton;
+            case Type::DeleteButton:
+                return Textures::DeleteButtonNormal;
+            case Type::ResetButton:
+                return Textures::ResetButtonNormal;
+            case Type::UpButton:
+                return Textures::UpButtonNormal;
+            case Type::LeftButton:
+                return Textures::LeftButtonNormal;
+            case Type::RightButton:
+                return Textures::RightButtonNormal;
+            case Type::DownButton:
+                return Textures::DownButtonNormal;
+            case Type::AttackButton:
+                return Textures::AttackButtonNormal;
+            case Type::DoubleUpButton:
+                return Textures::DoubleUpButtonNormal;
+            case Type::HomeButton:
+                return Textures::HomeButtonNormal;
             default:
                 assert(false);
         }
@@ -153,10 +171,10 @@ namespace GUI{
                 return Textures::previousButton;
             case Type::nextButton:
                 return Textures::nextButton;
-            case Type::saveButton:
-                return Textures::saveButtonSelected;
-            case Type::choosePlayerButton:
-                return Textures::choosePlayerButtonSelected;
+            case Type::SaveButton:
+                return Textures::SaveButtonSelected;
+            case Type::instructionButton:
+                return Textures::instructionButtonSelected;
             case Type::chooseCharButton:
                 return Textures::chooseCharButtonSelected;
             case Type::chooseModeButton:
@@ -175,6 +193,24 @@ namespace GUI{
                 return Textures::onePlayerButton;
             case Type::twoPlayerButton:
                 return Textures::twoPlayerButton;
+            case Type::DeleteButton:
+                return Textures::DeleteButtonSelected;
+            case Type::ResetButton:
+                return Textures::ResetButtonSelected;
+            case Type::UpButton:
+                return Textures::UpButtonSelected;
+            case Type::LeftButton:
+                return Textures::LeftButtonSelected;
+            case Type::RightButton:
+                return Textures::RightButtonSelected;
+            case Type::DownButton:
+                return Textures::DownButtonSelected;
+            case Type::AttackButton:
+                return Textures::AttackButtonSelected;
+            case Type::DoubleUpButton:
+                return Textures::DoubleUpButtonSelected;
+            case Type::HomeButton:
+                return Textures::HomeButtonSelected;
             default:
                 assert(false);
         }
@@ -200,10 +236,10 @@ namespace GUI{
                 return Textures::previousButton;
             case Type::nextButton:
                 return Textures::nextButton;
-            case Type::saveButton:
-                return Textures::saveButtonSelected;
-            case Type::choosePlayerButton:
-                return Textures::choosePlayerButtonSelected;
+            case Type::SaveButton:
+                return Textures::SaveButtonSelected;
+            case Type::instructionButton:
+                return Textures::instructionButtonSelected;
             case Type::chooseCharButton:
                 return Textures::chooseCharButtonSelected;
             case Type::chooseModeButton:
@@ -222,6 +258,24 @@ namespace GUI{
                 return Textures::onePlayerButton;
             case Type::twoPlayerButton:
                 return Textures::twoPlayerButton;
+            case Type::DeleteButton:
+                return Textures::DeleteButtonSelected;
+            case Type::ResetButton:
+                return Textures::ResetButtonSelected;
+            case Type::UpButton:
+                return Textures::UpButtonSelected;
+            case Type::LeftButton:
+                return Textures::LeftButtonSelected;
+            case Type::RightButton:
+                return Textures::RightButtonSelected;
+            case Type::DownButton:
+                return Textures::DownButtonSelected;
+            case Type::AttackButton:
+                return Textures::AttackButtonSelected;  
+            case Type::DoubleUpButton:
+                return Textures::DoubleUpButtonSelected;
+            case Type::HomeButton:
+                return Textures::HomeButtonPressed;
             default:
                 assert(false);
         }
