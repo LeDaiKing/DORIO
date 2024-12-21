@@ -10,7 +10,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , backButton(context, GUI::Button::Type::BackButton)
 , previousButton(context, GUI::Button::Type::previousButton)
 , nextButton(context, GUI::Button::Type::nextButton)
-, saveButton(context, GUI::Button::Type::saveButton)
+, saveButton(context, GUI::Button::Type::SaveButton)
 , instructionButton(context, GUI::Button::Type::instructionButton)
 , chooseModeButton(context, GUI::Button::Type::chooseModeButton)
 {

@@ -23,7 +23,7 @@ namespace GUI{
             charSlot2,
             previousButton,
             nextButton,
-            saveButton,
+            SaveButton,
             instructionButton,
             chooseCharButton,
             chooseModeButton,
@@ -43,6 +43,7 @@ namespace GUI{
             DownButton,
             AttackButton,
             DoubleUpButton,
+            HomeButton,
         };
         Button(State::Context context, Type type);
 

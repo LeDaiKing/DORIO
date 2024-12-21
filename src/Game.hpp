@@ -49,5 +49,6 @@ class Game : private sf::NonCopyable
         MusicPlayer nMusicPlayer;
         SoundPlayer nSoundPlayer;
         ParallelTask nLoadingTask;
+        // int nStatisticsNumFrames = 0;
 };
 

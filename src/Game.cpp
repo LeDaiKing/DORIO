@@ -104,6 +104,12 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonNormal, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonSelected, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonPressed, "res/UI/doubleUpButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/rectButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/rectButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/rectButton.png");
+	TextureHolder::getInstance().load(Textures::ID::HomeButtonNormal, "res/UI/chooseCharButton.png");
+	TextureHolder::getInstance().load(Textures::ID::HomeButtonSelected, "res/UI/chooseCharButton.png");
+	TextureHolder::getInstance().load(Textures::ID::HomeButtonPressed, "res/UI/chooseCharButton.png");
 
 
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Normal, "res/UI/charSlot.png");
@@ -116,8 +122,9 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::nextButton, "res/UI/nextButton.png");
     TextureHolder::getInstance().load(Textures::ID::char1Sprite, "res/UI/char1Sprite.png");
 	TextureHolder::getInstance().load(Textures::ID::char2Sprite, "res/UI/char2Sprite.png");
-	TextureHolder::getInstance().load(Textures::ID::saveButtonNormal, "res/UI/saveButton.png");
-	TextureHolder::getInstance().load(Textures::ID::saveButtonSelected, "res/UI/saveButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::SaveButtonNormal, "res/UI/SaveButton.png");
+	TextureHolder::getInstance().load(Textures::ID::SaveButtonSelected, "res/UI/SaveButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::SaveButtonPressed, "res/UI/SaveButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::instructionButtonNormal, "res/UI/instructionButton.png");
 	TextureHolder::getInstance().load(Textures::ID::instructionButtonSelected, "res/UI/instructionButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::chooseCharButtonNormal, "res/UI/chooseCharButton.png");
@@ -229,18 +236,20 @@ void Game::render()
 
 void Game::updateStatistics(sf::Time elapsedTime)
 {
-	// mStatisticsUpdateTime += elapsedTime;
-	// mStatisticsNumFrames += 1;
+// 	nStatisticsUpdateTime += elapsedTime;
+// 	nStatisticsNumFrames += 1;
 
-	// if (mStatisticsUpdateTime >= sf::seconds(1.0f))
-	// {
-	// 	mStatisticsText.setString(
-	// 		"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
-	// 		"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
-							 
-	// 	mStatisticsUpdateTime -= sf::seconds(1.0f);
-	// 	mStatisticsNumFrames = 0;
-	// }
+// 	if (nStatisticsUpdateTime >= sf::seconds(1.0f))
+// 	{
+// 		nStatisticsText.setString(
+// 			"Frames / Second = " + std::to_string(nStatisticsNumFrames) + "\n" +
+// 			"Time / Update = " + std::to_string(nStatisticsUpdateTime.asMicroseconds() / nStatisticsNumFrames) + "us");
+
+// 		std::cout << "Frames / Second = " << nStatisticsNumFrames << std::endl;
+// 		std::cout << "Time / Update = " << nStatisticsUpdateTime.asMicroseconds() / nStatisticsNumFrames << "us" << std::endl;		 
+// 		nStatisticsUpdateTime -= sf::seconds(1.0f);
+// 		nStatisticsNumFrames = 0;
+// 	}
 }
 
 void Game::registerStates() {

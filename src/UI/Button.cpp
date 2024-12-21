@@ -106,8 +106,8 @@ namespace GUI{
                 return Textures::previousButton;
             case Type::nextButton:
                 return Textures::nextButton;
-            case Type::saveButton:
-                return Textures::saveButtonNormal;
+            case Type::SaveButton:
+                return Textures::SaveButtonNormal;
             case Type::instructionButton:
                 return Textures::instructionButtonNormal;
             case Type::chooseCharButton:
@@ -144,6 +144,8 @@ namespace GUI{
                 return Textures::AttackButtonNormal;
             case Type::DoubleUpButton:
                 return Textures::DoubleUpButtonNormal;
+            case Type::HomeButton:
+                return Textures::HomeButtonNormal;
             default:
                 assert(false);
         }
@@ -169,8 +171,8 @@ namespace GUI{
                 return Textures::previousButton;
             case Type::nextButton:
                 return Textures::nextButton;
-            case Type::saveButton:
-                return Textures::saveButtonSelected;
+            case Type::SaveButton:
+                return Textures::SaveButtonSelected;
             case Type::instructionButton:
                 return Textures::instructionButtonSelected;
             case Type::chooseCharButton:
@@ -207,6 +209,8 @@ namespace GUI{
                 return Textures::AttackButtonSelected;
             case Type::DoubleUpButton:
                 return Textures::DoubleUpButtonSelected;
+            case Type::HomeButton:
+                return Textures::HomeButtonSelected;
             default:
                 assert(false);
         }
@@ -232,8 +236,8 @@ namespace GUI{
                 return Textures::previousButton;
             case Type::nextButton:
                 return Textures::nextButton;
-            case Type::saveButton:
-                return Textures::saveButtonSelected;
+            case Type::SaveButton:
+                return Textures::SaveButtonSelected;
             case Type::instructionButton:
                 return Textures::instructionButtonSelected;
             case Type::chooseCharButton:
@@ -270,6 +274,8 @@ namespace GUI{
                 return Textures::AttackButtonSelected;  
             case Type::DoubleUpButton:
                 return Textures::DoubleUpButtonSelected;
+            case Type::HomeButton:
+                return Textures::HomeButtonPressed;
             default:
                 assert(false);
         }

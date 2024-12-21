@@ -56,8 +56,9 @@ namespace Textures
 		nextButton,
 		char1Sprite,
 		char2Sprite,
-		saveButtonNormal,
-		saveButtonSelected,
+		SaveButtonNormal,
+		SaveButtonSelected,
+		SaveButtonPressed,
 		instructionButtonNormal,
 		instructionButtonSelected,
 		chooseCharButtonNormal,
@@ -114,6 +115,10 @@ namespace Textures
 		DoubleUpButtonNormal,
 		DoubleUpButtonSelected,
 		DoubleUpButtonPressed,
+		HomeButtonNormal,
+		HomeButtonSelected,
+		HomeButtonPressed,
+
 	
 		
 		// Dough
