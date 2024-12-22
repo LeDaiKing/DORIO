@@ -70,11 +70,11 @@ class Entity : public SceneNode
 		void addAnimationState(State, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat = false);
 		virtual void setUpEntity() = 0;
 
-	private:
-		sf::Vector2f nVelocity;
-		sf::Vector2f nAcceleration;
+	// private:
 
 	protected:
+		sf::Vector2f nVelocity;
+		sf::Vector2f nAcceleration;
 		bool nDirection;
 		Animation nSprite;
 		State nCurrentState;

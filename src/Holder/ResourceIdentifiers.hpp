@@ -153,6 +153,10 @@ namespace Textures
 		JumpyBlock,
 		SlideBlock,
 
+		//Pipe
+		SewerPipe,
+		Pipe,
+
 		// Item
 		Coin,
 		CoinAnimation,

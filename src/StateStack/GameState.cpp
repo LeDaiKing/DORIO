@@ -45,7 +45,7 @@ bool GameState::update(sf::Time dt)
     CommandQueue& commands = nWorld.getCommandQueue();
     nPlayer.handleRealtimeInput(commands);
 
-    return true;
+    return false;
 }
 
 bool GameState::handleEvent(const sf::Event& event)
@@ -62,7 +62,7 @@ bool GameState::handleEvent(const sf::Event& event)
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
         requestStackPush(States::ID::Pause);
-        std::ofstream savefile(saveFile, std::ios::binary);
+        std::ofstream savefile("file/CurSave/temp", std::ios::binary);
         nWorld.save(savefile);
         savefile.close();
     }

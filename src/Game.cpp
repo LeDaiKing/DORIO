@@ -190,6 +190,10 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::JumpyBlock, "res/Background/JumpyBlock/Block.png");
 	TextureHolder::getInstance().load(Textures::SlideBlock, "res/Background/SlideBlock/Block.png");
 
+	//Pipe
+	TextureHolder::getInstance().load(Textures::SewerPipe, "res/Background/Pipes/SewerPipe.png");
+	TextureHolder::getInstance().load(Textures::Pipe, "res/Background/Pipes/Pipe.png");
+
 	//Item
 	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
 	TextureHolder::getInstance().load(Textures::CoinAnimation, "res/Item/CoinAnimation.png");

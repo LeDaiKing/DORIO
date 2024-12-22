@@ -4,7 +4,17 @@
         "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 0,
         "Time": 300,
-        "StartPoint": [8544, 480]
+        "StartPoint": [96, 480],
+        "Pipes": 
+        [
+            [200, 400, 2],
+            [400, 400, 2]
+        ],
+        "PipeConnect":
+        [
+            [0, 1],
+            [1, 0]
+        ]
     },
     "Level2":
     {

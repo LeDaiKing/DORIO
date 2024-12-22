@@ -58,11 +58,12 @@ class World : private sf::NonCopyable
 		enum Layer
 		{
 			Background,
+			Map,
 			Checkpoints,
 			Enemies,
 			Items,
 			Player,
-			Map,
+			Pipes,
 			LayerCount
 		};
 

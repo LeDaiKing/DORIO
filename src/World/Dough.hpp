@@ -7,6 +7,7 @@
 
 class Enemy;
 class Block;
+class SewerPipe;
 class Dough : public Entity
 {
 	public:
@@ -52,6 +53,7 @@ class Dough : public Entity
 		void resetCheckPoint();
 		virtual void load(std::ifstream& file);
 		virtual void save(std::ofstream& file);
+		void setMotionless(bool flag);
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -74,4 +76,6 @@ class Dough : public Entity
 		int nCoinsCount;
 		sf::Vector2f nCheckPoint;
 		int nScore;
+		bool nMotionless;
+		SewerPipe* nPipe;
 };

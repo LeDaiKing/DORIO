@@ -29,6 +29,8 @@ class Block : public SpriteNode
 
             SlideBlock,
             JumpyBlock,
+
+            SewerPipe,
         };
 
     public:
@@ -44,7 +46,7 @@ class Block : public SpriteNode
         virtual bool isBroken() const;
         virtual void load(std::ifstream& file);
         virtual void save(std::ofstream& file);
-
+        Type getType() const;
     private:
         Type nType;
         // virtual void updateCurrent(sf::Time dt, CommandQueue& commands);

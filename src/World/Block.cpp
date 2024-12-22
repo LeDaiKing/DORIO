@@ -37,6 +37,8 @@ Textures::ID toTextureID(Block::Type type)
             return Textures::SlideBlock;
         case Block::JumpyBlock:
             return Textures::JumpyBlock;
+        case Block::SewerPipe:
+            return Textures::SewerPipe;
     }
     return Textures::Floor1;
 }
@@ -180,4 +182,9 @@ void Block::load(std::ifstream& file)
     // sf::Vector2f position;
     // file.read(reinterpret_cast<char*>(&position), sizeof(position));
     // setPosition(position);
+}
+
+Block::Type Block::getType() const
+{
+    return nType;
 }

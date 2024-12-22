@@ -10,6 +10,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
 #include "../ConfigLoader.hpp"
+#include "SewerPipe.hpp"
 Textures::ID toTextureID(Dough::Type type)
 {
 	switch (type)
@@ -32,6 +33,8 @@ Dough::Dough(Type type)
 , stateJump(0)
 , nCoinsCount(0)
 , nScore(0)
+, nMotionless(false)
+, nPipe(nullptr)
 {
 	setUpEntity();
 	setAnimationState(State::Idle);
@@ -48,6 +51,23 @@ unsigned int Dough::getCategory() const
 
 void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
+	if (nMotionless) 
+	{
+		nClosestBottomBlock = nullptr;
+		nClosestTopBlock = nullptr;
+		nAcceleration = sf::Vector2f(0.f, 0.f);
+		nVelocity = sf::Vector2f(0.f, 0.f);
+	}
+
+	if ((nClosestTopBlock != nullptr))
+	{	
+		if ((nClosestTopBlock->getType() == Block::Type::SewerPipe))
+		nPipe = static_cast<SewerPipe*>(nClosestTopBlock);
+		else nPipe = nullptr;
+	}
+
+	if (!nOnGround) nPipe = nullptr;
+
 	if (nTimeDamage > sf::Time::Zero)
 	{
 		nTimeDamage -= dt;
@@ -288,6 +308,17 @@ void Dough::setStateJump(int state)
 
 void Dough::sit()
 {
+	if (nPipe != nullptr)
+	{
+		if (nPipe->inPlayer(this))
+		{
+			std::cout << "In Pipe" << std::endl;
+			nPipe = nullptr;
+			return;
+		}
+	}
+
+
 	if (nGrowUp == Small) return;
 	if (nGrowUp == Big)
 	{
@@ -554,4 +585,9 @@ void Dough::load(std::ifstream& file)
 	{
 		growUPFireBig();
 	}
+}
+
+void Dough::setMotionless(bool flag)
+{
+	nMotionless = flag;
 }

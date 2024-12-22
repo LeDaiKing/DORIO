@@ -5,6 +5,8 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "../UI/Button.hpp"
+#include <string>   
+#include <fstream>
 
 PauseState::PauseState(StateStack& stack, Context context)
 : State(stack, context)
@@ -27,6 +29,15 @@ PauseState::PauseState(StateStack& stack, Context context)
     saveButton->setCallback([this] ()
     {
         // save game
+        std::ifstream file("file/CurSave/save.txt");
+        std::string saveFile;
+        file >> saveFile;
+        file.close();
+        std::ofstream savefile(saveFile, std::ios::binary);
+        std::ifstream temp("file/CurSave/temp", std::ios::binary);
+        savefile << temp.rdbuf();
+        temp.close();
+        savefile.close();
     });
 
     auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);

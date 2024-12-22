@@ -20,6 +20,7 @@
 #include "EnemyFactory.hpp"
 #include "ItemFactory.hpp"
 #include "nlohmann/json.hpp"
+#include "SewerPipe.hpp"
 
 
 int World::nGravity = 700;
@@ -119,6 +120,7 @@ void World::buildScene()
 	nCategoryLayers[Background] |= Category::Scene;
 	nCategoryLayers[Map] |= Category::Block;
 	nCategoryLayers[Checkpoints] |= Category::Scene;
+	nCategoryLayers[Pipes] |= Category::Block;
 	nCategoryLayers[Enemies] |= Category::Enemy;
 	nCategoryLayers[Items] |= Category::Item;
 	nCategoryLayers[Player] |= Category::PlayerDough;
@@ -279,6 +281,24 @@ void World::loadMap(std::string level)
 	nPlayerDough->setCheckPoint(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
 
+	// Pipes
+	for (auto& pipe : config["Pipes"])
+	{
+		sf::Vector2f position = sf::Vector2f(pipe[0], pipe[1]);
+		int height = pipe[2];
+		std::unique_ptr<SewerPipe> sewerPipe(new SewerPipe(Block::SewerPipe, position, height));
+		nSceneLayers[Pipes]->attachChild(std::move(sewerPipe));
+	}
+	//Pips Connection
+	for (auto& con: config["PipeConnect"])
+	{
+		int index1 = con[0];
+		int index2 = con[1];
+		SewerPipe* pipe1 = static_cast<SewerPipe*>(nSceneLayers[Pipes]->getChildren()[index1].get());
+		SewerPipe* pipe2 = static_cast<SewerPipe*>(nSceneLayers[Pipes]->getChildren()[index2].get());
+		pipe1->setOutPipe(pipe2);
+	}
+
 }
 
 bool World::isWin() {
@@ -422,6 +442,14 @@ void World::save(std::ofstream& saveFile)
 	{
 		checkPoint->save(saveFile);
 	}
+
+	//Pipe
+	int pipes = nSceneLayers[Pipes]->getChildren().size();
+	saveFile.write(reinterpret_cast<char*>(&pipes), sizeof(pipes));
+	for (SceneNode::Ptr& pipe : nSceneLayers[Pipes]->getChildren())
+	{
+		pipe->save(saveFile);
+	}
 }
 
 void World::load(std::ifstream& saveFile, int lev)
@@ -506,5 +534,31 @@ void World::load(std::ifstream& saveFile, int lev)
 		checkPoint->load(saveFile);
 		nSceneLayers[Checkpoints]->attachChild(std::move(checkPoint));
 	}
+
+	//Pipe
+	int pipes;
+	saveFile.read(reinterpret_cast<char*>(&pipes), sizeof(pipes));
+	for (int i = 0; i < pipes; ++i)
+	{
+		int type;
+		saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+		sf::Vector2f position;
+		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
+		int height;
+		saveFile.read(reinterpret_cast<char*>(&height), sizeof(height));
+		std::unique_ptr<SewerPipe> pipe = std::make_unique<SewerPipe>(static_cast<Block::Type>(type), position, height);
+		pipe->load(saveFile);
+		nSceneLayers[Pipes]->attachChild(std::move(pipe));
+	}
 	
+	std::string key = "Map/Level" + std::to_string(lev + 1);
+	nlohmann::json config = ConfigLoader::getInstance().getConfig(key.c_str());
+	for (auto& pipe : config["PipeConnect"])
+	{
+		int index1 = pipe[0];
+		int index2 = pipe[1];
+		SewerPipe* pipe1 = static_cast<SewerPipe*>(nSceneLayers[Pipes]->getChildren()[index1].get());
+		SewerPipe* pipe2 = static_cast<SewerPipe*>(nSceneLayers[Pipes]->getChildren()[index2].get());
+		pipe1->setOutPipe(pipe2);
+	}
 }

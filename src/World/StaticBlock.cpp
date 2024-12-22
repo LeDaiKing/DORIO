@@ -67,5 +67,5 @@ void StaticBlock::handleBottomCollision(Entity& player)
     sf::FloatRect bound = getBoundingRect();
     player.move(0.f, bound.top + bound.height - player.getBoundingRect().top);
     player.setVelocity(player.getVelocity().x, 0.f);
-    player.setOnGround(true);
+    // player.setOnGround(true);
 }
