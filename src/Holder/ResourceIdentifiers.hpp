@@ -31,6 +31,7 @@ namespace Textures
         // Background
 		BackGround1,
 		BackGround2,
+		LeaderboardScreen,
 
 		
 		// Button
@@ -118,8 +119,9 @@ namespace Textures
 		HomeButtonNormal,
 		HomeButtonSelected,
 		HomeButtonPressed,
-
-	
+		LeaderboardButtonNormal,
+		LeaderboardButtonSelected,
+		LeaderboardButtonPressed,
 		
 		// Dough
 		Dough1,
@@ -169,6 +171,8 @@ namespace Textures
 		SettingBut,
 		WhiteText,
 		BlackText,
+		ClockHub,
+		HeartHub,
 
 		// CheckPoint
 		Start,

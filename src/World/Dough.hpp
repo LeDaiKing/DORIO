@@ -46,6 +46,7 @@ class Dough : public Entity
 		void addHitPoints(int points);
 		void addCoins(int coins);
 		int getCoinsCount() const;
+		int getScore() const;
 		int getHitPoints() const;
 		void setCheckPoint(sf::Vector2f checkPoint);
 		void resetCheckPoint();

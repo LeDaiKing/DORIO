@@ -44,6 +44,7 @@ namespace GUI{
             AttackButton,
             DoubleUpButton,
             HomeButton,
+            LeaderboardButton,
         };
         Button(State::Context context, Type type);
 

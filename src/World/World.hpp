@@ -40,6 +40,9 @@ class World : private sf::NonCopyable
 		void save(std::ofstream& saveFile);
 		void load(std::ifstream& saveFile, int lev);
 		void loadMap(std::string level);
+		bool isWin();
+		bool isLose();
+
 
 	private:
 		// void loadTextures();

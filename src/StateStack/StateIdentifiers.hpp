@@ -14,5 +14,7 @@ namespace States {
         ChoosePlayer,
         ChooseSlot,
         Instruction,
+        Winning, 
+        Losing,
     };
 }

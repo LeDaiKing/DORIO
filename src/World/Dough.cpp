@@ -473,6 +473,10 @@ int Dough::getCoinsCount() const
 	return nCoinsCount;
 }
 
+int Dough::getScore() const {
+	return nScore;
+}
+
 int Dough::getHitPoints() const
 {
 	return nHitPoints;

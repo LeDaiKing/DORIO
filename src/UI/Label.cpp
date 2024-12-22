@@ -1,10 +1,11 @@
 #include "Label.hpp"
+#include "../Utility.hpp"
 
 namespace GUI{
     Label::Label(const std::string& text)
     : nText(text, FontHolder::getInstance().get(Fonts::Main), 16)
     {
-        
+        centerOrigin(nText);
     }
 
     bool Label::isSelectable() const {
@@ -17,10 +18,12 @@ namespace GUI{
 
     void Label::setCharacterSize(unsigned int size) {
         nText.setCharacterSize(size);
+        centerOrigin(nText);
     }
 
     void Label::setText(const std::string& text) {
         nText.setString(text);
+        centerOrigin(nText);
     }
 
     float Label::getWidth() const {

@@ -10,6 +10,7 @@
 #include "StateStack/ChooseCharState.hpp"
 #include "StateStack/ChooseSlotState.hpp"
 #include "StateStack/InstructionState.hpp"
+#include "StateStack/WinningState.hpp"
 
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
@@ -72,6 +73,7 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::TitleScreen, "res/Background/title.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseCharScreen, "res/Background/ChooseCharScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
+	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/scoreboard.png");
 
 	//Button
 	TextureHolder::getInstance().load(Textures::ID::slotButtonNormal, "res/UI/slotButton.png");
@@ -110,7 +112,9 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonNormal, "res/UI/chooseCharButton.png");
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonSelected, "res/UI/chooseCharButton.png");
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonPressed, "res/UI/chooseCharButton.png");
-
+	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonNormal, "res/UI/leaderboardButton.png");
+	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonSelected, "res/UI/leaderboardButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonPressed, "res/UI/leaderboardButton_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Normal, "res/UI/charSlot.png");
 	TextureHolder::getInstance().load(Textures::ID::charSlot1Pressed, "res/UI/charSlot_s.png");
@@ -199,6 +203,8 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ClockIcon, "res/Hub/ClockIcon.png");
 	TextureHolder::getInstance().load(Textures::WhiteText, "res/Text/WhiteText.png");
 	TextureHolder::getInstance().load(Textures::BlackText, "res/Text/BlackText.png");
+	TextureHolder::getInstance().load(Textures::ClockHub, "res/Hub/ClockHub.png");
+	TextureHolder::getInstance().load(Textures::HeartHub, "res/Hub/HeartHub.png");
 
 	// CheckPoint
 	TextureHolder::getInstance().load(Textures::Start, "res/Background/CheckPoint/Start.png");
@@ -263,6 +269,7 @@ void Game::registerStates() {
 	nGameStateStack.registerState<ChooseCharState>(States::ID::ChooseCharacter);
 	nGameStateStack.registerState<ChooseSlotState>(States::ID::ChooseSlot);
 	nGameStateStack.registerState<InstructionState>(States::ID::Instruction);
+	nGameStateStack.registerState<WinningState>(States::ID::Winning);
 }
 
 

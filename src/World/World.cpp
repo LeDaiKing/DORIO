@@ -281,6 +281,28 @@ void World::loadMap(std::string level)
 
 }
 
+bool World::isWin() {
+	std::cerr << "Start" << std::endl;
+	if (nPlayerDough == nullptr) return false;
+	assert(nPlayerDough != nullptr);
+	std::ofstream file("file/Score/score.txt");
+	// file << nTime.asSeconds() << std::endl;
+	file << 300 << std::endl;
+	// file << nPlayerDough->getHitPoints() << std::endl;
+	file << 100 << std::endl;
+	// file << nPlayerDough->getScore() << std::endl;
+	file << 100 << std::endl;
+	file << 1 << std::endl; // win game
+	file << 1 << std::endl; // get all coins
+	file.close();
+	return true;
+}
+
+bool World::isLose() {
+	// return nTime <= sf::Time::Zero || nPlayerDough->getHealth() <= 0;
+	return false;
+}
+
 void World::applyNormal()
 {
 	Command applyNormal;

@@ -146,6 +146,8 @@ namespace GUI{
                 return Textures::DoubleUpButtonNormal;
             case Type::HomeButton:
                 return Textures::HomeButtonNormal;
+            case Type::LeaderboardButton:
+                return Textures::LeaderboardButtonNormal;
             default:
                 assert(false);
         }
@@ -211,6 +213,8 @@ namespace GUI{
                 return Textures::DoubleUpButtonSelected;
             case Type::HomeButton:
                 return Textures::HomeButtonSelected;
+            case Type::LeaderboardButton:
+                return Textures::LeaderboardButtonSelected;
             default:
                 assert(false);
         }
@@ -276,6 +280,8 @@ namespace GUI{
                 return Textures::DoubleUpButtonSelected;
             case Type::HomeButton:
                 return Textures::HomeButtonPressed;
+            case Type::LeaderboardButton:
+                return Textures::LeaderboardButtonPressed;
             default:
                 assert(false);
         }

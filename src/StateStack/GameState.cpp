@@ -34,6 +34,12 @@ void GameState::draw()
 
 bool GameState::update(sf::Time dt)
 {
+    if (nWorld.isWin())
+    {
+        requestStackPop();
+        requestStackPush(States::ID::Winning);
+        return true;
+    }
     nWorld.update(dt);
 
     CommandQueue& commands = nWorld.getCommandQueue();
@@ -44,6 +50,12 @@ bool GameState::update(sf::Time dt)
 
 bool GameState::handleEvent(const sf::Event& event)
 {
+    if (nWorld.isWin())
+    {
+        requestStackPop();
+        requestStackPush(States::ID::Winning);
+        return true;
+    }
     CommandQueue& commands = nWorld.getCommandQueue();
     nPlayer.handleEvent(event, commands);
 
