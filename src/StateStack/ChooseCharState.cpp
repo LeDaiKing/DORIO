@@ -13,6 +13,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , saveButton(context, GUI::Button::Type::SaveButton)
 , instructionButton(context, GUI::Button::Type::instructionButton)
 , chooseModeButton(context, GUI::Button::Type::chooseModeButton)
+, nCharAni1(TextureHolder::getInstance().get(Textures::Dough1))
+, nCharAni2(TextureHolder::getInstance().get(Textures::Dough1))
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
     nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
@@ -20,17 +22,30 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro));
     nCharIntro.setPosition({208, 53});
 
+    nCharAni1.addAnimationState(0, 96, 12, sf::seconds(1), sf::Vector2i(32, 32), true);
+    nCharAni1.setAnimationState(0);
+    nCharAni1.setPosition(538.5, 464);
+    nCharAni1.setScale(5, 5);
+
+    nCharAni2.addAnimationState(0, 96, 12, sf::seconds(1), sf::Vector2i(32, 32), true);
+    nCharAni2.setAnimationState(0);
+    nCharAni2.setPosition(538.5, 464);
+    nCharAni2.setScale(5, 5);
+
+
     auto charSlot1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::charSlot1);
     charSlot1->setPosition({930, 131});
     charSlot1->setCallback([this] ()
     {
-        nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+        // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+        selectedChar = 1;
     });
     auto charSlot2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::charSlot2);
     charSlot2->setPosition({1088, 131});
     charSlot2->setCallback([this] ()
     {
-        nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
+        // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
+        selectedChar = 2;
     });
     
     previousButton.setPosition({284.5, 482.5});
@@ -40,12 +55,14 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         nGUIContainer.selectNext();
         if(nGUIContainer.getSelectedChild() == charSlot1)
         {
-            nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+            // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+            selectedChar = 1;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro));
         }
         else
         {
-            nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
+            // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
+            selectedChar = 2;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro2));
         }
     });
@@ -56,12 +73,14 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         nGUIContainer.selectPrevious();
         if(nGUIContainer.getSelectedChild() == charSlot1)
         {
-            nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+            // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+            selectedChar = 1;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro));
         }
         else
         {
-            nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
+            // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
+            selectedChar = 2;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro2));
         }
     });
@@ -111,7 +130,13 @@ void ChooseCharState::draw()
     window.draw(backButton);
     window.draw(previousButton);
     window.draw(nextButton);
-    window.draw(nChar);
+    if (selectedChar == 1)  {
+        window.draw(nCharAni1);
+    }
+    else {
+        window.draw(nCharAni2);
+    }
+
     window.draw(nCharIntro);
     window.draw(saveButton);
     window.draw(instructionButton);
@@ -136,6 +161,9 @@ bool ChooseCharState::update(sf::Time dt)
     if (chooseModeButton.isMouseOver(window))
         chooseModeButton.setSelectedSprite();
     else chooseModeButton.setNormalSprite();
+
+    nCharAni1.update(dt);
+    nCharAni2.update(dt);
 
     return true;
 }

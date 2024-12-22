@@ -77,6 +77,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     resetButton->setCallback([this] ()
     {
         nSelectedSlot = -1;
+        nGUIContainerConfirm.selectPrevious();
     });
     // pass
 

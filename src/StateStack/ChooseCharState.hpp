@@ -20,6 +20,8 @@ class ChooseCharState : public State{
     private:
         sf::Sprite nBackgroundSprite;
         sf::Sprite nChar, nCharIntro;
+        Animation nCharAni1;
+        Animation nCharAni2;
         GUI::Container nGUIContainer;
         GUI::Button backButton;
         GUI::Button previousButton;
@@ -27,4 +29,5 @@ class ChooseCharState : public State{
         GUI::Button saveButton;
         GUI::Button instructionButton;
         GUI::Button chooseModeButton;
+        int selectedChar = 1;
 };
