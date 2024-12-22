@@ -173,6 +173,7 @@ void World::adaptCameraPosition()
 
 	if (postiion.x < 10) nPlayerDough->setPosition(10, postiion.y);
 	if (postiion.x > nWorldBounds.width - 10) nPlayerDough->setPosition(nWorldBounds.width - 10, postiion.y);
+	if (postiion.y < 10) nPlayerDough->setPosition(postiion.x, 10);
 }
 
 void World::loadMap(std::string level)
