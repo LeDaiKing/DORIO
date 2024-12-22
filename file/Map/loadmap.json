@@ -4,7 +4,7 @@
         "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 0,
         "Time": 300,
-        "StartPoint": [96, 480]
+        "StartPoint": [8544, 480]
     },
     "Level2":
     {
