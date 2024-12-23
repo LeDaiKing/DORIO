@@ -15,7 +15,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 // , twoPlayerButton(context, GUI::Button::Type::twoPlayerButton)
 , drawHand(false)
 {
-    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
+    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
     handSprite.setTexture(TextureHolder::getInstance().get(Textures::handSprite));
     choosePlayerDeco.setTexture(TextureHolder::getInstance().get(Textures::choosePlayerDeco));
     choosePlayerDeco.setPosition({189, 0});
