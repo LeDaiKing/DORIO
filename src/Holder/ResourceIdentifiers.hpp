@@ -134,6 +134,8 @@ namespace Textures
 		CockRoach,
 		Snail,
 		SnailShell,
+		HugeEnemy,
+		HugeEnemyWarning,
 
 		// Block
 		Floor1,

@@ -169,6 +169,8 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::CockRoach, "res/Enemy/CockRoach/CockRoach.png");
 	TextureHolder::getInstance().load(Textures::Snail, "res/Enemy/Snail/Snail.png");
 	TextureHolder::getInstance().load(Textures::SnailShell, "res/Enemy/Snail/SnailShell.png");
+	TextureHolder::getInstance().load(Textures::HugeEnemy, "res/Enemy/HugeEnemy/witch.png");
+	TextureHolder::getInstance().load(Textures::HugeEnemyWarning, "res/Enemy/HugeEnemy/eyeball.png");
 
 	//Block
 	TextureHolder::getInstance().load(Textures::Floor1, "res/Background/Block/Floor1.png");
