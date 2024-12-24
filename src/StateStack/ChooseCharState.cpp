@@ -7,19 +7,19 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
 , nGUIContainer()
-, backButton(context, GUI::Button::Type::BackButton)
-, previousButton(context, GUI::Button::Type::previousButton)
-, nextButton(context, GUI::Button::Type::nextButton)
-, saveButton(context, GUI::Button::Type::SaveButton)
-, instructionButton(context, GUI::Button::Type::instructionButton)
-, chooseModeButton(context, GUI::Button::Type::chooseModeButton)
+, backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
+, previousButton(context, Textures::ID::PreviousButtonNormal, Textures::ID::PreviousButtonSelected, Textures::ID::PreviousButtonPressed)
+, nextButton(context, Textures::ID::NextButtonNormal, Textures::ID::NextButtonSelected, Textures::ID::NextButtonPressed)
+, saveButton(context, Textures::ID::SaveButtonNormal, Textures::ID::SaveButtonSelected, Textures::ID::SaveButtonPressed)
+, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+, chooseModeButton(context, Textures::ID::ChooseModeButtonNormal, Textures::ID::ChooseModeButtonSelected, Textures::ID::ChooseModeButtonPressed)
 , nCharAni1(TextureHolder::getInstance().get(Textures::Dough1))
 , nCharAni2(TextureHolder::getInstance().get(Textures::Dough1))
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
-    nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+    nChar.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
     nChar.setPosition({376, 289});
-    nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro));
+    nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
     nCharIntro.setPosition({208, 53});
 
     nCharAni1.addAnimationState(0, 96, 12, sf::seconds(1), sf::Vector2i(32, 32), true);
@@ -33,14 +33,14 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     nCharAni2.setScale(5, 5);
 
 
-    auto charSlot1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::charSlot1);
+    auto charSlot1 = std::make_shared<GUI::Button>(context, Textures::ID::CharSlot1Normal, Textures::ID::CharSlot1Selected, Textures::ID::CharSlot1Pressed);
     charSlot1->setPosition({930, 131});
     charSlot1->setCallback([this] ()
     {
         // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
         selectedChar = 1;
     });
-    auto charSlot2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::charSlot2);
+    auto charSlot2 = std::make_shared<GUI::Button>(context, Textures::ID::CharSlot2Normal, Textures::ID::CharSlot2Selected, Textures::ID::CharSlot2Pressed);
     charSlot2->setPosition({1088, 131});
     charSlot2->setCallback([this] ()
     {
@@ -57,13 +57,13 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         {
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
             selectedChar = 1;
-            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro));
+            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
         }
         else
         {
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
             selectedChar = 2;
-            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro2));
+            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
         }
     });
     nextButton.setPosition({792.5, 482.5});
@@ -75,13 +75,13 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         {
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
             selectedChar = 1;
-            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro));
+            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
         }
         else
         {
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
             selectedChar = 2;
-            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::charIntro2));
+            nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
         }
     });
 

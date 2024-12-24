@@ -9,8 +9,8 @@ WinningState::WinningState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
 , nCharacterSprite()
-, leaderboardButton(context, GUI::Button::Type::LeaderboardButton)
-, startButton(context, GUI::Button::Type::StartButton)
+, leaderboardButton(context, Textures::ID::LeaderboardButtonNormal, Textures::ID::LeaderboardButtonSelected, Textures::ID::LeaderboardButtonPressed)
+, startButton(context, Textures::ID::StartButtonNormal, Textures::ID::StartButtonSelected, Textures::ID::StartButtonPressed)
 , nClock()
 , nHeart()
 , textClock("")
@@ -21,7 +21,7 @@ WinningState::WinningState(StateStack& stack, Context context)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::LeaderboardScreen));
     
-    nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
+    nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
     nCharacterSprite.setPosition(792, 238);
 
     nClock.setTexture(TextureHolder::getInstance().get(Textures::ClockHub));
@@ -61,10 +61,10 @@ WinningState::WinningState(StateStack& stack, Context context)
     file >> nSecond >> nHP >> nScore;
     bool isAchieveWin, isAchieveCoin;
     file >> isAchieveWin >> isAchieveCoin;
-    if (isAchieveWin) winBadge.setTexture(TextureHolder::getInstance().get(Textures::threeStarBadgeNormal));
-    else winBadge.setTexture(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank));
-    if (isAchieveCoin) coinBadge.setTexture(TextureHolder::getInstance().get(Textures::oneStarBadgeNormal));
-    else coinBadge.setTexture(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank));
+    if (isAchieveWin) winBadge.setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
+    else winBadge.setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeBlank));
+    if (isAchieveCoin) coinBadge.setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeNormal));
+    else coinBadge.setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeBlank));
     winBadge.setPosition(420, 400);
     coinBadge.setPosition(231, 402);
     winBadge.setScale(1.85, 1.85);
@@ -81,7 +81,6 @@ void WinningState::draw()
     window.draw(leaderboardButton);
     window.draw(startButton);
     textScore.setText(std::to_string((int) nScore));
-    std::cout << nScore << std::endl;
     window.draw(textScore);
     
 

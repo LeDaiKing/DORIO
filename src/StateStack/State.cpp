@@ -1,5 +1,6 @@
 #include "State.hpp"
 #include "StateStack.hpp"
+#include <iostream> 
 
 State::State(StateStack& stack, Context context)
 : nStack(&stack)
@@ -7,6 +8,8 @@ State::State(StateStack& stack, Context context)
 }
 
 State::~State() {
+    sf::RenderWindow& window = *getContext().window;    
+    window.setKeyRepeatEnabled(false);    
 }
 
 void State::requestStackPush(States::ID stateID) {

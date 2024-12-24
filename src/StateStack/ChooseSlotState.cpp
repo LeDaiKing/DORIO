@@ -9,12 +9,12 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
 , nBackgroundSprite()
 , nGUIContainerSlot()
 , nGUIContainerConfirm()
-, backButton(context, GUI::Button::Type::BackButton)
-, instructionButton(context, GUI::Button::Type::instructionButton)
+, backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
+, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     
-    auto slotButton1 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
+    auto slotButton1 = std::make_shared<GUI::Button>(context, Textures::ID::SlotButtonNormal, Textures::ID::SlotButtonSelected, Textures::ID::SlotButtonPressed);
     slotButton1->setPosition(373, 400.5);
     slotButton1->setText("NEW !");
     slotButton1->setCallback([this] ()
@@ -22,7 +22,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         nSelectedSlot = 1;
     });
 
-    auto slotButton2 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
+    auto slotButton2 = std::make_shared<GUI::Button>(context, Textures::ID::SlotButtonNormal, Textures::ID::SlotButtonSelected, Textures::ID::SlotButtonPressed);
     slotButton2->setPosition(632, 400.5);
     slotButton2->setText("NEW !");
     slotButton2->setCallback([this] ()
@@ -30,7 +30,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         nSelectedSlot = 2;
     });
 
-    auto slotButton3 = std::make_shared<GUI::Button>(context, GUI::Button::Type::SlotButton);
+    auto slotButton3 = std::make_shared<GUI::Button>(context, Textures::ID::SlotButtonNormal, Textures::ID::SlotButtonSelected, Textures::ID::SlotButtonPressed);
     slotButton3->setPosition(891, 400.5);
     slotButton3->setText("NEW !");
     slotButton3->setCallback([this] ()
@@ -53,7 +53,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         requestStackPush(States::Instruction);
     });
 
-    auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
+    auto startButton = std::make_shared<GUI::Button>(context, Textures::ID::StartButtonNormal, Textures::ID::StartButtonSelected, Textures::ID::StartButtonPressed);    
     startButton->setPosition(373, 615);
     startButton->setCallback([this] ()
     {
@@ -64,7 +64,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         requestStackPush(States::ID::ChoosePlayer);
     });
 
-    auto deleteButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::DeleteButton);
+    auto deleteButton = std::make_shared<GUI::Button>(context, Textures::ID::DeleteButtonNormal, Textures::ID::DeleteButtonSelected, Textures::ID::DeleteButtonPressed);
     deleteButton->setPosition({891, 615});
     deleteButton->setCallback([this] ()
     {
@@ -72,7 +72,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         clearFolder("file/Save" + std::to_string(nSelectedSlot));
     });
 
-    auto resetButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::ResetButton);
+    auto resetButton = std::make_shared<GUI::Button>(context, Textures::ID::ResetButtonNormal, Textures::ID::ResetButtonSelected, Textures::ID::ResetButtonPressed);
     resetButton->setPosition({632, 615});
     resetButton->setCallback([this] ()
     {

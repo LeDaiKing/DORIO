@@ -16,5 +16,6 @@ namespace States {
         Instruction,
         Winning, 
         Losing,
+        Creative
     };
 }

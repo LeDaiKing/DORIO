@@ -8,14 +8,14 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
 , nGUIContainer()
-, backButton(context, GUI::Button::Type::BackButton)
-// , playStartButton(context, GUI::Button::Type::playStartButton)
-, instructionButton(context, GUI::Button::Type::instructionButton)
-, chooseCharButton(context, GUI::Button::Type::chooseCharButton)
+, backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
+// , playStartButton(context, ButtonTextures::ID::playStartButton)
+, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+, chooseCharButton(context, Textures::ID::ChooseCharButtonNormal, Textures::ID::ChooseCharButtonSelected, Textures::ID::ChooseCharButtonPressed)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
 
-    auto kitchenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::kitchenMode);
+    auto kitchenMode = std::make_shared<GUI::Button>(context, Textures::ID::KitchenModeNormal, Textures::ID::KitchenModeSelected, Textures::ID::KitchenModePressed);
     kitchenMode->setPosition({407, 347});
     kitchenMode->setCallback([this] ()
     {   
@@ -27,7 +27,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::Loading);
     });
 
-    auto hallwayMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::hallwayMode);
+    auto hallwayMode = std::make_shared<GUI::Button>(context, Textures::ID::HallwayModeNormal, Textures::ID::HallwayModeSelected, Textures::ID::HallwayModePressed);
     hallwayMode->setPosition({655.565, 165.5});
     hallwayMode->setCallback([this] ()
     {
@@ -39,7 +39,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::Loading);
     });
 
-    auto gardenMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::gardenMode);
+    auto gardenMode = std::make_shared<GUI::Button>(context, Textures::ID::GardenModeNormal, Textures::ID::GardenModeSelected, Textures::ID::GardenModePressed);
     gardenMode->setPosition({912.77, 345});
     gardenMode->setCallback([this] ()
     {
@@ -51,22 +51,27 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::Loading);
     });
 
-    auto creativeMode = std::make_shared<GUI::Button>(context, GUI::Button::Type::creativeMode);
+    auto creativeMode = std::make_shared<GUI::Button>(context, Textures::ID::CreativeModeNormal, Textures::ID::CreativeModeSelected, Textures::ID::CreativeModePressed);
     creativeMode->setPosition({655.5, 555});
+    creativeMode->setCallback([this] ()
+    {
+        requestStackPop();
+        requestStackPush(States::Creative);
+    });
 
-    kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
-    kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
+    kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::OneStarBadgeBlank)));
+    kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::ThreeStarBadgeBlank)));
     kitchenModeBadge[0].setPosition({237, 256});
     kitchenModeBadge[1].setPosition({237, 335});
 
-    hallwayModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
-    hallwayModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
+    hallwayModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::OneStarBadgeBlank)));
+    hallwayModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::ThreeStarBadgeBlank)));
     hallwayModeBadge[0].setPosition({442, 60});
     hallwayModeBadge[1].setPosition({442, 139});
 
 
-    gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::oneStarBadgeBlank)));
-    gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::threeStarBadgeBlank)));
+    gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::OneStarBadgeBlank)));
+    gardenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::ThreeStarBadgeBlank)));
     gardenModeBadge[0].setPosition({755, 256});
     gardenModeBadge[1].setPosition({755, 335});
 
@@ -105,6 +110,8 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     nGUIContainer.pack(hallwayMode);
     nGUIContainer.pack(gardenMode);
     nGUIContainer.pack(creativeMode);
+    sf::RenderWindow& window = *getContext().window;    
+    window.setKeyRepeatEnabled(true);    
 }
 
 void ChooseModeState::draw()

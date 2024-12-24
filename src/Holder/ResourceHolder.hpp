@@ -7,6 +7,7 @@
 #include <cassert>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <iostream>
 
 
 template <typename Resource, typename Identifier>

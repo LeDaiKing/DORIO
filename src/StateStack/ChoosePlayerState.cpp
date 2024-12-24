@@ -9,18 +9,17 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 , nBackgroundSprite()
 , handSprite()
 , choosePlayerDeco()
-, backButton(context, GUI::Button::Type::BackButton)
-, instructionButton(context, GUI::Button::Type::instructionButton)
-// , onePlayerButton(context, GUI::Button::Type::onePlayerButton)
-// , twoPlayerButton(context, GUI::Button::Type::twoPlayerButton)
+, backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
+, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+// , onePlayerButton(context, ButtonTextures::ID::onePlayerButton)
+// , twoPlayerButton(context, ButtonTextures::ID::twoPlayerButton)
 , drawHand(false)
 {
-    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
-    handSprite.setTexture(TextureHolder::getInstance().get(Textures::handSprite));
-    choosePlayerDeco.setTexture(TextureHolder::getInstance().get(Textures::choosePlayerDeco));
+    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
+    handSprite.setTexture(TextureHolder::getInstance().get(Textures::HandSprite));
     choosePlayerDeco.setPosition({189, 0});
 
-    auto onePlayerButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::onePlayerButton);
+    auto onePlayerButton = std::make_shared<GUI::Button>(context, Textures::ID::OnePlayerButtonNormal, Textures::ID::OnePlayerButtonSelected, Textures::ID::OnePlayerButtonPressed);
     onePlayerButton->setPosition({418, 437});
     onePlayerButton->setIsSelected(true);
     onePlayerButton->setCallback([this] ()
@@ -29,7 +28,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
         requestStackPush(States::ChooseCharacter);
     });
 
-    auto twoPlayerButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::twoPlayerButton);
+    auto twoPlayerButton = std::make_shared<GUI::Button>(context, Textures::ID::TwoPlayerButtonNormal, Textures::ID::TwoPlayerButtonSelected, Textures::ID::TwoPlayerButtonPressed);
     twoPlayerButton->setPosition({872, 443});
     twoPlayerButton->setIsSelected(true);
     twoPlayerButton->setCallback([this] ()

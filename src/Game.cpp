@@ -3,7 +3,6 @@
 #include "StateStack/TitleState.hpp"
 #include "StateStack/GameState.hpp"
 #include "StateStack/PauseState.hpp"
-#include "StateStack/MenuState.hpp"
 #include "StateStack/ChooseModeState.hpp"
 #include "StateStack/ChoosePlayerState.hpp"
 #include "StateStack/LoadingState.hpp"
@@ -11,6 +10,8 @@
 #include "StateStack/ChooseSlotState.hpp"
 #include "StateStack/InstructionState.hpp"
 #include "StateStack/WinningState.hpp"
+#include "StateStack/ChooseModeState.hpp"
+#include "StateStack/CreativeState.hpp"
 
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
@@ -65,6 +66,8 @@ void Game::run()
 	}
 }
 
+
+
 void Game::loadTextures() {
 
 	//Background
@@ -76,87 +79,159 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/scoreboard.png");
 
 	//Button
-	TextureHolder::getInstance().load(Textures::ID::slotButtonNormal, "res/UI/slotButton.png");
-	TextureHolder::getInstance().load(Textures::ID::slotButtonSelected, "res/UI/slotButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::slotButtonPressed, "res/UI/slotButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::SlotButtonNormal, "res/UI/slotButton.png");
+	TextureHolder::getInstance().load(Textures::ID::SlotButtonSelected, "res/UI/slotButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::SlotButtonPressed, "res/UI/slotButton_s.png");
+
 	TextureHolder::getInstance().load(Textures::ID::BackButtonNormal, "res/UI/BackButton.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonSelected, "res/UI/BackButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::BackButtonPressed, "res/UI/BackButton_s.png");
+
 	TextureHolder::getInstance().load(Textures::ID::StartButtonNormal, "res/UI/startButton.png");
 	TextureHolder::getInstance().load(Textures::ID::StartButtonSelected, "res/UI/startButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::StartButtonPressed, "res/UI/startButton_s.png");
+
 	TextureHolder::getInstance().load(Textures::ID::DeleteButtonNormal, "res/UI/deleteButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DeleteButtonSelected, "res/UI/deleteButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::DeleteButtonPressed, "res/UI/deleteButton_s.png");
+
 	TextureHolder::getInstance().load(Textures::ID::ResetButtonNormal, "res/UI/resetButton.png");
 	TextureHolder::getInstance().load(Textures::ID::ResetButtonSelected, "res/UI/resetButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::ResetButtonPressed, "res/UI/resetButton_s.png");
+
 	TextureHolder::getInstance().load(Textures::ID::UpButtonNormal, "res/UI/upButton.png");
 	TextureHolder::getInstance().load(Textures::ID::UpButtonSelected, "res/UI/upButton.png");
 	TextureHolder::getInstance().load(Textures::ID::UpButtonPressed, "res/UI/upButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::LeftButtonNormal, "res/UI/leftButton.png");
 	TextureHolder::getInstance().load(Textures::ID::LeftButtonSelected, "res/UI/leftButton.png");
+	TextureHolder::getInstance().load(Textures::ID::LeftButtonPressed, "res/UI/leftButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::RightButtonNormal, "res/UI/rightButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RightButtonSelected, "res/UI/rightButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RightButtonPressed, "res/UI/rightButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::DownButtonNormal, "res/UI/downButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DownButtonSelected, "res/UI/downButton.png");
+	TextureHolder::getInstance().load(Textures::ID::DownButtonPressed, "res/UI/downButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::AttackButtonNormal, "res/UI/attackButton.png");
 	TextureHolder::getInstance().load(Textures::ID::AttackButtonSelected, "res/UI/attackButton.png");
 	TextureHolder::getInstance().load(Textures::ID::AttackButtonPressed, "res/UI/attackButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonNormal, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonSelected, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonPressed, "res/UI/doubleUpButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/rectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/rectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/rectButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonNormal, "res/UI/chooseCharButton.png");
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonSelected, "res/UI/chooseCharButton.png");
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonPressed, "res/UI/chooseCharButton.png");
+
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonNormal, "res/UI/leaderboardButton.png");
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonSelected, "res/UI/leaderboardButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonPressed, "res/UI/leaderboardButton_s.png");
 
-	TextureHolder::getInstance().load(Textures::ID::charSlot1Normal, "res/UI/charSlot.png");
-	TextureHolder::getInstance().load(Textures::ID::charSlot1Pressed, "res/UI/charSlot_s.png");
-	TextureHolder::getInstance().load(Textures::ID::charSlot1Selected, "res/UI/charSlot_s.png");
-	TextureHolder::getInstance().load(Textures::ID::charSlot2Normal, "res/UI/char2Slot.png");
-	TextureHolder::getInstance().load(Textures::ID::charSlot2Pressed, "res/UI/char2Slot_s.png");
-	TextureHolder::getInstance().load(Textures::ID::charSlot2Selected, "res/UI/char2Slot_s.png");
-	TextureHolder::getInstance().load(Textures::ID::previousButton, "res/UI/previousButton.png");
-	TextureHolder::getInstance().load(Textures::ID::nextButton, "res/UI/nextButton.png");
-    TextureHolder::getInstance().load(Textures::ID::char1Sprite, "res/UI/char1Sprite.png");
-	TextureHolder::getInstance().load(Textures::ID::char2Sprite, "res/UI/char2Sprite.png");
+	TextureHolder::getInstance().load(Textures::ID::CharSlot1Normal, "res/UI/charSlot.png");
+	TextureHolder::getInstance().load(Textures::ID::CharSlot1Pressed, "res/UI/charSlot_s.png");
+	TextureHolder::getInstance().load(Textures::ID::CharSlot1Selected, "res/UI/charSlot_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::CharSlot2Normal, "res/UI/char2Slot.png");
+	TextureHolder::getInstance().load(Textures::ID::CharSlot2Pressed, "res/UI/char2Slot_s.png");
+	TextureHolder::getInstance().load(Textures::ID::CharSlot2Selected, "res/UI/char2Slot_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::PreviousButtonNormal, "res/UI/previousButton.png");
+	TextureHolder::getInstance().load(Textures::ID::PreviousButtonSelected, "res/UI/previousButton.png");
+	TextureHolder::getInstance().load(Textures::ID::PreviousButtonPressed, "res/UI/previousButton.png");
+
+	TextureHolder::getInstance().load(Textures::ID::NextButtonNormal, "res/UI/nextButton.png");
+	TextureHolder::getInstance().load(Textures::ID::NextButtonSelected, "res/UI/nextButton.png");
+	TextureHolder::getInstance().load(Textures::ID::NextButtonPressed, "res/UI/nextButton.png");
+
+    TextureHolder::getInstance().load(Textures::ID::Char1Sprite, "res/UI/char1Sprite.png");
+	TextureHolder::getInstance().load(Textures::ID::Char2Sprite, "res/UI/char2Sprite.png");
+
 	TextureHolder::getInstance().load(Textures::ID::SaveButtonNormal, "res/UI/SaveButton.png");
 	TextureHolder::getInstance().load(Textures::ID::SaveButtonSelected, "res/UI/SaveButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::SaveButtonPressed, "res/UI/SaveButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::instructionButtonNormal, "res/UI/instructionButton.png");
-	TextureHolder::getInstance().load(Textures::ID::instructionButtonSelected, "res/UI/instructionButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::chooseCharButtonNormal, "res/UI/chooseCharButton.png");
-	TextureHolder::getInstance().load(Textures::ID::chooseCharButtonSelected, "res/UI/chooseCharButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::charIntro, "res/UI/charIntro.png");
-	TextureHolder::getInstance().load(Textures::ID::charIntro2, "res/UI/charIntro2.png");
-	TextureHolder::getInstance().load(Textures::ID::chooseModeButtonNormal, "res/UI/chooseModeButton.png");
-	TextureHolder::getInstance().load(Textures::ID::chooseModeButtonSelected, "res/UI/chooseModeButton_s.png");
 
-	TextureHolder::getInstance().load(Textures::ID::kitchenModeNormal, "res/UI/kitchenMode.png");
-	TextureHolder::getInstance().load(Textures::ID::kitchenModeSelected, "res/UI/kitchenMode_s.png");
-	TextureHolder::getInstance().load(Textures::ID::hallwayModeNormal, "res/UI/hallwayMode.png");
-	TextureHolder::getInstance().load(Textures::ID::hallwayModeSelected, "res/UI/hallwayMode_s.png");
-	TextureHolder::getInstance().load(Textures::ID::gardenModeNormal, "res/UI/gardenMode.png");
-	TextureHolder::getInstance().load(Textures::ID::gardenModeSelected, "res/UI/gardenMode_s.png");
-	TextureHolder::getInstance().load(Textures::ID::creativeModeNormal, "res/UI/creativeMode.png");
-	TextureHolder::getInstance().load(Textures::ID::creativeModeSelected, "res/UI/creativeMode_s.png");
-	TextureHolder::getInstance().load(Textures::ID::playStartButtonNormal, "res/UI/playStartButton.png");
-	TextureHolder::getInstance().load(Textures::ID::playStartButtonSelected, "res/UI/playStartButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::oneStarBadgeNormal, "res/UI/oneStarBadge.png");
-	TextureHolder::getInstance().load(Textures::ID::oneStarBadgeBlank, "res/UI/oneStarBadge_b.png");
-	TextureHolder::getInstance().load(Textures::ID::threeStarBadgeNormal, "res/UI/threeStarBadge.png");
-	TextureHolder::getInstance().load(Textures::ID::threeStarBadgeBlank, "res/UI/threeStarBadge_b.png");
+	TextureHolder::getInstance().load(Textures::ID::InstructionButtonNormal, "res/UI/instructionButton.png");
+	TextureHolder::getInstance().load(Textures::ID::InstructionButtonSelected, "res/UI/instructionButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::InstructionButtonPressed, "res/UI/instructionButton_s.png");
 
-	TextureHolder::getInstance().load(Textures::ID::choosePlayerDeco, "res/Background/choosePlayerDeco.png");
-	TextureHolder::getInstance().load(Textures::ID::onePlayerButton, "res/UI/onePlayerButton.png");
-	TextureHolder::getInstance().load(Textures::ID::twoPlayerButton, "res/UI/twoPlayerButton.png");
-	TextureHolder::getInstance().load(Textures::ID::handSprite, "res/UI/handSprite.png");
+	TextureHolder::getInstance().load(Textures::ID::ChooseCharButtonNormal, "res/UI/chooseCharButton.png");
+	TextureHolder::getInstance().load(Textures::ID::ChooseCharButtonSelected, "res/UI/chooseCharButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::ChooseCharButtonPressed, "res/UI/chooseCharButton_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::CharIntro, "res/UI/charIntro.png");
+	TextureHolder::getInstance().load(Textures::ID::CharIntro2, "res/UI/charIntro2.png");
+
+	TextureHolder::getInstance().load(Textures::ID::ChooseModeButtonNormal, "res/UI/chooseModeButton.png");
+	TextureHolder::getInstance().load(Textures::ID::ChooseModeButtonSelected, "res/UI/chooseModeButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::ChooseModeButtonPressed, "res/UI/chooseModeButton_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::PaintButtonNormal, "res/UI/paintButton.png");
+	TextureHolder::getInstance().load(Textures::ID::PaintButtonSelected, "res/UI/paintButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::PaintButtonPressed, "res/UI/paintButton_p.png");
+
+	TextureHolder::getInstance().load(Textures::ID::HandButtonNormal, "res/UI/handButton.png");
+	TextureHolder::getInstance().load(Textures::ID::HandButtonSelected, "res/UI/handButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::HandButtonPressed, "res/UI/handButton_p.png");
+
+	TextureHolder::getInstance().load(Textures::ID::EraseButtonNormal, "res/UI/eraseButton.png");
+	TextureHolder::getInstance().load(Textures::ID::EraseButtonSelected, "res/UI/eraseButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::EraseButtonPressed, "res/UI/eraseButton_p.png");
+
+	TextureHolder::getInstance().load(Textures::ID::RedoButtonNormal, "res/UI/redoButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RedoButtonSelected, "res/UI/redoButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::RedoButtonPressed, "res/UI/redoButton_p.png");
+
+	TextureHolder::getInstance().load(Textures::ID::UndoButtonNormal, "res/UI/undoButton.png");
+	TextureHolder::getInstance().load(Textures::ID::UndoButtonSelected, "res/UI/undoButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::UndoButtonPressed, "res/UI/undoButton_p.png");
+
+	TextureHolder::getInstance().load(Textures::ID::PurpleRectangle, "res/UI/purpleRectangle.png");
+
+	TextureHolder::getInstance().load(Textures::ID::KitchenModeNormal, "res/UI/kitchenMode.png");
+	TextureHolder::getInstance().load(Textures::ID::KitchenModeSelected, "res/UI/kitchenMode_s.png");
+	TextureHolder::getInstance().load(Textures::ID::KitchenModePressed, "res/UI/kitchenMode_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::HallwayModeNormal, "res/UI/hallwayMode.png");
+	TextureHolder::getInstance().load(Textures::ID::HallwayModeSelected, "res/UI/hallwayMode_s.png");
+	TextureHolder::getInstance().load(Textures::ID::HallwayModePressed, "res/UI/hallwayMode_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::GardenModeNormal, "res/UI/gardenMode.png");
+	TextureHolder::getInstance().load(Textures::ID::GardenModeSelected, "res/UI/gardenMode_s.png");
+	TextureHolder::getInstance().load(Textures::ID::GardenModePressed, "res/UI/gardenMode_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::CreativeModeNormal, "res/UI/creativeMode.png");
+	TextureHolder::getInstance().load(Textures::ID::CreativeModeSelected, "res/UI/creativeMode_s.png");
+	TextureHolder::getInstance().load(Textures::ID::CreativeModePressed, "res/UI/creativeMode_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::PlayStartButtonNormal, "res/UI/playStartButton.png");
+	TextureHolder::getInstance().load(Textures::ID::PlayStartButtonSelected, "res/UI/playStartButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::PlayStartButtonPressed, "res/UI/playStartButton_s.png");
+
+
+	TextureHolder::getInstance().load(Textures::ID::OneStarBadgeNormal, "res/UI/oneStarBadge.png");
+	TextureHolder::getInstance().load(Textures::ID::OneStarBadgeBlank, "res/UI/oneStarBadge_b.png");
+	TextureHolder::getInstance().load(Textures::ID::ThreeStarBadgeNormal, "res/UI/threeStarBadge.png");
+	TextureHolder::getInstance().load(Textures::ID::ThreeStarBadgeBlank, "res/UI/threeStarBadge_b.png");
+
+	TextureHolder::getInstance().load(Textures::ID::ChoosePlayerDeco, "res/Background/choosePlayerDeco.png");
+
+	TextureHolder::getInstance().load(Textures::ID::OnePlayerButtonNormal, "res/UI/onePlayerButton.png");
+	TextureHolder::getInstance().load(Textures::ID::OnePlayerButtonSelected, "res/UI/onePlayerButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::OnePlayerButtonPressed, "res/UI/onePlayerButton_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonNormal, "res/UI/twoPlayerButton.png");
+	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonSelected, "res/UI/twoPlayerButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonPressed, "res/UI/twoPlayerButton_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::HandSprite, "res/UI/handSprite.png");
 	
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
@@ -220,7 +295,6 @@ void Game::loadTextures() {
 
 void Game::loadFonts() {
 	FontHolder::getInstance().load(Fonts::Main, "res/Fonts/SuperMario256.ttf");
-
 }
 
 void Game::processInput() {
@@ -268,7 +342,6 @@ void Game::registerStates() {
 	nGameStateStack.registerState<TitleState>(States::ID::Title);
 	nGameStateStack.registerState<GameState>(States::ID::Game);
 	nGameStateStack.registerState<PauseState>(States::ID::Pause);
-	nGameStateStack.registerState<MenuState>(States::ID::Menu);
 	nGameStateStack.registerState<ChooseModeState>(States::ID::ChooseMode);
 	nGameStateStack.registerState<ChoosePlayerState>(States::ID::ChoosePlayer);
 	nGameStateStack.registerState<LoadingState>(States::ID::Loading);	
@@ -276,6 +349,7 @@ void Game::registerStates() {
 	nGameStateStack.registerState<ChooseSlotState>(States::ID::ChooseSlot);
 	nGameStateStack.registerState<InstructionState>(States::ID::Instruction);
 	nGameStateStack.registerState<WinningState>(States::ID::Winning);
+	nGameStateStack.registerState<CreativeState>(States::ID::Creative);
 }
 
 

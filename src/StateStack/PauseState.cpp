@@ -10,13 +10,13 @@
 
 PauseState::PauseState(StateStack& stack, Context context)
 : State(stack, context)
-, rectButton(context, GUI::Button::Type::RectangleButton)
+, rectButton(context, Textures::ID::RectButtonNormal, Textures::ID::RectButtonSelected, Textures::ID::RectButtonPressed)
 , nBar()
 {
     rectButton.setPosition(600.5, 400);
     rectButton.setIsSelected(false);
 
-    auto homeButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::HomeButton);
+    auto homeButton = std::make_shared<GUI::Button>(context, Textures::ID::HomeButtonNormal, Textures::ID::HomeButtonSelected, Textures::ID::HomeButtonPressed);
     homeButton->setPosition(386, 400);
     homeButton->setCallback([this] ()
     {
@@ -24,7 +24,7 @@ PauseState::PauseState(StateStack& stack, Context context)
         requestStackPush(States::Title);
     });
 
-    auto saveButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::SaveButton);
+    auto saveButton = std::make_shared<GUI::Button>(context, Textures::ID::SaveButtonNormal, Textures::ID::SaveButtonSelected, Textures::ID::SaveButtonPressed);
     saveButton->setPosition(600, 400);
     saveButton->setCallback([this] ()
     {
@@ -40,7 +40,7 @@ PauseState::PauseState(StateStack& stack, Context context)
         savefile.close();
     });
 
-    auto startButton = std::make_shared<GUI::Button>(context, GUI::Button::Type::StartButton);
+    auto startButton = std::make_shared<GUI::Button>(context, Textures::ID::StartButtonNormal, Textures::ID::StartButtonSelected, Textures::ID::StartButtonPressed);
     startButton->setPosition(814, 400); 
     startButton->setCallback([this] ()
     {

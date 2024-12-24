@@ -5,6 +5,7 @@
 #include "../World/Animation.hpp"
 #include "../StateStack/StateStack.hpp"
 #include "Component.hpp"
+#include "../Holder/ResourceHolder.hpp"
 
 #include <functional>
 
@@ -14,39 +15,8 @@ namespace GUI{
         typedef std::function<void()> Callback;
 
         public:
-        enum Type{
-            RectangleButton,
-            SquareButton,
-            SlotButton,
-            BackButton,
-            charSlot1,
-            charSlot2,
-            previousButton,
-            nextButton,
-            SaveButton,
-            instructionButton,
-            chooseCharButton,
-            chooseModeButton,
-            playStartButton,
-            kitchenMode,
-            hallwayMode,
-            gardenMode,
-            creativeMode,
-            onePlayerButton,
-            twoPlayerButton,
-            DeleteButton,
-            ResetButton, 
-            StartButton,
-            UpButton, 
-            LeftButton,
-            RightButton,
-            DownButton,
-            AttackButton,
-            DoubleUpButton,
-            HomeButton,
-            LeaderboardButton,
-        };
-        Button(State::Context context, Type type);
+
+        Button(State::Context context, Textures::ID normal, Textures::ID selected, Textures::ID pressed);
 
         void setNormalSprite();
         void setSelectedSprite();
@@ -57,10 +27,6 @@ namespace GUI{
         void setSpriteColor(const sf::Color& color);
         void setSizeText(unsigned int size);
         void setToggle(bool flag);
-
-        Textures::ID getNormalTexture(Type type) const;
-        Textures::ID getSelectedTexture(Type type) const;
-        Textures::ID getPressedTexture(Type type) const;
 
         void setIsSelected(bool flag);
 
@@ -89,7 +55,6 @@ namespace GUI{
         SoundPlayer& nSoundPlayer;
         bool nIsSelected = true;
         bool nIsSelecting = false;
-        Type nType;
         sf::Sprite nSprite;
         Animation nSelectedAni;
         sf::Text nText;
