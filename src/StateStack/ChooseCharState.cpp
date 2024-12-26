@@ -11,7 +11,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , previousButton(context, Textures::ID::PreviousButtonNormal, Textures::ID::PreviousButtonSelected, Textures::ID::PreviousButtonPressed)
 , nextButton(context, Textures::ID::NextButtonNormal, Textures::ID::NextButtonSelected, Textures::ID::NextButtonPressed)
 , saveButton(context, Textures::ID::SaveButtonNormal, Textures::ID::SaveButtonSelected, Textures::ID::SaveButtonPressed)
-, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+, settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
 , chooseModeButton(context, Textures::ID::ChooseModeButtonNormal, Textures::ID::ChooseModeButtonSelected, Textures::ID::ChooseModeButtonPressed)
 , nCharAni1(TextureHolder::getInstance().get(Textures::Dough1))
 , nCharAni2(TextureHolder::getInstance().get(Textures::Dough1))
@@ -101,9 +101,9 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         requestStackPush(States::ChooseMode);
     });
 
-    instructionButton.setPosition({75, 92});
-    instructionButton.setIsSelected(false);
-    instructionButton.setCallback([this] ()
+    settingButton.setPosition({75, 92});
+    settingButton.setIsSelected(false);
+    settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
     });
@@ -139,7 +139,7 @@ void ChooseCharState::draw()
 
     window.draw(nCharIntro);
     window.draw(saveButton);
-    window.draw(instructionButton);
+    window.draw(settingButton);
     window.draw(chooseModeButton);
 }
 
@@ -154,9 +154,9 @@ bool ChooseCharState::update(sf::Time dt)
         saveButton.setSelectedSprite();
     else saveButton.setNormalSprite();
 
-    if (instructionButton.isMouseOver(window))
-        instructionButton.setSelectedSprite();
-    else instructionButton.setNormalSprite();
+    if (settingButton.isMouseOver(window))
+        settingButton.setSelectedSprite();
+    else settingButton.setNormalSprite();
 
     if (chooseModeButton.isMouseOver(window))
         chooseModeButton.setSelectedSprite();
@@ -180,7 +180,7 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     previousButton.handleEvent(event);
     nextButton.handleEvent(event);
     saveButton.handleEvent(event);
-    instructionButton.handleEvent(event);
+    settingButton.handleEvent(event);
     chooseModeButton.handleEvent(event);
     return false;
 }

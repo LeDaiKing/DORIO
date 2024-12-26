@@ -25,7 +25,7 @@ class ChooseModeState : public State{
         GUI::Container nGUIContainer;
         GUI::Button backButton;
         // GUI::Button playStartButton;
-        GUI::Button instructionButton;
+        GUI::Button settingButton;
         GUI::Button chooseCharButton;
         std::vector<sf::Sprite> kitchenModeBadge;
         std::vector<sf::Sprite> hallwayModeBadge;

@@ -16,6 +16,7 @@ class MusicPlayer : private sf::NonCopyable
 
         void setPaused(bool isPaused);
         void setVolume(float volume);
+        float getVolume() const;
 
     private:
         sf::Music mMusic;

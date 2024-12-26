@@ -15,6 +15,9 @@ class SoundPlayer : private sf::NonCopyable
         ~SoundPlayer() = default;
         void play(SoundEffect::ID effect);
         void removeStoppedSounds();
+        void setVolume(float volume);
+        float getVolume() const;
     private:
         std::list<sf::Sound> mSounds;
+        float nVolume;
 };

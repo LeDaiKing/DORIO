@@ -32,3 +32,12 @@ void MusicPlayer::setPaused(bool isPaused)
     if (isPaused) mMusic.pause();
     else mMusic.play();
 }
+
+void MusicPlayer::setVolume(float volume) {
+    mVolume = volume;
+    mMusic.setVolume(volume);
+}
+
+float MusicPlayer::getVolume() const {
+    return mVolume;
+}

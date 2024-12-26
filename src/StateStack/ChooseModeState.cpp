@@ -10,7 +10,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , nGUIContainer()
 , backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
 // , playStartButton(context, ButtonTextures::ID::playStartButton)
-, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+, settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
 , chooseCharButton(context, Textures::ID::ChooseCharButtonNormal, Textures::ID::ChooseCharButtonSelected, Textures::ID::ChooseCharButtonPressed)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
@@ -92,9 +92,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     //     requestStackPush(States::Loading);
     // });
 
-    instructionButton.setPosition({75, 92});
-    instructionButton.setIsSelected(false);
-    instructionButton.setCallback([this] ()
+    settingButton.setPosition({75, 92});
+    settingButton.setIsSelected(false);
+    settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
     });
@@ -122,7 +122,7 @@ void ChooseModeState::draw()
     window.draw(nGUIContainer);
     window.draw(backButton);
     // window.draw(playStartButton);
-    window.draw(instructionButton);
+    window.draw(settingButton);
     window.draw(chooseCharButton);
     for (auto& badge : kitchenModeBadge)
         window.draw(badge);
@@ -143,9 +143,9 @@ bool ChooseModeState::update(sf::Time dt)
     //     playStartButton.setSelectedSprite();
     // else playStartButton.setNormalSprite();
 
-    if (instructionButton.isMouseOver(window))
-        instructionButton.setSelectedSprite();
-    else instructionButton.setNormalSprite();
+    if (settingButton.isMouseOver(window))
+        settingButton.setSelectedSprite();
+    else settingButton.setNormalSprite();
 
     if (chooseCharButton.isMouseOver(window))
         chooseCharButton.setSelectedSprite();
@@ -158,7 +158,7 @@ bool ChooseModeState::handleEvent(const sf::Event& event)
     nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
     // playStartButton.handleEvent(event);
-    instructionButton.handleEvent(event);
+    settingButton.handleEvent(event);
     chooseCharButton.handleEvent(event);
     return false;
 }

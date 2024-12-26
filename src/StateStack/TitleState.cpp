@@ -21,6 +21,8 @@ TitleState::TitleState(StateStack& stack, Context context)
     centerOrigin(this->nameTitle);
     this->nameTitle.setPosition(context.window->getView().getSize().x / 2.f, context.window->getView().getSize().y / 4.f);
     context.music->play(Music::ID::BackgroundTheme);
+    context.music->setVolume(2.0f / 3.0f * 100);
+    context.sounds->setVolume(2.0f / 3.0f * 100);
 }   
 
 void TitleState::draw() {

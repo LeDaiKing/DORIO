@@ -10,7 +10,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 , handSprite()
 , choosePlayerDeco()
 , backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
-, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+, settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
 // , onePlayerButton(context, ButtonTextures::ID::onePlayerButton)
 // , twoPlayerButton(context, ButtonTextures::ID::twoPlayerButton)
 , drawHand(false)
@@ -45,9 +45,9 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
         requestStackPush(States::ChooseSlot);
     });  
 
-    instructionButton.setPosition({75, 92});
-    instructionButton.setIsSelected(false);
-    instructionButton.setCallback([this] ()
+    settingButton.setPosition({75, 92});
+    settingButton.setIsSelected(false);
+    settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
     });
@@ -63,7 +63,7 @@ void ChoosePlayerState::draw()
     window.draw(nBackgroundSprite);
     window.draw(choosePlayerDeco);
     window.draw(backButton);
-    window.draw(instructionButton);
+    window.draw(settingButton);
     window.draw(nGUIContainer);
     // window.draw(onePlayerButton);
     // window.draw(twoPlayerButton);
@@ -77,9 +77,9 @@ bool ChoosePlayerState::update(sf::Time dt)
     if (backButton.isMouseOver(window))
         backButton.setSelectedSprite();
     else backButton.setNormalSprite();
-    if (instructionButton.isMouseOver(window))
-        instructionButton.setSelectedSprite();
-    else instructionButton.setNormalSprite();
+    if (settingButton.isMouseOver(window))
+        settingButton.setSelectedSprite();
+    else settingButton.setNormalSprite();
     int index = nGUIContainer.getSelectedIndex();
     auto selected = nGUIContainer.getSelectedChild();
     drawHand = true;
@@ -107,7 +107,7 @@ bool ChoosePlayerState::update(sf::Time dt)
 bool ChoosePlayerState::handleEvent(const sf::Event& event)
 {
     backButton.handleEvent(event);
-    instructionButton.handleEvent(event);
+    settingButton.handleEvent(event);
     nGUIContainer.handleEvent(event);
     // onePlayerButton.handleEvent(event);
     // twoPlayerButton.handleEvent(event);

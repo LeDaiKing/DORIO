@@ -27,7 +27,7 @@ class ChooseCharState : public State{
         GUI::Button previousButton;
         GUI::Button nextButton;
         GUI::Button saveButton;
-        GUI::Button instructionButton;
+        GUI::Button settingButton;
         GUI::Button chooseModeButton;
         int selectedChar = 1;
 };

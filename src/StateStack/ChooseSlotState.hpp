@@ -26,7 +26,7 @@ class ChooseSlotState : public State{
         GUI::Container nGUIContainerSlot;
         GUI::Container nGUIContainerConfirm;
         GUI::Button backButton;
-        GUI::Button instructionButton;
+        GUI::Button settingButton;
         // GUI::Button startButton;
         // GUI::Button deleteButton;
         // GUI::Button resetButton;

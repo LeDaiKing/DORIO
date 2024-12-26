@@ -10,7 +10,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
 , nGUIContainerSlot()
 , nGUIContainerConfirm()
 , backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
-, instructionButton(context, Textures::ID::InstructionButtonNormal, Textures::ID::InstructionButtonSelected, Textures::ID::InstructionButtonPressed)
+, settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     
@@ -46,9 +46,9 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         requestStackPush(States::Title);
     });
 
-    instructionButton.setPosition({75, 92});
-    instructionButton.setIsSelected(false);
-    instructionButton.setCallback([this] ()
+    settingButton.setPosition({75, 92});
+    settingButton.setIsSelected(false);
+    settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
     });
@@ -100,7 +100,7 @@ void ChooseSlotState::draw()
     window.draw(nBackgroundSprite);
     window.draw(nGUIContainerSlot);
     window.draw(backButton);
-    window.draw(instructionButton);
+    window.draw(settingButton);
     if (nSelectedSlot != -1)
         window.draw(nGUIContainerConfirm);
 }
@@ -111,9 +111,9 @@ bool ChooseSlotState::update(sf::Time dt)
     if (backButton.isMouseOver(window))
         backButton.setSelectedSprite();
     else backButton.setNormalSprite();
-    if (instructionButton.isMouseOver(window))
-        instructionButton.setSelectedSprite();
-    else instructionButton.setNormalSprite();
+    if (settingButton.isMouseOver(window))
+        settingButton.setSelectedSprite();
+    else settingButton.setNormalSprite();
     return true;
 }
 
@@ -126,6 +126,6 @@ bool ChooseSlotState::handleEvent(const sf::Event& event)
         nGUIContainerSlot.handleEvent(event);
     }
     backButton.handleEvent(event);
-    instructionButton.handleEvent(event);
+    settingButton.handleEvent(event);
     return false;
 }

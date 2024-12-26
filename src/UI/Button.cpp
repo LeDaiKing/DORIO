@@ -114,7 +114,8 @@ namespace GUI{
     }
 
     bool Button::contains(const sf::Vector2f& point) const {
-        return getTransform().transformRect(nSprite.getGlobalBounds()).contains(point);
+        sf::Transform transform = getTransform();
+        return nSprite.getGlobalBounds().contains(transform.getInverse().transformPoint(point));
     }
 
     void Button::activate() {

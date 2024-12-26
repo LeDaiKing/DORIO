@@ -23,14 +23,11 @@ class InstructionState : public State{
     private:
         int nSelectedSlot = -1;
         sf::Sprite nBackgroundSprite;
-        GUI::Button upButton;
-        GUI::Button leftButton;
-        GUI::Button rightButton;
-        GUI::Button downButton;
-        GUI::Button attackButton;
         GUI::Button backButton;
-        GUI::Button doubleUpButton;
+        GUI::Button instructionButton;
+        GUI::Button musicButton;
         GUI::Container nGUIContainerText;
+        GUI::Container nGUIContainerButton;
         // GUI::Button startButton;
         // GUI::Button deleteButton;
         // GUI::Button resetButton;
