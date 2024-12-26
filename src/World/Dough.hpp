@@ -48,7 +48,6 @@ class Dough : public Entity
 		void addCoins(int coins);
 		int getCoinsCount() const;
 		int getScore() const;
-		int getHitPoints() const;
 		void setCheckPoint(sf::Vector2f checkPoint);
 		void resetCheckPoint();
 		virtual void load(std::ifstream& file);

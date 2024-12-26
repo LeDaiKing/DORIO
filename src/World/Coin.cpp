@@ -14,5 +14,4 @@ void Coin::activate(Entity& player)
     nIsCollected = true;
     Dough& dough = static_cast<Dough&>(player);
     dough.addCoins(1);
-
 }

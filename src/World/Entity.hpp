@@ -57,6 +57,7 @@ class Entity : public SceneNode
 		// virtual sf::FloatRect getHitBox() const;
 		
 		virtual void getDamage(int damage);
+		int getHitPoints() const;
 		// virtual void attack() = 0;
 
 		void updateClosestTopBlock(Block* block);

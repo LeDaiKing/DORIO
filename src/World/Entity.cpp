@@ -324,3 +324,8 @@ void Entity::setDirection(bool type)
 	nDirection = type;
 	nSprite.setFlipped(nDirection);
 }
+
+int Entity::getHitPoints() const
+{
+	return nHitPoints;
+}

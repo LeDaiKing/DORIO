@@ -16,6 +16,7 @@ class Hub
         int preHitPoints;
         int curHitPoints;
         int curCoins;
+        int curScore;
         sf::Time nTime;
         // Dough* nPlayer;
         // sf::Vector2f

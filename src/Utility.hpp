@@ -62,10 +62,13 @@ sf::Vector2f	unitVector(sf::Vector2f vector);
 
 
 // Check Collision
-bool checkCollision(const sf::FloatRect rect1, const sf::FloatRect rect2);
-collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRect rect2);
+bool checkCollision(const sf::FloatRect& rect1, const sf::FloatRect& rect2);
+collision::Side checkCollisionSide(const sf::FloatRect& rect1, const sf::FloatRect& rect2);
 // bool checkCollisionLC(const sf::FloatRect rect1, const sf::FloatRect rect2);
 // bool checkCollisionRC(const sf::FloatRect rect1, const sf::FloatRect rect2);
+
+
+bool checkInRange(const sf::FloatRect& rect1, const sf::Vector2f& range);
 
 // convert json to vector2
 template <typename T>

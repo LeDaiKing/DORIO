@@ -9,6 +9,7 @@
 #include "Enemy.hpp"
 #include "Item.hpp"
 #include "Hub.hpp"
+#include "CheckPoint.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
 
@@ -81,6 +82,8 @@ class World : private sf::NonCopyable
 		sf::Vector2f nSpawnPosition;
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
+		CheckPoint* nCup;
+		
 		Hub nHub;
 		sf::Time nTime;
 

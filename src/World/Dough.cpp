@@ -153,7 +153,7 @@ void Dough::setUpEntity()
 		addAnimationState(State::Walk, 0, 4, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
 		addAnimationState(State::Jump, 32, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
 		addAnimationState(State::DoubleJump, 32, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::Fall, 64, 5, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
+		addAnimationState(State::Fall, 64, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
 		addAnimationState(State::Hit, 128, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
 		break;
 	case Dough2:
@@ -219,6 +219,7 @@ void Dough::jump()
 void Dough::attackEnemy(Enemy& enemy)
 {
 	enemy.getDamage(1);
+	if (enemy.getHitPoints() == 0) nScore += 100;
 }
 
 void Dough::getDamage(int damage)
@@ -463,7 +464,7 @@ void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 	rect.setFillColor(sf::Color(255, 255, 255, 0));
 	rect.setOutlineColor(sf::Color::Red);
 	rect.setOutlineThickness(1.f);
-	target.draw(rect);
+	// target.draw(rect);
 
 	if (nGrowUp == Big)
 	target.draw(nBig, states);
@@ -498,6 +499,7 @@ void Dough::addHitPoints(int points)
 void Dough::addCoins(int coins)
 {
 	nCoinsCount += coins;
+	nScore += 10;
 }
 int Dough::getCoinsCount() const
 {
@@ -508,10 +510,6 @@ int Dough::getScore() const {
 	return nScore;
 }
 
-int Dough::getHitPoints() const
-{
-	return nHitPoints;
-}
 
 void Dough::preFire()
 {

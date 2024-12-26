@@ -1,9 +1,11 @@
 #include "SceneNode.hpp"
 #include "../Command/Command.hpp"
-
+#include "Utility.hpp"
 
 #include <algorithm>
 #include <cassert>
+
+sf::Vector2f SceneNode::nRange = sf::Vector2f(0, 0);
 
 SceneNode::SceneNode(unsigned int category)
 : nChildren()
@@ -44,7 +46,10 @@ void SceneNode::updateCurrent(sf::Time, CommandQueue&)
 void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands)
 {
 	for(Ptr& child : nChildren)
+	{
+		if (!checkInRange(child->getBoundingRect(), nRange)) continue;
 		child->update(dt, commands);
+	}
 }
 
 void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -65,7 +70,10 @@ void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const
 void SceneNode::drawChildren(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for(const Ptr& child : nChildren)
+	{
+		if (!checkInRange(child->getBoundingRect(), nRange)) continue;
 		child->draw(target, states);
+	}
 }
 
 sf::Vector2f SceneNode::getWorldPosition() const
@@ -86,6 +94,7 @@ sf::Transform SceneNode::getWorldTransform() const
 void SceneNode::onCommand(const Command& command, sf::Time dt)
 {
 	// Command current node, if category matches
+	
 	if (command.category & getCategory())
 		command.action(*this, dt);
 	// else if (command.category != Category::Scene)
@@ -93,7 +102,10 @@ void SceneNode::onCommand(const Command& command, sf::Time dt)
 
 	// Command children
 	for(Ptr& child : nChildren)
+	{
+		if (!checkInRange(child->getBoundingRect(), nRange)) continue;
 		child->onCommand(command, dt);
+	}
 }
 
 unsigned int SceneNode::getCategory() const
@@ -129,4 +141,9 @@ void SceneNode::save(std::ofstream& file)
 void SceneNode::load(std::ifstream& file)
 {
 	//somthing
+}
+
+void SceneNode::setRange(float centerPoint)
+{
+	nRange = sf::Vector2f(centerPoint - 700, centerPoint + 700);
 }

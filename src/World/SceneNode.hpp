@@ -44,6 +44,8 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 
 		std::vector<Ptr>& getChildren();
 
+		static void setRange(float centerPoint);
+
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 		void updateChildren(sf::Time dt, CommandQueue& commands);
@@ -55,6 +57,7 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 
 	private:
 		std::vector<Ptr> nChildren;
+		static sf::Vector2f nRange;
 	protected:
 		SceneNode* nParent;
 		unsigned int nDefaultCategory;

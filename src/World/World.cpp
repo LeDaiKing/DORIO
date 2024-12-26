@@ -49,7 +49,7 @@ World::World(sf::RenderWindow& window)
 
 void World::update(sf::Time dt)
 {
-
+	nSceneGraph.setRange(nWorldView.getCenter().x);
 	nTime -= dt;
 	applyNormal();
 	applyGravity();
@@ -250,6 +250,13 @@ void World::loadMap(std::string level)
 			std::unique_ptr<CheckPoint> checkpoint(new CheckPoint(CheckPoint::Checkpoint, sf::Vector2f(x + 32, y)));
 			nSceneLayers[Checkpoints]->attachChild(std::move(checkpoint));
 		}
+		else if (color.toInteger() == 0x4B5908FF)
+		{
+			std::cout << "Cup here: " << x << " " << y << std::endl;
+			std::unique_ptr<CheckPoint> checkpoint(new CheckPoint(CheckPoint::End, sf::Vector2f(x + 32, y)));
+			nCup = checkpoint.get();
+			nSceneLayers[Checkpoints]->attachChild(std::move(checkpoint));
+		}
 	}
 
 	nSpawnPosition = toVector2<float>(config["StartPoint"]);
@@ -261,13 +268,43 @@ void World::loadMap(std::string level)
 
 	//Enemy
 	std::string enemySpawn = "EnemySpawn" + level;
-	std::cout << enemySpawn << std::endl;
+	// std::cout << enemySpawn << std::endl;
 	nlohmann::json enemyConfig = ConfigLoader::getInstance().getConfig(enemySpawn.c_str());
 
 	for (auto& cockroach : enemyConfig["CockRoach"])
 	{
 		std::unique_ptr<CockRoach> enemy(new CockRoach(Enemy::CockRoach, toVector2<float>(cockroach["Position"])));
 		for (auto& ai : cockroach["AI"])
+		{
+			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
+		}
+		nSceneLayers[Enemies]->attachChild(std::move(enemy));
+	}
+
+	for (auto& ghost : enemyConfig["Ghost"])
+	{
+		std::unique_ptr<Ghost> enemy(new Ghost(Enemy::Ghost, toVector2<float>(ghost["Position"])));
+		for (auto& ai : ghost["AI"])
+		{
+			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
+		}
+		nSceneLayers[Enemies]->attachChild(std::move(enemy));
+	}
+
+	for (auto& chicken : enemyConfig["Chicken"])
+	{
+		std::unique_ptr<Chicken> enemy(new Chicken(Enemy::Chicken, toVector2<float>(chicken["Position"])));
+		for (auto& ai : chicken["AI"])
+		{
+			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
+		}
+		nSceneLayers[Enemies]->attachChild(std::move(enemy));
+	}
+
+	for (auto& snail : enemyConfig["Snail"])
+	{
+		std::unique_ptr<Snail> enemy(new Snail(Enemy::Snail, toVector2<float>(snail["Position"])));
+		for (auto& ai : snail["AI"])
 		{
 			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
 		}
@@ -302,25 +339,24 @@ void World::loadMap(std::string level)
 }
 
 bool World::isWin() {
-	std::cerr << "Start" << std::endl;
+	if (nCup!= nullptr && !nCup->isCheck()) return false;
 	if (nPlayerDough == nullptr) return false;
 	assert(nPlayerDough != nullptr);
 	std::ofstream file("file/Score/score.txt");
 	// file << nTime.asSeconds() << std::endl;
-	file << 300 << std::endl;
+	file << nTime.asSeconds() << std::endl;
 	// file << nPlayerDough->getHitPoints() << std::endl;
-	file << 100 << std::endl;
+	file << nPlayerDough->getHitPoints() << std::endl;
 	// file << nPlayerDough->getScore() << std::endl;
-	file << 100 << std::endl;
+	file << nPlayerDough->getScore() << std::endl;
 	file << 1 << std::endl; // win game
-	file << 1 << std::endl; // get all coins
+	file << (nPlayerDough->getCoinsCount() > 100) << std::endl; // get all coins
 	file.close();
 	return true;
 }
 
 bool World::isLose() {
-	// return nTime <= sf::Time::Zero || nPlayerDough->getHealth() <= 0;
-	return false;
+	return nTime <= sf::Time::Zero || nPlayerDough->getHitPoints() <= 0;
 }
 
 void World::applyNormal()
@@ -532,6 +568,10 @@ void World::load(std::ifstream& saveFile, int lev)
 		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
 		std::unique_ptr<CheckPoint> checkPoint = std::make_unique<CheckPoint>(static_cast<CheckPoint::Type>(type), position);
 		checkPoint->load(saveFile);
+		if (type == CheckPoint::End)
+		{
+			nCup = checkPoint.get();
+		}
 		nSceneLayers[Checkpoints]->attachChild(std::move(checkPoint));
 	}
 

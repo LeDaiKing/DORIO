@@ -181,12 +181,12 @@ sf::Vector2f unitVector(sf::Vector2f vector)
 	return vector / length(vector);
 }
 
-bool checkCollision(const sf::FloatRect rect1, const sf::FloatRect rect2)
+bool checkCollision(const sf::FloatRect& rect1, const sf::FloatRect& rect2)
 {
 	return (rect1.intersects(rect2));
 }
 
-collision::Side checkCollisionSide(const sf::FloatRect rect1, const sf::FloatRect rect2)
+collision::Side checkCollisionSide(const sf::FloatRect& rect1, const sf::FloatRect& rect2)
 {
 	float leftOverlap = rect1.left + rect1.width - rect2.left;
 	float rightOverlap = rect2.left + rect2.width - rect1.left;
@@ -244,4 +244,11 @@ void clearFolder(const std::string& folderName)
 	{
 		std::filesystem::remove_all(entry.path());
 	}
+}
+
+bool checkInRange(const sf::FloatRect& rect1, const sf::Vector2f& range)
+{
+	if (rect1 == sf::FloatRect())
+		return true;
+	return (rect1.left >= range.x && rect1.left + rect1.width <= range.y);
 }

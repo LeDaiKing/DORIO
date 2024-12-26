@@ -13,6 +13,7 @@ Hub::Hub()
 , nTime(sf::Time::Zero)
 , curHitPoints(0)
 , curCoins(0)
+, curScore(0)
 {
     nCoin.addAnimationState(0, 0, 6, sf::seconds(0.5f), sf::Vector2i(16, 16), true);
     nCoin.setAnimationState(0);
@@ -73,8 +74,7 @@ void Hub::draw(sf::RenderWindow& window)
 
 
     size = 32;
-    int score = curCoins * 100;
-    std::string scoreText = std::to_string(score);
+    std::string scoreText = std::to_string(curScore);
     pos = {960, 29};
     float len = scoreText.size();
     len = len * 8 - (len - 1) * 2;
@@ -93,6 +93,7 @@ void Hub::update(sf::Time dt, Dough& player, sf::Time& gameTime)
         nHeart2.setAnimationState(0);
     }
     preHitPoints = curHitPoints;
+    curScore = player.getScore();
     nHeart2.update(dt);
     nCoin.update(dt);
     nClock.update(dt);

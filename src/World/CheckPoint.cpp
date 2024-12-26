@@ -24,6 +24,7 @@ Textures::ID toTextureID(CheckPoint::Type type)
 CheckPoint::CheckPoint(Type type, sf::Vector2f position)
 : nSprite(TextureHolder::getInstance().get(toTextureID(type)))
 , nType(type)
+, nIsCheck(false)
 {
     nSprite.setPosition(position);
     centerOrigin(nSprite);
@@ -67,6 +68,7 @@ void CheckPoint::updateCurrent(sf::Time dt, CommandQueue& commands)
         {
             if (player.getBoundingRect().intersects(getBoundingRect()))
             {
+                nIsCheck = true;
                 if (nType == End)
                 {
                     //Winning
@@ -108,4 +110,9 @@ void CheckPoint::load(std::ifstream& file)
     int currentAnimation;
     file.read(reinterpret_cast<char*>(&currentAnimation), sizeof(currentAnimation));
     nSprite.setAnimationState(currentAnimation);
+}
+
+bool CheckPoint::isCheck() const
+{
+    return nIsCheck;
 }
