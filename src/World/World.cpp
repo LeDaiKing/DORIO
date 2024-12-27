@@ -328,6 +328,8 @@ void World::loadMap(std::string level)
 	for (auto& slide : config["SlideBlock"])
 	{
 		sf::Vector2f position = toVector2<float>(slide["Position"]);
+		position.x *= 32; position.y *= 32;
+		position.y += 16;
 		std::unique_ptr<SlideBlock> slideBlock(new SlideBlock(Block::SlideBlock, position));
 
 		for (auto& pa : slide["Offset"])
