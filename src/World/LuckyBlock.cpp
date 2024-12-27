@@ -46,6 +46,7 @@ void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
         item.first = nItems.back();
         item.second = ItemFactory::createAppearAnimation(nItems.back());
         nQueueItems.push_back(std::move(item));
+        // int fy = nQueueItems.back().second->getGlobalBounds().height / 2;
         nQueueItems.back().second->setPosition(0, -16);
         nItems.pop_back();
         nIsDropping = false;
@@ -60,15 +61,17 @@ void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
     {
         if ((*it).second->isFinished())
         {
+            int fy = (*it).second->getGlobalBounds().height / 4;
             Command command;
             command.category = Category::ItemScene;
-            command.action = [this, it, &commands] (SceneNode& graph, sf::Time)
+            command.action = [this, it, &commands, fy] (SceneNode& graph, sf::Time)
             {
                 if ((*it).first == Item::Coin)
                 {
                     return;
                 }
-                std::unique_ptr<Item> item = ItemFactory::createItem((*it).first, getWorldPosition() + sf::Vector2f(0.f, -32.f));
+                
+                std::unique_ptr<Item> item = ItemFactory::createItem((*it).first, getWorldPosition() + sf::Vector2f(0.f, - 16 - fy));
                 graph.attachChild(std::move(item));
             };
             commands.push(command);

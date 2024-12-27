@@ -24,18 +24,47 @@ Textures::ID toTextureID(Dough::Type type)
 	return Textures::Dough1;
 }
 
+Textures::ID toTextureBigID(Dough::Type type)
+{
+	switch (type)
+	{
+		case Dough::Dough1:
+			return Textures::BigDough1;
+		case Dough::Dough2:
+			return Textures::BigDough2;
+
+	}
+	return Textures::Dough1;
+}
+
+Textures::ID toTextureFireID(Dough::Type type)
+{
+	switch (type)
+	{
+		case Dough::Dough1:
+			return Textures::FireBigDough1;
+		case Dough::Dough2:
+			return Textures::FireBigDough2;
+
+	}
+	return Textures::Dough1;
+}
+
 Dough::Dough(Type type)
 : nType(type)
 , nGrowUp(Small)
 , Entity(TextureHolder::getInstance().get(toTextureID(type)))
-, nBig(TextureHolder::getInstance().get(Textures::BigDough))
-, nFireBig(TextureHolder::getInstance().get(Textures::FireBigDough))
+, nBig(TextureHolder::getInstance().get(toTextureBigID(type)))
+, nFireBig(TextureHolder::getInstance().get(toTextureFireID(type)))
 , stateJump(0)
 , nCoinsCount(0)
 , nScore(0)
 , nMotionless(false)
 , nPipe(nullptr)
 {
+	centerOrigin(nBig);
+	centerOrigin(nFireBig);
+
 	setUpEntity();
 	setAnimationState(State::Idle);
 }
@@ -146,49 +175,37 @@ void Dough::setUpEntity()
 	nJumpVelocity2 = config["JumpVelocity2"];
 	nHitPoints = config["HitPoints"];
 
-	switch (nType)
-	{
-	case Dough1:
-		addAnimationState(State::Idle, 96, 12, sf::seconds(1.f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Walk, 0, 4, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Jump, 32, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::DoubleJump, 32, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::Fall, 64, 5, sf::seconds(0.4f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::Hit, 128, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
-		break;
-	case Dough2:
-		addAnimationState(State::Idle, 96, 11, sf::seconds(1.f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Walk, 160, 12, sf::seconds(0.6f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Jump, 128, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::DoubleJump, 0, 6, sf::seconds(0.1f), sf::Vector2i(32, 32), true);
-		addAnimationState(State::Fall, 32, 1, sf::seconds(0.6f), sf::Vector2i(32, 32), false);
-		addAnimationState(State::Hit, 64, 7, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
-		break;
-	
-	default:
 
-		break;
-	}
-	centerOrigin(nBig);
+	// dough
+	addAnimationState(State::Idle, 96, 12, sf::seconds(1.f), sf::Vector2i(32, 32), true);
+	addAnimationState(State::Walk, 0, 4, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
+	addAnimationState(State::Jump, 32, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
+	addAnimationState(State::DoubleJump, 32, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
+	addAnimationState(State::Fall, 64, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
+	addAnimationState(State::Hit, 128, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
+
+
+	// Big dough
 	nBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
-	nBig.addAnimationState(State::Walk, 64, 8, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
-	nBig.addAnimationState(State::Jump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
+	nBig.addAnimationState(State::Walk, 128, 4, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
+	nBig.addAnimationState(State::Jump, 64, 8, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
 	nBig.addAnimationState(State::DoubleJump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
-	// nBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nBig.addAnimationState(State::Fall, 192, 5, sf::seconds(0.5f), sf::Vector2i(32, 64), false);
-	nBig.addAnimationState(State::Appear, 256, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
+	nBig.addAnimationState(State::Appear, 320, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
 	nBig.addAnimationState(State::Disappear, 256, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);	
+	nBig.addAnimationState(State::Sit, 384, 1, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
 
-	centerOrigin(nFireBig);
+
+	// FireBig dough
 	nFireBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
 	nFireBig.addAnimationState(State::Walk, 64, 6, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nFireBig.addAnimationState(State::Jump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
 	nFireBig.addAnimationState(State::DoubleJump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
-	// nFireBig.addAnimationState(State::Sit, 180, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nFireBig.addAnimationState(State::Fall, 192, 1, sf::seconds(0.5f), sf::Vector2i(32, 64), false);	
 	nFireBig.addAnimationState(State::Fire, 256, 6, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
-	nFireBig.addAnimationState(State::Appear, 320, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
+	nFireBig.addAnimationState(State::Appear, 384, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
 	nFireBig.addAnimationState(State::Disappear, 320, 8, sf::seconds(0.7f), sf::Vector2i(32, 64), false);
+	nFireBig.addAnimationState(State::Sit, 448, 1, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
 }
 
 void Dough::jump()
@@ -438,8 +455,8 @@ void Dough::growUPBig()
 	addHitPoints(1);
 	if (nGrowUp == Big || nGrowUp == FireBig) return;
 	nGrowUp = Big;
-	nCurrentState = State::Idle;
-	nBig.setAnimationState(State::Idle);
+	nCurrentState = State::Appear;
+	nBig.setAnimationState(State::Appear);
 }
 
 void Dough::growUPFireBig()
@@ -481,7 +498,7 @@ void Dough::fire(CommandQueue& commands)
 	fire.action = [this] (SceneNode& node, sf::Time dt)
 	{
 		std::unique_ptr<Projectile> fireBall(new Projectile(Item::FireBall, getPosition() - sf::Vector2f(0.f, 10.f)));
-		if (nFireBig.getCurrentAnimationID() == State::Sit) fireBall->move(0.f, 20.f);
+		if (nFireBig.getCurrentAnimationID() == State::Sit) fireBall->move(0.f, 10.f);
 		fireBall->setTargetCategory(Category::Enemy);
 		fireBall->setSpeed(312.f);
 		if (nDirection) fireBall->setTargetDirection(sf::Vector2f(-1.f, 0.f));

@@ -27,7 +27,9 @@ void JumpyBlock::handleTopCollision(Entity& entity)
     {
         entity.setVelocity(entity.getVelocity().x, 0.f);
     }
+    entity.jump();
     entity.addVelocity(0.f, -nJumpForce);
+
     if (entity.getCategory() & Category::PlayerDough)
     {
         Dough& dough = static_cast<Dough&>(entity);

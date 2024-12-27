@@ -5,7 +5,7 @@
 FireBigItem::FireBigItem(Type type, sf::Vector2f position)
 : Item(type, position)
 {
-    nAnimation.addAnimationState(0, 0, 1, sf::seconds(0.5f), sf::Vector2i(32, 32), true);
+    nAnimation.addAnimationState(0, 0, 14, sf::seconds(0.7f), sf::Vector2i(16, 51), true);
     nAnimation.setAnimationState(0);
 }
 

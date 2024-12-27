@@ -317,11 +317,26 @@ void World::loadMap(std::string level)
 	}
 	
 	// Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nPlayerDough->setCheckPoint(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
+
+	// Slide
+
+	for (auto& slide : config["SlideBlock"])
+	{
+		sf::Vector2f position = toVector2<float>(slide["Position"]);
+		std::unique_ptr<SlideBlock> slideBlock(new SlideBlock(Block::SlideBlock, position));
+
+		for (auto& pa : slide["Offset"])
+		{
+			slideBlock->addPath(toVector2<float>(pa));
+		}
+
+		nSceneLayers[Map]->attachChild(std::move(slideBlock));
+	}
 
 	// Pipes
 	for (auto& pipe : config["Pipes"])

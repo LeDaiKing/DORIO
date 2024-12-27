@@ -167,11 +167,14 @@ namespace Textures
 
 		PurpleRectangle,
 		VolumeBlock,
+		
 		// Dough
 		Dough1,
 		Dough2,
-		BigDough,
-		FireBigDough,
+		BigDough1,
+		BigDough2,
+		FireBigDough1,
+		FireBigDough2,
 
 		Ghost,
 		Chicken,

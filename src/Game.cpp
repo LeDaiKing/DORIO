@@ -252,9 +252,11 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::HandSprite, "res/UI/handSprite.png");
 	
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
-	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/tile001.png");
-	TextureHolder::getInstance().load(Textures::BigDough, "res/Dough/big_dough.png");
-	TextureHolder::getInstance().load(Textures::FireBigDough, "res/Dough/fire_dough.png");
+	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/dough1.png");
+	TextureHolder::getInstance().load(Textures::BigDough1, "res/Dough/big_dough.png");
+	TextureHolder::getInstance().load(Textures::BigDough2, "res/Dough/big_dough1.png");
+	TextureHolder::getInstance().load(Textures::FireBigDough1, "res/Dough/fire_dough.png");
+	TextureHolder::getInstance().load(Textures::FireBigDough2, "res/Dough/fire_dough1.png");
 
 	//Enemy
 	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
@@ -293,12 +295,16 @@ void Game::loadTextures() {
 	//Item
 	TextureHolder::getInstance().load(Textures::Coin, "res/Item/Coin.png");
 	TextureHolder::getInstance().load(Textures::CoinAnimation, "res/Item/CoinAnimation.png");
-	TextureHolder::getInstance().load(Textures::Heart, "res/Item/Heart.png");
-	TextureHolder::getInstance().load(Textures::HeartAnimation, "res/Item/StarAnimation.png");
+	TextureHolder::getInstance().load(Textures::Heart, "res/Item/life.png");
+	TextureHolder::getInstance().load(Textures::HeartAnimation, "res/Item/lifeAni.png");
 	TextureHolder::getInstance().load(Textures::FireBall, "res/Item/Fireball.png");
-	TextureHolder::getInstance().load(Textures::HeartIcon, "res/Hub/HeartIcon.png");
+	TextureHolder::getInstance().load(Textures::BigItem, "res/Item/big_potion.png");
+	TextureHolder::getInstance().load(Textures::BigItemAnimation, "res/Item/BigPotionAni.png");
+	TextureHolder::getInstance().load(Textures::FireBigItem, "res/Item/fire_potion.png");
+	TextureHolder::getInstance().load(Textures::FireBigItemAnimation, "res/Item/FirePotionAni.png");
 
 	//Hub
+	TextureHolder::getInstance().load(Textures::HeartIcon, "res/Hub/HeartIcon.png");
 	TextureHolder::getInstance().load(Textures::CoinIcon, "res/Hub/CoinIcon.png");
 	TextureHolder::getInstance().load(Textures::ClockIcon, "res/Hub/ClockIcon.png");
 	TextureHolder::getInstance().load(Textures::WhiteText, "res/Text/WhiteText.png");

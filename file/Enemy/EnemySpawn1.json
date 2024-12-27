@@ -62,22 +62,16 @@
     ],
     "Snail": [
       {
-        "Position": [1760, 256]
+        "Position": [4672, 480]
       },
       {
-        "Position": [2080, 192]
+        "Position": [5184, 480]
       },
       {
-        "Position": [3520, 416]
+        "Position": [6144, 128]
       },
       {
-        "Position": [4064, 352]
-      },
-      {
-        "Position": [4480, 448]
-      },
-      {
-        "Position": [7392, 352]
+        "Position": [6720, 480]
       }
     ]
   }

@@ -5,6 +5,34 @@
         "Background": 0,
         "Time": 300,
         "StartPoint": [96, 480],
+
+        "SlideBlock":
+        [
+            {
+                "Position": [1680, 256],
+                "Offset":
+                [
+                    [288, 0]
+                ]
+            },
+            {
+                "Position": [1968, 192],
+                "Offset":
+                [
+                    [224, 0]
+                ]
+            },
+            {
+                "Position": [3376, 416],
+                "Offset":
+                [
+                    [224, 0]
+                ]
+            }
+            
+        ],
+        
+
         "Pipes": 
         [
             [7552, 416, 2],

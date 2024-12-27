@@ -47,7 +47,7 @@ void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands)
 {
 	for(Ptr& child : nChildren)
 	{
-		if (!checkInRange(child->getBoundingRect(), nRange)) continue;
+		if (!checkInRange(child->getBoundingRect(), nRange) && getCategory() != Category::Item) continue;
 		child->update(dt, commands);
 	}
 }
@@ -103,7 +103,7 @@ void SceneNode::onCommand(const Command& command, sf::Time dt)
 	// Command children
 	for(Ptr& child : nChildren)
 	{
-		if (!checkInRange(child->getBoundingRect(), nRange)) continue;
+		if (!checkInRange(child->getBoundingRect(), nRange) && getCategory() != Category::Item) continue;
 		child->onCommand(command, dt);
 	}
 }

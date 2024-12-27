@@ -201,7 +201,7 @@ void Entity::jump()
 		setAnimationState(State::Jump);
 
 	nOnGround = false;
-	setVelocity(nVelocity.x, -nJumpVelocity);
+	addVelocity(nVelocity.x, -nJumpVelocity);
 }
 
 void Entity::addAnimationState(State state, std::size_t row, std::size_t numFrames, sf::Time duration, sf::Vector2i frameSize, bool repeat)

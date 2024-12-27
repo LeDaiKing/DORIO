@@ -36,7 +36,17 @@ std::unique_ptr<Animation> ItemFactory::createAppearAnimation(Item::Type type)
             return animation;
         case Item::Heart:
             animation = std::make_unique<Animation>(TextureHolder::getInstance().get(Textures::HeartAnimation));
-            animation->addAnimationState(0, 0, 4, sf::seconds(0.6), sf::Vector2i(25, 64), false);
+            animation->addAnimationState(0, 0, 4, sf::seconds(0.6), sf::Vector2i(15, 60), false);
+            animation->setAnimationState(0);
+            return animation;
+        case Item::Big:
+            animation = std::make_unique<Animation>(TextureHolder::getInstance().get(Textures::BigItemAnimation));
+            animation->addAnimationState(0, 0, 4, sf::seconds(0.6), sf::Vector2i(24, 78), false);
+            animation->setAnimationState(0);
+            return animation;
+        case Item::FireBig:
+            animation = std::make_unique<Animation>(TextureHolder::getInstance().get(Textures::FireBigItemAnimation));
+            animation->addAnimationState(0, 0, 4, sf::seconds(0.6), sf::Vector2i(16, 101), false);
             animation->setAnimationState(0);
             return animation;
         default:
