@@ -39,6 +39,8 @@ Textures::ID toTextureID(Block::Type type)
             return Textures::JumpyBlock;
         case Block::SewerPipe:
             return Textures::SewerPipe;
+        case Block::Gold:
+            return Textures::Gold;
     }
     return Textures::Floor1;
 }

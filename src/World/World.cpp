@@ -208,6 +208,11 @@ void World::loadMap(std::string level)
 			std::unique_ptr<Block> block = BlockFactory::createBlock("Floor" + level, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
+		else if (color.toInteger() == 0xE2CB36FF)
+		{
+			std::unique_ptr<Block> block = BlockFactory::createBlock("Gold", sf::Vector2f(x + 16, y + 16));
+			nSceneLayers[Map]->attachChild(std::move(block));
+		}
 		else if (color.toInteger() == 0xB2B2FF)
 		{
 			std::unique_ptr<Block> block = BlockFactory::createBlock("UnderFloor" + level, sf::Vector2f(x + 16, y + 16));

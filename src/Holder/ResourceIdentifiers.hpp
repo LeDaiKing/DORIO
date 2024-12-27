@@ -198,6 +198,7 @@ namespace Textures
 		StaticLuckyBlock2,
 		JumpyBlock,
 		SlideBlock,
+		Gold,
 
 		//Pipe
 		SewerPipe,

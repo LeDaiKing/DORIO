@@ -20,6 +20,7 @@ class Block : public SpriteNode
             StaticBlock1,
             Breakable1,
             LuckyBlock1,
+            Gold,
 
             Floor2,
             UnderFloor2,

@@ -9,6 +9,8 @@ std::unique_ptr<Block> BlockFactory::createBlock(const std::string& type, sf::Ve
 {
     if (type == "Floor1")
         return std::make_unique<StaticBlock>(Block::Type::Floor1, position);
+    else if (type == "Gold")
+        return std::make_unique<StaticBlock>(Block::Type::Gold, position);
     else if (type == "UnderFloor1")
         return std::make_unique<StaticBlock>(Block::Type::UnderFloor1, position);
     else if (type == "StaticBlock1")
@@ -41,6 +43,8 @@ std::unique_ptr<Block> BlockFactory::createBlock(Block::Type type, sf::Vector2f 
     {
     case Block::Type::Floor1:
         return std::make_unique<StaticBlock>(Block::Type::Floor1, position);
+    case Block::Type::Gold:
+        return std::make_unique<StaticBlock>(Block::Type::Gold, position);
     case Block::Type::UnderFloor1:
         return std::make_unique<StaticBlock>(Block::Type::UnderFloor1, position);
     case Block::Type::StaticBlock1:

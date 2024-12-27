@@ -273,6 +273,7 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::BreakAnimation1, "res/Background/Breakable/BreakAnimation1.png");
 	TextureHolder::getInstance().load(Textures::LuckyBlock1, "res/Background/LuckyBlock/Unbox1.png");
 	TextureHolder::getInstance().load(Textures::StaticLuckyBlock1, "res/Background/LuckyBlock/Empty1.png");
+	TextureHolder::getInstance().load(Textures::Gold, "res/Background/Block/Gold.png");
 
 	TextureHolder::getInstance().load(Textures::Floor2, "res/Background/Block/Floor2.png");
 	TextureHolder::getInstance().load(Textures::UnderFloor2, "res/Background/Block/UnderFloor2.png");
