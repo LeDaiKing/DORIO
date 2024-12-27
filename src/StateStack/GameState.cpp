@@ -42,6 +42,12 @@ bool GameState::update(sf::Time dt)
         requestStackPush(States::ID::Transition);
         return true;
     }
+    if (nWorld.isLose())
+    {
+        requestStackPop();
+        requestStackPush(States::ID::Losing);
+        return true;
+    }
     nWorld.update(dt);
 
     CommandQueue& commands = nWorld.getCommandQueue();
@@ -57,6 +63,12 @@ bool GameState::handleEvent(const sf::Event& event)
         requestStackPop();
         requestStackPush(States::ID::Winning);
         requestStackPush(States::ID::Transition);
+        return true;
+    }
+    if (nWorld.isLose())
+    {
+        requestStackPop();
+        requestStackPush(States::ID::Losing);
         return true;
     }
     CommandQueue& commands = nWorld.getCommandQueue();

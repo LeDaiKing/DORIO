@@ -14,6 +14,7 @@
 #include "StateStack/CreativeState.hpp"
 #include "StateStack/MusicState.hpp"
 #include "StateStack/TransitionState.hpp"
+#include "StateStack/LosingState.hpp"
 
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
@@ -79,6 +80,7 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::ChooseCharScreen, "res/Background/ChooseCharScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/scoreboard.png");
+	TextureHolder::getInstance().load(Textures::ID::LosingScreen, "res/Background/losingScreen.png");
 
 	//Button
 	TextureHolder::getInstance().load(Textures::ID::SlotButtonNormal, "res/UI/slotButton.png");
@@ -250,6 +252,10 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonSelected, "res/UI/twoPlayerButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonPressed, "res/UI/twoPlayerButton_s.png");
 
+	TextureHolder::getInstance().load(Textures::ID::RetryButtonNormal, "res/UI/retryButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RetryButtonSelected, "res/UI/retryButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::RetryButtonPressed, "res/UI/retryButton_s.png");
+
 	TextureHolder::getInstance().load(Textures::ID::HandSprite, "res/UI/handSprite.png");
 	TextureHolder::getInstance().load(Textures::ID::TextBox, "res/UI/textBox.png");
 	
@@ -377,6 +383,7 @@ void Game::registerStates() {
 	nGameStateStack.registerState<CreativeState>(States::ID::Creative);
 	nGameStateStack.registerState<MusicState>(States::ID::Music);
 	nGameStateStack.registerState<TransitionState>(States::ID::Transition);
+	nGameStateStack.registerState<LosingState>(States::ID::Losing);
 }
 
 

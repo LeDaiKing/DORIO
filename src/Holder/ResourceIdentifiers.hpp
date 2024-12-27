@@ -34,6 +34,7 @@ namespace Textures
 		LeaderboardScreen,
 		TitleScreen,
 		ChooseModeScreen,
+		LosingScreen,
 		
 		// Button
 		RectButtonNormal,
@@ -165,6 +166,9 @@ namespace Textures
 		VolumeDecreaseButtonSelected,
 		VolumeDecreaseButtonPressed,
 		TextBox,
+		RetryButtonNormal,
+		RetryButtonSelected,
+		RetryButtonPressed,
 
 		PurpleRectangle,
 		VolumeBlock,
