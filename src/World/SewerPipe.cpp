@@ -4,7 +4,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include "World.hpp"
 #include <iostream> 
-SewerPipe::SewerPipe(Type type, sf::Vector2f position, int height)
+SewerPipe::SewerPipe(Type type, sf::Vector2f position, int height, bool invert)
 : StaticBlock(type, position)
 , nPipe(TextureHolder::getInstance().get(Textures::Pipe))
 , nHeight(height)
@@ -13,8 +13,13 @@ SewerPipe::SewerPipe(Type type, sf::Vector2f position, int height)
 , nPlayerIn(nullptr)
 , nPlayerOut(nullptr)
 , nSpeedGetIn(32.f)
+, nInvert(invert)
 {
     centerOrigin(nPipe);
+    if (nInvert)
+    {
+        setRotation(180.f);
+    }
     // nPipe.setPosition(position.x, position.y + 32);
 }
 
@@ -45,6 +50,8 @@ sf::FloatRect SewerPipe::getBoundingRect() const
 {
     sf::FloatRect bound = StaticBlock::getBoundingRect();
     bound.height += (nHeight - 1) * 32;
+    if (nInvert)
+    bound.top -= (nHeight - 1) * 32;
     return bound;
 }
 
@@ -80,21 +87,45 @@ void SewerPipe::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     if (nPlayerIn != nullptr)
     {
-        nPlayerIn->move(0.f, nSpeedGetIn * dt.asSeconds());
-        if (getBoundingRect().top < nPlayerIn->getBoundingRect().top)
+        if (!nInvert)
         {
-            nOutPipe->outPlayer(nPlayerIn);
-            nPlayerIn = nullptr;
+            nPlayerIn->move(0.f, nSpeedGetIn * dt.asSeconds());
+            if (getBoundingRect().top < nPlayerIn->getBoundingRect().top)
+            {
+                nOutPipe->outPlayer(nPlayerIn);
+                nPlayerIn = nullptr;
+            }
+        }
+        else 
+        {
+            nPlayerIn->move(0.f, -nSpeedGetIn * dt.asSeconds());
+            if (getBoundingRect().top + getBoundingRect().height > nPlayerIn->getBoundingRect().top + nPlayerIn->getBoundingRect().height)
+            {
+                nOutPipe->outPlayer(nPlayerIn);
+                nPlayerIn = nullptr;
+            }
         }
     }
     if (nPlayerOut != nullptr)
     {
-        nPlayerOut->move(0.f, -nSpeedGetIn * dt.asSeconds());
-        // nPlayerOut->accelerate(0.f, -World::getGravity());
-        if (getBoundingRect().top > nPlayerOut->getBoundingRect().top + nPlayerOut->getBoundingRect().height + 5)
+        if (!nInvert)
         {
-            nPlayerOut->setMotionless(false);
-            nPlayerOut = nullptr;
+            nPlayerOut->move(0.f, -nSpeedGetIn * dt.asSeconds());
+            // nPlayerOut->accelerate(0.f, -World::getGravity());
+            if (getBoundingRect().top > nPlayerOut->getBoundingRect().top + nPlayerOut->getBoundingRect().height)
+            {
+                nPlayerOut->setMotionless(false);
+                nPlayerOut = nullptr;
+            }
+        }
+        else
+        {
+            nPlayerOut->move(0.f, nSpeedGetIn * dt.asSeconds());
+            if (getBoundingRect().top + getBoundingRect().height < nPlayerOut->getBoundingRect().top)
+            {
+                nPlayerOut->setMotionless(false);
+                nPlayerOut = nullptr;
+            }
         }
     }
     StaticBlock::updateCurrent(dt, commands);
@@ -116,4 +147,10 @@ void SewerPipe::save(std::ofstream& file)
 {
     StaticBlock::save(file);
     file.write(reinterpret_cast<const char*>(&nHeight), sizeof(nHeight));
+    file.write(reinterpret_cast<const char*>(&nInvert), sizeof(nInvert));
+}
+
+bool SewerPipe::isInvert() const
+{
+    return nInvert;
 }

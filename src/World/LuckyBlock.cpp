@@ -7,7 +7,7 @@
 #include "Dough.hpp"
 #include "World.hpp"
 #include "ItemFactory.hpp"
-// #include <iostream>
+#include <iostream>
 
 Textures::ID toTextureIDEmpty(LuckyBlock::Type type)
 {
@@ -34,9 +34,13 @@ LuckyBlock::LuckyBlock(Type type, sf::Vector2f position)
 
 void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
-    if (!nIsEmpty)
+    if (!nIsEmpty || nStateBounce != 0)
     {
         BouncingBlock::updateCurrent(dt, commands);
+    }
+    if (nIsEmpty && nStateBounce == 0)
+    {
+        nSprite.setTexture(nTexture);
     }
     if (nIsDropping)
     {
@@ -51,27 +55,25 @@ void LuckyBlock::updateCurrent(sf::Time dt, CommandQueue& commands)
         nItems.pop_back();
         nIsDropping = false;
     }
-    if (!(int)nItems.size() && nStateBounce == 0)
-    {
-        nIsEmpty = true;
-        nSprite.setTexture(nTexture);
-    }
+   
+    nIsEmpty = ((int)nItems.size() == 0);
 
     for (auto it = nQueueItems.begin(); it != nQueueItems.end();)
     {
         if ((*it).second->isFinished())
         {
+            if ((*it).first != Item::Coin)
+               std::cout << "Add item" << std::endl;
             int fy = (*it).second->getGlobalBounds().height / 4;
             Command command;
             command.category = Category::ItemScene;
-            command.action = [this, it, &commands, fy] (SceneNode& graph, sf::Time)
+            command.action = [this, key = (*it).first, fy] (SceneNode& graph, sf::Time)
             {
-                if ((*it).first == Item::Coin)
+                if (key == Item::Coin)
                 {
                     return;
                 }
-                
-                std::unique_ptr<Item> item = ItemFactory::createItem((*it).first, getWorldPosition() + sf::Vector2f(0.f, - 16 - fy));
+                std::unique_ptr<Item> item = ItemFactory::createItem(key, nOriginPosition + sf::Vector2f(0.f, - 16 - fy));
                 graph.attachChild(std::move(item));
             };
             commands.push(command);

@@ -33,6 +33,8 @@ void Projectile::activate(Entity& player)
 {
     if (nIsCollected) return;
     if (!(nTargetCategory & player.getCategory())) return;
+
+    if (player.getAnimationState() == Entity::State::Dead || player.getAnimationState() == Entity::State::Hit) return;
     player.getDamage(nDamage);
     sf::Vector2f direction = player.getPosition() - getPosition();
     direction /= length(direction);
@@ -72,13 +74,15 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
         handleBlockCollision(commands);
 
         if (!nIsCollected)
-        move(nVelocity * dt.asSeconds());
-        nAnimation.update(dt);
-        nTimeLife -= dt;
-        if (nTimeLife <= sf::Time::Zero)
         {
-            destroy();
+            move(nVelocity * dt.asSeconds());
+            nTimeLife -= dt;
+            if (nTimeLife <= sf::Time::Zero)
+            {
+                destroy();
+            }
         }
+        nAnimation.update(dt);
         // if (nAniState == AniState::Explode
     }
 

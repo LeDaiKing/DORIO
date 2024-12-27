@@ -61,6 +61,7 @@ Dough::Dough(Type type)
 , nScore(0)
 , nMotionless(false)
 , nPipe(nullptr)
+, nHit(0)
 {
 	centerOrigin(nBig);
 	centerOrigin(nFireBig);
@@ -100,12 +101,7 @@ void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
 	if (nTimeDamage > sf::Time::Zero)
 	{
 		nTimeDamage -= dt;
-		if (nTimeDamage <= sf::Time::Zero)
-		{
-			// if (nCurrentState == State::Hit)
-				setAnimationState(State::Idle);
-			// nSprite.setAnimationState(State::Idle);
-		}
+		nHit = (nHit + 1 )%30;
 	}
 
 	if (nOnGround) stateJump = 0;
@@ -182,11 +178,10 @@ void Dough::setUpEntity()
 	addAnimationState(State::Jump, 32, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
 	addAnimationState(State::DoubleJump, 32, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
 	addAnimationState(State::Fall, 64, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
-	addAnimationState(State::Hit, 128, 9, sf::seconds(0.3f), sf::Vector2i(32, 32), true);
 
 
 	// Big dough
-	nBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
+	nBig.addAnimationState(State::Idle, 0, 7, sf::seconds(1.f), sf::Vector2i(32, 64), true);
 	nBig.addAnimationState(State::Walk, 128, 4, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nBig.addAnimationState(State::Jump, 64, 8, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
 	nBig.addAnimationState(State::DoubleJump, 128, 4, sf::seconds(0.4f), sf::Vector2i(32, 64), false);
@@ -197,7 +192,7 @@ void Dough::setUpEntity()
 
 
 	// FireBig dough
-	nFireBig.addAnimationState(State::Idle, 0, 7, sf::seconds(0.7f), sf::Vector2i(32, 64), true);
+	nFireBig.addAnimationState(State::Idle, 0, 7, sf::seconds(1.f), sf::Vector2i(32, 64), true);
 	nFireBig.addAnimationState(State::Walk, 64, 6, sf::seconds(0.5f), sf::Vector2i(32, 64), true);
 	nFireBig.addAnimationState(State::Jump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
 	nFireBig.addAnimationState(State::DoubleJump, 128, 5, sf::seconds(0.3f), sf::Vector2i(32, 64), false);
@@ -210,6 +205,15 @@ void Dough::setUpEntity()
 
 void Dough::jump()
 {
+	// if (nPipe != nullptr && nPipe->isInvert())
+	// {
+	// 	if (nPipe->inPlayer(this))
+	// 	{
+	// 		std::cout << "In Pipe" << std::endl;
+	// 		nPipe = nullptr;
+	// 		return;
+	// 	}
+	// }
 	if (stateJump == 0)
 	{
 		if (nCurrentState == State::Fall)
@@ -225,8 +229,7 @@ void Dough::jump()
 	} 
 	else if (stateJump == 1)
 	{
-		if (nCurrentState != State::Hit)
-			setAnimationState(State::DoubleJump);
+		setAnimationState(State::DoubleJump);
 		// addVelocity(0.f, -getVelocity().y);
 		setVelocity(getVelocity().x, -nJumpVelocity);
 		stateJump++;
@@ -242,10 +245,10 @@ void Dough::attackEnemy(Enemy& enemy)
 void Dough::getDamage(int damage)
 {
 	// setAnimationState(State::Hit);
-	if (nCurrentState == State::Hit)
+	if (nTimeDamage > sf::Time::Zero)
 		return;
 	
-	nTimeDamage = sf::seconds(0.35f);
+	nTimeDamage = sf::seconds(3.f);
 	if (nGrowUp != Small)
 	{
 		// nGrowUp = Small;
@@ -261,12 +264,11 @@ void Dough::getDamage(int damage)
 	}
 	// nSprite.setAnimationState(State::Hit);
 	nHitPoints -= damage;
-	setAnimationState(State::Hit);
 }
 
 void Dough::handleCollisionEnemies(SceneNode& graph)
 {
-	if (nCurrentState == State::Hit)
+	if (nTimeDamage > sf::Time::Zero)
 		return;
 	
 	if (graph.getCategory() & Category::Enemy && !graph.isMarkedForRemoval())
@@ -326,7 +328,7 @@ void Dough::setStateJump(int state)
 
 void Dough::sit()
 {
-	if (nPipe != nullptr)
+	if (nPipe != nullptr && !nPipe->isInvert())
 	{
 		if (nPipe->inPlayer(this))
 		{
@@ -470,6 +472,8 @@ void Dough::growUPFireBig()
 
 void Dough::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	if (nTimeDamage > sf::Time::Zero && nHit < 12)
+		return;
 	if (nGrowUp == Small)
 	{
 		Entity::drawCurrent(target, states);

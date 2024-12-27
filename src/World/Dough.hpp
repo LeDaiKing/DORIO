@@ -77,4 +77,5 @@ class Dough : public Entity
 		int nScore;
 		bool nMotionless;
 		SewerPipe* nPipe;
+		int nHit;
 };

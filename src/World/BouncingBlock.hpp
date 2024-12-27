@@ -16,9 +16,9 @@ class BouncingBlock : public Block
 
     protected:
         int nStateBounce;
+        sf::Vector2f nOriginPosition;
     private:
         float nBounceSpeed;
-        sf::Vector2f nOriginPosition;
         sf::Vector2f nDestination;
 
 };

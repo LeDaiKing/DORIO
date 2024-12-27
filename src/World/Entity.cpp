@@ -218,7 +218,7 @@ void Entity::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) cons
 	rect.setFillColor(sf::Color(255, 255, 255, 0));
 	rect.setOutlineColor(sf::Color::Red);
 	rect.setOutlineThickness(1.f);
-	target.draw(rect);
+	// target.draw(rect);
 	target.draw(nSprite, states);
 }
 
@@ -328,4 +328,9 @@ void Entity::setDirection(bool type)
 int Entity::getHitPoints() const
 {
 	return nHitPoints;
+}
+
+Entity::State Entity::getAnimationState() const
+{
+	return nCurrentState;
 }

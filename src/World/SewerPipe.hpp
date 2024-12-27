@@ -4,7 +4,7 @@
 class SewerPipe: public StaticBlock
 {
     public:
-        SewerPipe(Type type, sf::Vector2f position, int height = 1);
+        SewerPipe(Type type, sf::Vector2f position, int height = 1, bool invert = false);
         // virtual void handleTopCollision(Entity& player);
         virtual void applyNormal(SceneNode& graph);
         void setOutPipe(SewerPipe* pipe);
@@ -13,6 +13,7 @@ class SewerPipe: public StaticBlock
 
         sf::FloatRect getBoundingRect() const;
         virtual void save(std::ofstream& file);
+        bool isInvert() const;
         // void setInPipe(SewerPipe* pipe);
 
     protected:
@@ -27,4 +28,5 @@ class SewerPipe: public StaticBlock
         Dough* nPlayerIn;
         Dough* nPlayerOut;
         float nSpeedGetIn;
+        bool nInvert;
 };

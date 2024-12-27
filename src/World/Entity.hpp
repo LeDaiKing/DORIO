@@ -50,6 +50,7 @@ class Entity : public SceneNode
 		virtual void jump();
 
 		virtual void setAnimationState(State type);
+		State getAnimationState() const;
 
 		virtual sf::FloatRect getBoundingRect() const;
 		virtual unsigned int getCategory() const;

@@ -345,7 +345,8 @@ void World::loadMap(std::string level)
 	{
 		sf::Vector2f position = sf::Vector2f(pipe[0], pipe[1]);
 		int height = pipe[2];
-		std::unique_ptr<SewerPipe> sewerPipe(new SewerPipe(Block::SewerPipe, position, height));
+		int invert = pipe[3];
+		std::unique_ptr<SewerPipe> sewerPipe(new SewerPipe(Block::SewerPipe, position, height, invert));
 		nSceneLayers[Pipes]->attachChild(std::move(sewerPipe));
 	}
 	//Pips Connection
@@ -608,7 +609,9 @@ void World::load(std::ifstream& saveFile, int lev)
 		saveFile.read(reinterpret_cast<char*>(&position), sizeof(position));
 		int height;
 		saveFile.read(reinterpret_cast<char*>(&height), sizeof(height));
-		std::unique_ptr<SewerPipe> pipe = std::make_unique<SewerPipe>(static_cast<Block::Type>(type), position, height);
+		bool invert;
+		saveFile.read(reinterpret_cast<char*>(&invert), sizeof(invert));
+		std::unique_ptr<SewerPipe> pipe = std::make_unique<SewerPipe>(static_cast<Block::Type>(type), position, height, invert);
 		pipe->load(saveFile);
 		nSceneLayers[Pipes]->attachChild(std::move(pipe));
 	}
