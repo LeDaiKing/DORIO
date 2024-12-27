@@ -29,11 +29,7 @@ PauseState::PauseState(StateStack& stack, Context context)
     saveButton->setCallback([this] ()
     {
         // save game
-        std::ifstream file("file/CurSave/save.txt");
-        std::string saveFile;
-        file >> saveFile;
-        file.close();
-        std::ofstream savefile(saveFile, std::ios::binary);
+        std::ofstream savefile(*getContext().saveFile + "data.bin", std::ios::binary);
         std::ifstream temp("file/CurSave/temp", std::ios::binary);
         savefile << temp.rdbuf();
         temp.close();

@@ -17,6 +17,7 @@ class ChooseCharState : public State{
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
+        virtual void saveCurrentState();
     private:
         sf::Sprite nBackgroundSprite;
         sf::Sprite nChar, nCharIntro;

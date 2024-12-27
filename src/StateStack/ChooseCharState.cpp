@@ -2,6 +2,8 @@
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 : State(stack, context)
@@ -14,7 +16,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
 , chooseModeButton(context, Textures::ID::ChooseModeButtonNormal, Textures::ID::ChooseModeButtonSelected, Textures::ID::ChooseModeButtonPressed)
 , nCharAni1(TextureHolder::getInstance().get(Textures::Dough1))
-, nCharAni2(TextureHolder::getInstance().get(Textures::Dough1))
+, nCharAni2(TextureHolder::getInstance().get(Textures::Dough2))
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseCharScreen));
     nChar.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
@@ -91,6 +93,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::ID::Transition);
     }); 
 
     saveButton.setPosition({1102, 705});
@@ -99,6 +102,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseMode);
+        requestStackPush(States::ID::Transition);
     });
 
     settingButton.setPosition({75, 92});
@@ -106,6 +110,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
+        requestStackPush(States::ID::Transition);
     });
 
     chooseModeButton.setPosition({75, 221});
@@ -114,6 +119,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseMode);
+        requestStackPush(States::ID::Transition);
     });
 
     nGUIContainer.pack(charSlot1, true);
@@ -173,6 +179,7 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
         requestStackPop();
         requestStackPush(States::ChooseMode);
+        requestStackPush(States::ID::Transition);
         return false;
     }
     nGUIContainer.handleEvent(event);
@@ -183,4 +190,13 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     settingButton.handleEvent(event);
     chooseModeButton.handleEvent(event);
     return false;
+}
+
+void ChooseCharState::saveCurrentState() {
+    Context context = getContext();
+    std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
+    assert(savefile.is_open());
+    int state = States::ID::ChooseCharacter;
+    savefile.write((char*)&state, sizeof(int));
+    savefile.close();
 }

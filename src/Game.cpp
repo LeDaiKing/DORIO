@@ -13,6 +13,7 @@
 #include "StateStack/ChooseModeState.hpp"
 #include "StateStack/CreativeState.hpp"
 #include "StateStack/MusicState.hpp"
+#include "StateStack/TransitionState.hpp"
 
 #include "Holder/ResourceHolder.hpp"
 const int numFrames = 60;
@@ -250,13 +251,12 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonPressed, "res/UI/twoPlayerButton_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::HandSprite, "res/UI/handSprite.png");
+	TextureHolder::getInstance().load(Textures::ID::TextBox, "res/UI/textBox.png");
 	
 	TextureHolder::getInstance().load(Textures::Dough1, "res/Dough/dough.png");
 	TextureHolder::getInstance().load(Textures::Dough2, "res/Dough/dough1.png");
-	TextureHolder::getInstance().load(Textures::BigDough1, "res/Dough/big_dough.png");
-	TextureHolder::getInstance().load(Textures::BigDough2, "res/Dough/big_dough1.png");
-	TextureHolder::getInstance().load(Textures::FireBigDough1, "res/Dough/fire_dough.png");
-	TextureHolder::getInstance().load(Textures::FireBigDough2, "res/Dough/fire_dough1.png");
+	TextureHolder::getInstance().load(Textures::BigDough2, "res/Dough/big_dough.png");
+	TextureHolder::getInstance().load(Textures::FireBigDough2, "res/Dough/fire_dough.png");
 
 	//Enemy
 	TextureHolder::getInstance().load(Textures::Ghost, "res/Enemy/Ghost/Ghost.png");
@@ -376,6 +376,7 @@ void Game::registerStates() {
 	nGameStateStack.registerState<WinningState>(States::ID::Winning);
 	nGameStateStack.registerState<CreativeState>(States::ID::Creative);
 	nGameStateStack.registerState<MusicState>(States::ID::Music);
+	nGameStateStack.registerState<TransitionState>(States::ID::Transition);
 }
 
 

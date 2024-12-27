@@ -34,6 +34,10 @@ namespace GUI{
         return nText.getLocalBounds().height;
     }
 
+    std::string Label::getText() const {
+        return nText.getString().toAnsiString();
+    }
+
     void Label::handleEvent(const sf::Event& event) {
     }
 

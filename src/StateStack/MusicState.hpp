@@ -21,6 +21,7 @@ class MusicState : public State{
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
+        
     private:
         int nSelectedSlot = -1;
         sf::Sprite nBackgroundSprite;

@@ -11,11 +11,11 @@
 
 namespace GUI{
     class Button : public Component {
-        typedef std::shared_ptr<Button> Ptr;
-        typedef std::function<void()> Callback;
 
         public:
-
+        typedef std::function<void()> Callback;
+        typedef std::shared_ptr<Button> Ptr;
+        
         Button(State::Context context, Textures::ID normal, Textures::ID selected, Textures::ID pressed);
 
         void setNormalSprite();

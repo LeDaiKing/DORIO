@@ -10,20 +10,21 @@ GameState::GameState(StateStack& stack, Context context)
 , nPlayer(*context.player)
 {
 
+    saveCurrentState();
     // nWorld.load();
     // nWorld.loadMap();
-    std::ifstream file("file/CurSave/save.txt");
-    file >> saveFile;
-    file.close();
-    if (isFileEmpty(saveFile))
+    std::ifstream fileLevel(*context.saveFile + "level.bin", std::ios::binary);
+    std::ifstream fileData(*context.saveFile + "data.bin", std::ios::binary);
+    if (!fileData)
     {
-        nWorld.loadMap(std::string(1, saveFile[saveFile.size() - 1]));
+        int level;
+        fileLevel.read((char*)&level, sizeof(int));
+        nWorld.loadMap(std::to_string(level));
     }
-    else
-    {
-        std::ifstream savefile(saveFile, std::ios::binary);
-        nWorld.load(savefile, saveFile[saveFile.size() - 1] - '1');
-        savefile.close();
+    else {
+        int level;
+        fileLevel.read((char*)&level, sizeof(int));
+        nWorld.load(fileData, level);
     }
 }
 
@@ -38,6 +39,7 @@ bool GameState::update(sf::Time dt)
     {
         requestStackPop();
         requestStackPush(States::ID::Winning);
+        requestStackPush(States::ID::Transition);
         return true;
     }
     nWorld.update(dt);
@@ -54,6 +56,7 @@ bool GameState::handleEvent(const sf::Event& event)
     {
         requestStackPop();
         requestStackPush(States::ID::Winning);
+        requestStackPush(States::ID::Transition);
         return true;
     }
     CommandQueue& commands = nWorld.getCommandQueue();
@@ -67,4 +70,13 @@ bool GameState::handleEvent(const sf::Event& event)
         savefile.close();
     }
     return true;
+}
+
+void GameState::saveCurrentState() {
+    Context context = getContext();
+    std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
+    assert(savefile.is_open());
+    int state = States::ID::Game;
+    savefile.write((char*)&state, sizeof(int));
+    savefile.close();
 }

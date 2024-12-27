@@ -14,13 +14,15 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , chooseCharButton(context, Textures::ID::ChooseCharButtonNormal, Textures::ID::ChooseCharButtonSelected, Textures::ID::ChooseCharButtonPressed)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
+    saveCurrentState();
 
     auto kitchenMode = std::make_shared<GUI::Button>(context, Textures::ID::KitchenModeNormal, Textures::ID::KitchenModeSelected, Textures::ID::KitchenModePressed);
     kitchenMode->setPosition({407, 347});
     kitchenMode->setCallback([this] ()
     {   
-        std::ofstream file("file/CurSave/save.txt", std::ios::app);
-        file << "/level1";
+        std::ofstream file(*getContext().saveFile + "level.bin", std::ios::binary);
+        int level = 1;
+        file.write((char*)&level, sizeof(int));
         file.close();
         requestStackPop();
         requestStackPush(States::Game);
@@ -31,8 +33,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     hallwayMode->setPosition({655.565, 165.5});
     hallwayMode->setCallback([this] ()
     {
-        std::ofstream file("file/CurSave/save.txt", std::ios::app);
-        file << "/level2";
+        std::ofstream file(*getContext().saveFile + "level.bin", std::ios::binary);
+        int level = 2;
+        file.write((char*)&level, sizeof(int));
         file.close();
         requestStackPop();
         requestStackPush(States::Game);
@@ -43,8 +46,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     gardenMode->setPosition({912.77, 345});
     gardenMode->setCallback([this] ()
     {
-        std::ofstream file("file/CurSave/save.txt", std::ios::app);
-        file << "/level3";
+        std::ofstream file(*getContext().saveFile + "level.bin", std::ios::binary);
+        int level = 3;
+        file.write((char*)&level, sizeof(int));
         file.close();
         requestStackPop();
         requestStackPush(States::Game);
@@ -81,6 +85,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::ID::Transition);
     });
 
     // playStartButton.setPosition({1077, 681});
@@ -97,6 +102,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
+        requestStackPush(States::ID::Transition);
     });
     chooseCharButton.setPosition({75, 221});
     chooseCharButton.setIsSelected(false);
@@ -104,6 +110,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::ID::Transition);
     });
 
     nGUIContainer.pack(kitchenMode);
@@ -161,4 +168,13 @@ bool ChooseModeState::handleEvent(const sf::Event& event)
     settingButton.handleEvent(event);
     chooseCharButton.handleEvent(event);
     return false;
+}
+
+void ChooseModeState::saveCurrentState() {
+    Context context = getContext();
+    std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
+    assert(savefile.is_open());
+    int state = States::ID::ChooseMode;
+    savefile.write((char*)&state, sizeof(int));
+    savefile.close();
 }

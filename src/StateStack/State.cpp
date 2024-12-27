@@ -12,9 +12,11 @@ State::~State() {
     window.setKeyRepeatEnabled(false);    
 }
 
-void State::requestStackPush(States::ID stateID) {
-    nStack->pushState(stateID);
+void State::saveCurrentState() {
+    // pass
 }
+
+void State::requestStackPush(States::ID stateID) { nStack->pushState(stateID); }
 
 void State::requestStackPop() {
     nStack->popState();
@@ -35,6 +37,7 @@ State::Context::Context(sf::RenderWindow& window,
 , player(&player) 
 , music(&music) 
 , sounds(&sounds) 
-, loadingTask(&loadingTask) {
+, loadingTask(&loadingTask) 
+, saveFile(new std::string("file/")) {
 }
 

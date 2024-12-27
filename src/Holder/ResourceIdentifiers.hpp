@@ -164,6 +164,7 @@ namespace Textures
 		VolumeDecreaseButtonNormal,
 		VolumeDecreaseButtonSelected,
 		VolumeDecreaseButtonPressed,
+		TextBox,
 
 		PurpleRectangle,
 		VolumeBlock,

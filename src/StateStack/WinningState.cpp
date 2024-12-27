@@ -55,6 +55,7 @@ WinningState::WinningState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseMode);
+        requestStackPush(States::ID::Transition);
     });
 
     std::ifstream file("file/Score/score.txt");

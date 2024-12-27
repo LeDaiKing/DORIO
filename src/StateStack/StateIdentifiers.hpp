@@ -18,5 +18,6 @@ namespace States {
         Losing,
         Creative,
         Music,
+        Transition,
     };
 }

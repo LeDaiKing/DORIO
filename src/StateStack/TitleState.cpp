@@ -47,6 +47,7 @@ bool TitleState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         this->requestStackPop();
         this->requestStackPush(States::ID::ChooseSlot);
+        this->requestStackPush(States::ID::Transition);
     }
     return true;
 }

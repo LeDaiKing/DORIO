@@ -3,6 +3,9 @@
 #include "../UI/Label.hpp"
 #include "../UI/Component.hpp"
 #include <iostream>
+#include <fstream>
+#include <cassert>
+#include <string>
 
 ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 : State(stack, context)
@@ -18,6 +21,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     handSprite.setTexture(TextureHolder::getInstance().get(Textures::HandSprite));
     choosePlayerDeco.setPosition({189, 0});
+    saveCurrentState();
 
     auto onePlayerButton = std::make_shared<GUI::Button>(context, Textures::ID::OnePlayerButtonNormal, Textures::ID::OnePlayerButtonSelected, Textures::ID::OnePlayerButtonPressed);
     onePlayerButton->setPosition({418, 437});
@@ -26,6 +30,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::ID::Transition);
     });
 
     auto twoPlayerButton = std::make_shared<GUI::Button>(context, Textures::ID::TwoPlayerButtonNormal, Textures::ID::TwoPlayerButtonSelected, Textures::ID::TwoPlayerButtonPressed);
@@ -35,6 +40,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::ID::Transition);
     });
 
     backButton.setPosition({75, 705});
@@ -43,6 +49,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::ChooseSlot);
+        requestStackPush(States::ID::Transition);
     });  
 
     settingButton.setPosition({75, 92});
@@ -50,6 +57,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     settingButton.setCallback([this] ()
     {
         requestStackPush(States::Instruction);
+        requestStackPush(States::ID::Transition);
     });
 
     nGUIContainer.pack(onePlayerButton);
@@ -112,4 +120,13 @@ bool ChoosePlayerState::handleEvent(const sf::Event& event)
     // onePlayerButton.handleEvent(event);
     // twoPlayerButton.handleEvent(event);
     return false;
+}
+
+void ChoosePlayerState::saveCurrentState() {
+    Context context = getContext();
+    std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
+    assert(savefile.is_open());
+    int state = States::ID::ChooseCharacter;
+    savefile.write((char*)&state, sizeof(int));
+    savefile.close();
 }

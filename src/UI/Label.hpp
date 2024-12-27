@@ -21,6 +21,7 @@ namespace GUI{
         void setText(const std::string& text);
         float getWidth() const;
         float getHeight() const;
+        std::string getText() const;
 
         virtual void handleEvent(const sf::Event& event);
 
