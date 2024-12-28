@@ -3,6 +3,17 @@
 SoundPlayer::SoundPlayer() 
 : mSounds() {
     SoundBufferHolder::getInstance().load(SoundEffect::ID::ClickedButton, "res/Sound/ClickedButton.wav");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::levelcomplete, "res/Sound/levelcomplete.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::achievement, "res/Sound/achievement.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::coin, "res/Sound/coin.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::gameover, "res/Sound/gameover.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::hurt, "res/Sound/hurt.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::item, "res/Sound/item.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::jump, "res/Sound/jump.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::land, "res/Sound/land.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::ui, "res/Sound/ui.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::powerup, "res/Sound/powerup.mp3");
+    SoundBufferHolder::getInstance().load(SoundEffect::ID::shoot, "res/Sound/shoot.mp3");
 }
 
 

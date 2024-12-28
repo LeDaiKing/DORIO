@@ -13,7 +13,11 @@ namespace Music{
 	enum ID
 	{
 		BackgroundTheme, 
-		ClickedButton,	
+		ClickedButton,
+		map1,
+		map2,
+		map3,
+		themesong,	
 	};
 }
 
@@ -21,6 +25,17 @@ namespace SoundEffect{
 	enum ID
 	{
 		ClickedButton,
+		levelcomplete,
+		achievement,
+		coin,
+		gameover,
+		hurt,
+		item,
+		jump,
+		land,
+		ui,
+		powerup,
+		shoot,
 	};
 }
 
