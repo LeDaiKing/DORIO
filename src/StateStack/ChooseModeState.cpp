@@ -123,9 +123,9 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
                 hallwayMode->setIsPressable(false);
             }
             else if (i == 1) {
-                gardenMode->setNormalTexture(Textures::ID::GardenModeLocked);
-                gardenMode->setIsSelected(false);
-                gardenMode->setIsPressable(false);
+                // gardenMode->setNormalTexture(Textures::ID::GardenModeLocked);
+                // gardenMode->setIsSelected(false);
+                // gardenMode->setIsPressable(false);
             }
         }
 

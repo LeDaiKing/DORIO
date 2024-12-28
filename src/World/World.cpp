@@ -221,6 +221,7 @@ void World::adaptCameraPosition()
 
 void World::loadMap(std::string level)
 {
+	std::cerr << level << std::endl;
 	nLevel = std::stoi(level);
 	std::string key = "Map/Level" + level;
 	nlohmann::json config = ConfigLoader::getInstance().getConfig(key.c_str());
@@ -317,7 +318,7 @@ void World::loadMap(std::string level)
 
 	//Enemy
 	std::string enemySpawn = "EnemySpawn" + level;
-	// std::cout << enemySpawn << std::endl;
+	std::cout << enemySpawn << std::endl;
 	nlohmann::json enemyConfig = ConfigLoader::getInstance().getConfig(enemySpawn.c_str());
 
 	for (auto& cockroach : enemyConfig["CockRoach"])
