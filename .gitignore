@@ -10,6 +10,8 @@
 **/CTestTestfile.cmake
 **/_deps/
 **/CMakeUserPresets.json
-file/
+file/Save1/*.bin
+file/Save2/*.bin
+file/Save3/*.bin
 build/
 .DS_Store
