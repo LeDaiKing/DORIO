@@ -23,8 +23,8 @@ WinningState::WinningState(StateStack& stack, Context context)
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::WinningScreen));
     saveCurrentState();
     nSoundPlayer.play(SoundEffect::levelcomplete);
-    nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
-    nCharacterSprite.setPosition(792, 238);
+    nCupSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
+    nCupSprite.setPosition(792, 238);
 
     nClock.setTexture(TextureHolder::getInstance().get(Textures::ClockHub));
     nClock.setPosition(169, 370);

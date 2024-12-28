@@ -72,6 +72,14 @@ void Hub::draw(sf::RenderWindow& window)
     pos = {85, 39};
     TextRender::getInstance().drawText(window, heartText.c_str(), pos, 30);
 
+    if (curHitPoints1 != -100)
+    {
+        nHeart.setPosition(146 + nHeart.getGlobalBounds().width / 2, 19 + nHeart.getGlobalBounds().height / 2);
+        window.draw(nHeart);
+        std::string heartText1 = "x" + std::to_string(curHitPoints1);
+        pos = {202, 39};
+        TextRender::getInstance().drawText(window, heartText1.c_str(), pos, 30);
+    }
 
     size = 32;
     std::string scoreText = std::to_string(curScore);
@@ -84,16 +92,31 @@ void Hub::draw(sf::RenderWindow& window)
 
 }
 
-void Hub::update(sf::Time dt, Dough& player, sf::Time& gameTime)
+void Hub::update(sf::Time dt, Dough* player, Dough* player1, sf::Time& gameTime)
 {
-    curHitPoints = player.getHitPoints();
-    curCoins = player.getCoinsCount();
+    curHitPoints = player->getHitPoints();
+    curCoins = player->getCoinsCount();
     if (preHitPoints > curHitPoints)
     {
         nHeart2.setAnimationState(0);
     }
     preHitPoints = curHitPoints;
-    curScore = player.getScore();
+    curScore = player->getScore();
+    if (player1 != nullptr)
+    {
+        curHitPoints1 = player1->getHitPoints();
+        curCoins += player1->getCoinsCount();
+        curScore += player1->getScore();
+    }
+    if (curHitPoints1 < 0 && curHitPoints1 != -100)
+    {
+        curHitPoints1 = 0;
+    }
+    if (curHitPoints <  0)
+    {
+        curHitPoints = 0;
+    }
+
     nHeart2.update(dt);
     nCoin.update(dt);
     nClock.update(dt);

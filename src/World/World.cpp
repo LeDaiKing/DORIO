@@ -105,7 +105,7 @@ void World::update(sf::Time dt)
   // Regular update step, adapt position (correct if outside view)
 
   adaptCameraPosition();
-  nHub.update(dt, *nPlayerDough, nTime);
+  nHub.update(dt, nPlayerDough, nPlayerDough2, nTime);
 }
 
 void World::draw()
@@ -361,18 +361,31 @@ void World::loadMap(std::string level)
 
 	
 	// Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1, *nContext.sounds));
+	std::ifstream file(*nContext.saveFile + "SkinPlayer.bin", std::ios::binary);
+	int ty;
+	file.read((char*)&ty, sizeof(int));
+	file.close();
+	ty--;
+	std::unique_ptr<Dough> leader(new Dough(static_cast<Dough::Type>(ty), *nContext.sounds));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nPlayerDough->setCheckPoint(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
-	// std::unique_ptr<Dough> leader1(new Dough(Dough::Dough2));
-	// leader1->setPosition(nSpawnPosition);
-	// leader1->setPlayer2(true);
-	// nPlayerDough2 = leader1.get();
-	// leader1->setCheckPoint(nSpawnPosition);
-	// nSceneLayers[Player]->attachChild(std::move(leader1));
 
+	std::ifstream file2(*nContext.saveFile + "numberPlayer.bin", std::ios::binary);
+	int numberPlayer;
+	file2.read((char*)&numberPlayer, sizeof(int));
+	file2.close();
+	if (numberPlayer == 2)
+	{
+		ty = 1 - ty;
+		std::unique_ptr<Dough> leader1(new Dough(static_cast<Dough::Type>(ty), *nContext.sounds));
+		leader1->setPosition(nSpawnPosition);
+		leader1->setPlayer2(true);
+		nPlayerDough2 = leader1.get();
+		leader1->setCheckPoint(nSpawnPosition);
+		nSceneLayers[Player]->attachChild(std::move(leader1));
+	}
 	// Slide
 	std::cout << "SlideBlock" << std::endl;
 
@@ -542,6 +555,10 @@ void World::save(std::ofstream& saveFile)
 	saveFile.write(reinterpret_cast<char*>(&nSpawnPosition), sizeof(nSpawnPosition));
 	saveFile.write(reinterpret_cast<char*>(&nTime), sizeof(nTime));
 	nPlayerDough->save(saveFile);
+	int te;
+	if (nPlayerDough2 != nullptr) te = 1; else te = 0;
+	saveFile.write(reinterpret_cast<char*>(&te), sizeof(te));
+	if (nPlayerDough2 != nullptr) nPlayerDough2->save(saveFile);
 
 	//Enemies
 	int enemies = nSceneLayers[Enemies]->getChildren().size();
@@ -598,6 +615,7 @@ void World::load(std::ifstream& saveFile, int lev)
 	saveFile.read(reinterpret_cast<char*>(&nSpawnPosition), sizeof(nSpawnPosition));
 	saveFile.read(reinterpret_cast<char*>(&nTime), sizeof(nTime));
 	
+	
 	int type;
 	saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
 	std::unique_ptr<Dough> leader(new Dough(static_cast<Dough::Type>(type), *nContext.sounds));
@@ -605,6 +623,18 @@ void World::load(std::ifstream& saveFile, int lev)
 	nPlayerDough->load(saveFile);
 	nSceneLayers[Player]->attachChild(std::move(leader));
 	
+	int te;
+	saveFile.read(reinterpret_cast<char*>(&te), sizeof(te));
+	if (te == 1)
+	{
+		saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+		std::unique_ptr<Dough> leader1(new Dough(static_cast<Dough::Type>(type), *nContext.sounds));
+		nPlayerDough2 = leader1.get();
+		leader1->load(saveFile);
+		leader1->setPlayer2(true);
+		nSceneLayers[Player]->attachChild(std::move(leader1));
+	}
+
 	int enemies;
 	
 	saveFile.read(reinterpret_cast<char*>(&enemies), sizeof(enemies));

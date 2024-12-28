@@ -43,8 +43,9 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
         selectedChar = 1;
-        nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
-        nStat.setString("Speed: " + std::to_string(nSpeed1) + "\n" + " Jump: " + std::to_string(nJumpVelocity1));
+        std::ofstream file(*getContext().saveFile + "SkinPlayer.bin", std::ios::binary);
+        file.write((char*)&selectedChar, sizeof(int));
+        file.close();
     });
     auto charSlot2 = std::make_shared<GUI::Button>(context, Textures::ID::CharSlot2Normal, Textures::ID::CharSlot2Selected, Textures::ID::CharSlot2Pressed);
     charSlot2->setPosition({1088, 131});
@@ -52,8 +53,9 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
         selectedChar = 2;
-        nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
-        nStat.setString("Speed: " + std::to_string(nSpeed2) + "\n" + " Jump: " + std::to_string(nJumpVelocity2));
+        std::ofstream file(*getContext().saveFile + "SkinPlayer.bin", std::ios::binary);
+        file.write((char*)&selectedChar, sizeof(int));
+        file.close();
     });
 
     std::string key = std::string("Dough/") + "Dough1";

@@ -15,18 +15,25 @@ GameState::GameState(StateStack& stack, Context context)
     // nWorld.loadMap();
     std::ifstream fileLevel(*context.saveFile + "level.bin", std::ios::binary);
     std::ifstream fileData(*context.saveFile + "data.bin", std::ios::binary);
+    int level;
     if (!fileData)
     {
-        int level;
         fileLevel.read((char*)&level, sizeof(int));
         nWorld.loadMap(std::to_string(level));
+
     }
     else {
-        int level;
         fileLevel.read((char*)&level, sizeof(int));
-        --level;
-        nWorld.load(fileData, level);
+        nWorld.load(fileData, level - 1);
     }
+    fileLevel.close();
+    fileData.close();
+    if (level == 1)
+        context.music->play(Music::ID::map1);
+    else if (level == 2)
+        context.music->play(Music::ID::map2);
+    else if (level == 3)
+        context.music->play(Music::ID::map3);
 }
 
 GameState::~GameState() {
