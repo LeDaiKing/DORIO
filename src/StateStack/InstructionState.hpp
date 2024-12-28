@@ -26,8 +26,12 @@ class InstructionState : public State{
         GUI::Button backButton;
         GUI::Button instructionButton;
         GUI::Button musicButton;
+        GUI::Button player1Button;
+        GUI::Button player2Button;
         GUI::Container nGUIContainerText;
+        GUI::Container nGUIContainerButton1;
         GUI::Container nGUIContainerButton;
+        int player = 1;
         // GUI::Button startButton;
         // GUI::Button deleteButton;
         // GUI::Button resetButton;

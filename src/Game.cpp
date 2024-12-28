@@ -125,6 +125,32 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::AttackButtonSelected, "res/UI/attackButton.png");
 	TextureHolder::getInstance().load(Textures::ID::AttackButtonPressed, "res/UI/attackButton.png");
 
+	TextureHolder::getInstance().load(Textures::ID::UpButtonNormal1, "res/UI/upButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::UpButtonSelected1, "res/UI/upButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::UpButtonPressed1, "res/UI/upButton1.png");
+
+	TextureHolder::getInstance().load(Textures::ID::LeftButtonNormal1, "res/UI/leftButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::LeftButtonSelected1, "res/UI/leftButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::LeftButtonPressed1, "res/UI/leftButton1.png");
+
+	TextureHolder::getInstance().load(Textures::ID::RightButtonNormal1, "res/UI/rightButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::RightButtonSelected1, "res/UI/rightButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::RightButtonPressed1, "res/UI/rightButton1.png");
+
+	TextureHolder::getInstance().load(Textures::ID::DownButtonNormal1, "res/UI/downButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::DownButtonSelected1, "res/UI/downButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::DownButtonPressed1, "res/UI/downButton1.png");
+
+	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonNormal1, "res/UI/doubleUpButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonSelected1, "res/UI/doubleUpButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonPressed1, "res/UI/doubleUpButton1.png");
+
+	TextureHolder::getInstance().load(Textures::ID::AttackButtonNormal1, "res/UI/attackButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::AttackButtonSelected1, "res/UI/attackButton1.png");
+	TextureHolder::getInstance().load(Textures::ID::AttackButtonPressed1, "res/UI/attackButton1.png");
+
+	
+
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonNormal, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonSelected, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonPressed, "res/UI/doubleUpButton.png");
@@ -262,6 +288,14 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::RetryButtonNormal, "res/UI/retryButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RetryButtonSelected, "res/UI/retryButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::RetryButtonPressed, "res/UI/retryButton_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::Player1ButtonNormal, "res/UI/player1Button.png");
+	TextureHolder::getInstance().load(Textures::ID::Player1ButtonSelected, "res/UI/player1Button_s.png");
+	TextureHolder::getInstance().load(Textures::ID::Player1ButtonPressed, "res/UI/player1Button_s.png");
+
+	TextureHolder::getInstance().load(Textures::ID::Player2ButtonNormal, "res/UI/player2Button.png");
+	TextureHolder::getInstance().load(Textures::ID::Player2ButtonSelected, "res/UI/player2Button_s.png");
+	TextureHolder::getInstance().load(Textures::ID::Player2ButtonPressed, "res/UI/player2Button_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::HandSprite, "res/UI/handSprite.png");
 	TextureHolder::getInstance().load(Textures::ID::TextBox, "res/UI/textBox.png");
