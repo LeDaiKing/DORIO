@@ -79,7 +79,6 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::TitleScreen, "res/Background/title.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseCharScreen, "res/Background/ChooseCharScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
-	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/scoreboard.png");
 	TextureHolder::getInstance().load(Textures::ID::LosingScreen, "res/Background/losingScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::ChoosePlayerScreen, "res/Background/ChoosePlayerScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/LeaderboardScreen.png");

@@ -14,11 +14,11 @@
 
 class LeaderboardState : public State {
     public:
-        LeaderboardState(StateStack& stack, Context context);
+        LeaderboardState(StateStack& stack, State::Context context);
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
     private:
         sf::Sprite nBackgroundSprite;
         GUI::Button homeButton;
-}
+};
