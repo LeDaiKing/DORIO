@@ -81,6 +81,8 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeScreen, "res/Background/ChooseModeScreen.png");
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/scoreboard.png");
 	TextureHolder::getInstance().load(Textures::ID::LosingScreen, "res/Background/losingScreen.png");
+	TextureHolder::getInstance().load(Textures::ID::ChoosePlayerScreen, "res/Background/ChoosePlayerScreen.png");
+	TextureHolder::getInstance().load(Textures::ID::LeaderboardScreen, "res/Background/LeaderboardScreen.png");
 
 	//Button
 	TextureHolder::getInstance().load(Textures::ID::SlotButtonNormal, "res/UI/slotButton.png");
@@ -94,6 +96,7 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::StartButtonNormal, "res/UI/startButton.png");
 	TextureHolder::getInstance().load(Textures::ID::StartButtonSelected, "res/UI/startButton_s.png");
 	TextureHolder::getInstance().load(Textures::ID::StartButtonPressed, "res/UI/startButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::StartButtonNormal1, "res/UI/startButton1.png");
 
 	TextureHolder::getInstance().load(Textures::ID::DeleteButtonNormal, "res/UI/deleteButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DeleteButtonSelected, "res/UI/deleteButton_s.png");
@@ -131,9 +134,9 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/rectButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/rectButton.png");
 
-	TextureHolder::getInstance().load(Textures::ID::HomeButtonNormal, "res/UI/chooseCharButton.png");
-	TextureHolder::getInstance().load(Textures::ID::HomeButtonSelected, "res/UI/chooseCharButton.png");
-	TextureHolder::getInstance().load(Textures::ID::HomeButtonPressed, "res/UI/chooseCharButton.png");
+	TextureHolder::getInstance().load(Textures::ID::HomeButtonNormal, "res/UI/HomeButton.png");
+	TextureHolder::getInstance().load(Textures::ID::HomeButtonSelected, "res/UI/HomeButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::HomeButtonPressed, "res/UI/HomeButton_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonNormal, "res/UI/leaderboardButton.png");
 	TextureHolder::getInstance().load(Textures::ID::LeaderboardButtonSelected, "res/UI/leaderboardButton_s.png");
@@ -249,8 +252,8 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::OnePlayerButtonPressed, "res/UI/onePlayerButton_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonNormal, "res/UI/twoPlayerButton.png");
-	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonSelected, "res/UI/twoPlayerButton_s.png");
-	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonPressed, "res/UI/twoPlayerButton_s.png");
+	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonSelected, "res/UI/twoPlayerButton.png");
+	TextureHolder::getInstance().load(Textures::ID::TwoPlayerButtonPressed, "res/UI/twoPlayerButton.png");
 
 	TextureHolder::getInstance().load(Textures::ID::RetryButtonNormal, "res/UI/retryButton.png");
 	TextureHolder::getInstance().load(Textures::ID::RetryButtonSelected, "res/UI/retryButton_s.png");

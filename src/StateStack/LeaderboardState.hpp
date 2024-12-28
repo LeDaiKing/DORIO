@@ -4,30 +4,21 @@
 #include "StateIdentifiers.hpp"
 #include "../UI/Container.hpp"
 #include "../UI/Button.hpp"
+#include "../UI/Label.hpp"
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "../Utility.hpp"
-
+#include <vector>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-class ChooseCharState : public State{
+class LeaderboardState : public State {
     public:
-        ChooseCharState(StateStack& stack, Context context);
+        LeaderboardState(StateStack& stack, Context context);
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
-        virtual void saveCurrentState();
     private:
         sf::Sprite nBackgroundSprite;
-        sf::Sprite nChar, nCharIntro;
-        Animation nCharAni1;
-        Animation nCharAni2;
-        GUI::Container nGUIContainer;
-        GUI::Button backButton;
-        GUI::Button previousButton;
-        GUI::Button nextButton;
-        GUI::Button saveButton;
-        GUI::Button settingButton;
-        int selectedChar = 1;
-};
+        GUI::Button homeButton;
+}

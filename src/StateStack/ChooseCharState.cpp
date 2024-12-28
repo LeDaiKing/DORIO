@@ -14,7 +14,6 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 , nextButton(context, Textures::ID::NextButtonNormal, Textures::ID::NextButtonSelected, Textures::ID::NextButtonPressed)
 , saveButton(context, Textures::ID::SaveButtonNormal, Textures::ID::SaveButtonSelected, Textures::ID::SaveButtonPressed)
 , settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
-, chooseModeButton(context, Textures::ID::ChooseModeButtonNormal, Textures::ID::ChooseModeButtonSelected, Textures::ID::ChooseModeButtonPressed)
 , nCharAni1(TextureHolder::getInstance().get(Textures::Dough1))
 , nCharAni2(TextureHolder::getInstance().get(Textures::Dough2))
 {
@@ -113,14 +112,6 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         requestStackPush(States::ID::Transition);
     });
 
-    chooseModeButton.setPosition({75, 221});
-    chooseModeButton.setIsSelected(false);
-    chooseModeButton.setCallback([this] ()
-    {
-        requestStackPop();
-        requestStackPush(States::ChooseMode);
-        requestStackPush(States::ID::Transition);
-    });
 
     nGUIContainer.pack(charSlot1, true);
     nGUIContainer.pack(charSlot2, true);
@@ -146,7 +137,6 @@ void ChooseCharState::draw()
     window.draw(nCharIntro);
     window.draw(saveButton);
     window.draw(settingButton);
-    window.draw(chooseModeButton);
 }
 
 bool ChooseCharState::update(sf::Time dt)
@@ -163,10 +153,6 @@ bool ChooseCharState::update(sf::Time dt)
     if (settingButton.isMouseOver(window))
         settingButton.setSelectedSprite();
     else settingButton.setNormalSprite();
-
-    if (chooseModeButton.isMouseOver(window))
-        chooseModeButton.setSelectedSprite();
-    else chooseModeButton.setNormalSprite();
 
     nCharAni1.update(dt);
     nCharAni2.update(dt);
@@ -188,7 +174,6 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     nextButton.handleEvent(event);
     saveButton.handleEvent(event);
     settingButton.handleEvent(event);
-    chooseModeButton.handleEvent(event);
     return false;
 }
 

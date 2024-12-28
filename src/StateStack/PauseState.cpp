@@ -36,7 +36,7 @@ PauseState::PauseState(StateStack& stack, Context context)
         savefile.close();
     });
 
-    auto startButton = std::make_shared<GUI::Button>(context, Textures::ID::StartButtonNormal, Textures::ID::StartButtonSelected, Textures::ID::StartButtonPressed);
+    auto startButton = std::make_shared<GUI::Button>(context, Textures::ID::StartButtonNormal1, Textures::ID::StartButtonSelected, Textures::ID::StartButtonPressed);
     startButton->setPosition(814, 400); 
     startButton->setCallback([this] ()
     {
