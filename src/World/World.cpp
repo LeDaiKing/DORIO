@@ -241,13 +241,15 @@ void World::loadMap(std::string level)
 	nSceneLayers[Background]->attachChild(std::move(background));
 
 	//Map
+	std::string level1 = level;
+	if (level1 == "3") level1 = "1";
 	for (int x = 0; x < map.getSize().x; x += 32)
 	for (int y = 0; y < map.getSize().y; y += 32)
 	{
 		sf::Color color = map.getPixel(x + 10, y + 10);
 		if (color.toInteger() == 0xFF)
 		{
-			std::unique_ptr<Block> block = BlockFactory::createBlock("Floor" + level, sf::Vector2f(x + 16, y + 16));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("Floor" + level1, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0xE2CB36FF)
@@ -257,24 +259,24 @@ void World::loadMap(std::string level)
 		}
 		else if (color.toInteger() == 0xB2B2FF)
 		{
-			std::unique_ptr<Block> block = BlockFactory::createBlock("UnderFloor" + level, sf::Vector2f(x + 16, y + 16));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("UnderFloor" + level1, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0xA53A00FF)
 		{
-			std::unique_ptr<Block> block = BlockFactory::createBlock("StaticBlock" + level, sf::Vector2f(x + 16, y + 16));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("StaticBlock" + level1, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0xF600FFFF)
 		{
-			std::unique_ptr<Block> block = BlockFactory::createBlock("LuckyBlock" + level, sf::Vector2f(x + 16, y + 16));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("LuckyBlock" + level1, sf::Vector2f(x + 16, y + 16));
 			LuckyBlock& luckyBlock = static_cast<LuckyBlock&>(*block);
 			luckyBlock.randomItem(-1);
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0xFF0000FF)
 		{
-			std::unique_ptr<Block> block = BlockFactory::createBlock("Breakable" + level, sf::Vector2f(x + 16, y + 16));
+			std::unique_ptr<Block> block = BlockFactory::createBlock("Breakable" + level1, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
 		else if (color.toInteger() == 0x54E5FFFF)
