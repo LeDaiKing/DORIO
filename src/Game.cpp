@@ -129,9 +129,9 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonSelected, "res/UI/doubleUpButton.png");
 	TextureHolder::getInstance().load(Textures::ID::DoubleUpButtonPressed, "res/UI/doubleUpButton.png");
 
-	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/rectButton.png");
-	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/rectButton.png");
-	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/rectButton.png");
+	TextureHolder::getInstance().load(Textures::ID::RectButtonNormal, "res/UI/pausePanel.png");
+	TextureHolder::getInstance().load(Textures::ID::RectButtonSelected, "res/UI/pausePanel.png");
+	TextureHolder::getInstance().load(Textures::ID::RectButtonPressed, "res/UI/pausePanel.png");
 
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonNormal, "res/UI/HomeButton.png");
 	TextureHolder::getInstance().load(Textures::ID::HomeButtonSelected, "res/UI/HomeButton_s.png");

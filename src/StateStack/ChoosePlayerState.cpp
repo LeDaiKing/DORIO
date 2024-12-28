@@ -36,14 +36,12 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     auto twoPlayerButton = std::make_shared<GUI::Button>(context, Textures::ID::TwoPlayerButtonNormal, Textures::ID::TwoPlayerButtonSelected, Textures::ID::TwoPlayerButtonPressed);
     twoPlayerButton->setPosition({872, 443});
     twoPlayerButton->setIsSelected(true);
-    /*
     twoPlayerButton->setCallback([this] ()
     {
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
         requestStackPush(States::ID::Transition);
     });
-    */
     backButton.setPosition({75, 705});
     backButton.setIsSelected(false);
     backButton.setCallback([this] ()

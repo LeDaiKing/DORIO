@@ -4,6 +4,7 @@
 #include "StateIdentifiers.hpp"
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
+#include "../UI/VolumeBar.hpp"
 #include "../Utility.hpp"
 #include "../UI/Container.hpp"
 #include "../UI/Button.hpp"
@@ -20,4 +21,6 @@ class PauseState : public State{
     private:
         GUI::Button rectButton;
         GUI::Container nBar;
+        GUI::VolumeBar nMusicBar;
+        GUI::VolumeBar nSoundBar;
 };
