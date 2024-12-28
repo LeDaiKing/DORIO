@@ -2,7 +2,7 @@
 #include "Entity.hpp"
 #include "../Utility.hpp"
 #include  "../Holder/ResourceIdentifiers.hpp"
-
+#include "../Music/SoundPlayer.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 
 class Enemy;
@@ -54,6 +54,8 @@ class Dough : public Entity
 		virtual void save(std::ofstream& file);
 		void setMotionless(bool flag);
 		virtual bool isMarkedForRemoval() const;
+		void setPlayer2(bool flag);
+		void setPlayer2(Dough* player2);
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -79,4 +81,7 @@ class Dough : public Entity
 		bool nMotionless;
 		SewerPipe* nPipe;
 		int nHit;
+		bool isPlayer2;
+		Dough* nPlayer2;
+		SoundPlayer& nSoundPlayer;
 };

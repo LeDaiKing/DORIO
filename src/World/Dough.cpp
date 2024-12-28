@@ -50,7 +50,7 @@ Textures::ID toTextureFireID(Dough::Type type)
 	return Textures::Dough1;
 }
 
-Dough::Dough(Type type)
+Dough::Dough(Type type, SoundPlayer& sounds)
 : nType(type)
 , nGrowUp(Small)
 , Entity(TextureHolder::getInstance().get(toTextureID(type)))
@@ -62,6 +62,8 @@ Dough::Dough(Type type)
 , nMotionless(false)
 , nPipe(nullptr)
 , nHit(0)
+, isPlayer2(false)
+, nSoundPlayer(sounds)
 {
 	centerOrigin(nBig);
 	centerOrigin(nFireBig);
@@ -76,7 +78,8 @@ Dough::Dough(Type type)
 
 unsigned int Dough::getCategory() const
 {
-	return Category::PlayerDough;
+	if (!isPlayer2) return Category::PlayerDough1;
+	return Category::PlayerDough2;
 }
 
 void Dough::updateCurrent(sf::Time dt, CommandQueue& commands)
@@ -616,4 +619,14 @@ void Dough::setMotionless(bool flag)
 bool Dough::isMarkedForRemoval() const
 {
 	return nCurrentState == State::Dead && nSprite.isFinished();
+}
+void Dough::setPlayer2(bool flag)
+{
+	isPlayer2= flag;
+}
+
+void Dough::setPlayer2(Dough* player2)
+{
+	
+	nPlayer2 = player2;
 }

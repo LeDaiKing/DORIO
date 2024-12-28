@@ -44,6 +44,9 @@ Player::Player()
 	nKeyBinding[sf::Keyboard::Left] = MoveLeft;
 	nKeyBinding[sf::Keyboard::Right] = MoveRight;
 	nKeyBinding[sf::Keyboard::Up] = MoveUp;
+	nKeyBinding[sf::Keyboard::A] = MoveLeft1;
+	nKeyBinding[sf::Keyboard::D] = MoveRight1;
+	nKeyBinding[sf::Keyboard::W] = MoveUp1;
 	// nKeyBinding[sf::Keyboard::Down] = Sit;
 
 	
@@ -52,9 +55,19 @@ Player::Player()
 	initializeActions();	
 
 	// Assign all categories to player's Dough
-	for(auto& pair : nActionBinding)
-		pair.second.category = Category::PlayerDough;
-	nActionBinding[Fire].category = Category::PlayerDough;
+	nActionBinding[MoveLeft].category = Category::PlayerDough1;
+	nActionBinding[MoveRight].category = Category::PlayerDough1;
+	nActionBinding[MoveUp].category = Category::PlayerDough1;
+	nActionBinding[Fire].category = Category::PlayerDough1;
+	nActionBinding[Sit].category = Category::PlayerDough1;
+	nActionBinding[StandUp].category = Category::PlayerDough1;
+
+	nActionBinding[MoveLeft1].category = Category::PlayerDough2;
+	nActionBinding[MoveRight1].category = Category::PlayerDough2;
+	nActionBinding[MoveUp1].category = Category::PlayerDough2;
+	nActionBinding[Fire1].category = Category::PlayerDough2;
+	nActionBinding[Sit1].category = Category::PlayerDough2;
+	nActionBinding[StandUp1].category = Category::PlayerDough2;
 }
 
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
@@ -75,6 +88,16 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 		{
 			commands.push(nActionBinding[Fire]);
 		}
+
+		if (event.key.code == sf::Keyboard::S)
+		{
+			commands.push(nActionBinding[Sit1]);
+		}
+
+		if (event.key.code == sf::Keyboard::F)
+		{
+			commands.push(nActionBinding[Fire1]);
+		}
 	}
 
 	if (event.type == sf::Event::KeyReleased)
@@ -82,6 +105,10 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 		if (event.key.code == sf::Keyboard::Down)
 		{
 			commands.push(nActionBinding[StandUp]);
+		}
+		if (event.key.code == sf::Keyboard::S)
+		{
+			commands.push(nActionBinding[StandUp1]);
 		}
 	}
 
@@ -136,6 +163,13 @@ void Player::initializeActions()
 	nActionBinding[Sit].action       = derivedAction<Dough>([](Dough& a, sf::Time){ a.sit(); });
 	nActionBinding[StandUp].action   = derivedAction<Dough>([](Dough& a, sf::Time){ a.standUp(); });
 	nActionBinding[Fire].action      = derivedAction<Dough>([](Dough& a, sf::Time){ a.preFire(); });
+
+	nActionBinding[MoveLeft1].action	 = derivedAction<Dough>(DoughMover(true));
+	nActionBinding[MoveRight1].action = derivedAction<Dough>(DoughMover(false));
+	nActionBinding[MoveUp1].action    = derivedAction<Dough>(DougJump());
+	nActionBinding[Sit1].action       = derivedAction<Dough>([](Dough& a, sf::Time){ a.sit(); });
+	nActionBinding[StandUp1].action   = derivedAction<Dough>([](Dough& a, sf::Time){ a.standUp(); });
+	nActionBinding[Fire1].action      = derivedAction<Dough>([](Dough& a, sf::Time){ a.preFire(); });
 }
 
 
@@ -146,6 +180,8 @@ bool Player::isRealtimeAction(Action action)
 	{
 		case MoveLeft:
 		case MoveRight:
+		case MoveLeft1:
+		case MoveRight1:
 		// case MoveUp:
 			return true;
 

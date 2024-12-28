@@ -34,6 +34,7 @@ World::World(sf::RenderWindow& window, State::Context context)
 , nWorldBounds(0.f, 0.f, 5000, nWorldView.getSize().y)
 , nSpawnPosition(50, nWorldBounds.height - nWorldView.getSize().y / 2.f)
 , nPlayerDough(nullptr)
+, nPlayerDough2(nullptr)
 , nTime(sf::Time::Zero)
 {
 	// loadTextures();
@@ -48,24 +49,64 @@ World::World(sf::RenderWindow& window, State::Context context)
 	// nHub = Hub();
 }
 
+void World::update(sf::Time dt)
+{
+	// if ((node.getCategory() & Category::PlayerDough) && !node.isMarkedForRemoval() && !nWorldBounds.intersects(node.getBoundingRect()))
+	// {
+	// 	Dough* nPlayerDough = static_cast<Dough*>(&node);
+	// 	nPlayerDough->getDamage(1);
+	// 	nPlayerDough->resetCheckPoint();
+	// }
 
-void World::update(sf::Time dt) {
-  nSceneGraph.setRange(nWorldView.getCenter().x);
-  nTime -= dt;
-  applyNormal();
-  applyGravity();
-  // enemiesAttackPlayer();
-  // Forward commands to scene graph, adapt velocity (scrolling, diagonal
-  // correction)
-  while (!nCommandQueue.isEmpty()) {
-    const Command& command = nCommandQueue.pop();
-    for (std::size_t i = 0; i < LayerCount; ++i) {
-      if (nCategoryLayers[i] & command.category)
-        nSceneLayers[i]->onCommand(command, dt);
-    }
-  }
-  handleCollisions();
-  removeSceneNode();
+	if (nPlayerDough->getAnimationState() != Entity::State::Dead && !nWorldBounds.intersects(nPlayerDough->getBoundingRect()))
+	{
+		nPlayerDough->getDamage(1);
+		if (nPlayerDough2 != nullptr && nPlayerDough2->getAnimationState() != Entity::State::Dead)
+		{
+			if (!nWorldBounds.intersects(nPlayerDough2->getBoundingRect()))
+			{
+				nPlayerDough2->getDamage(1);
+				// nPlayerDough2->setPosition(nPlayerDough->getPosition() + sf::Vector2f(0.f, 50.f));
+				nPlayerDough->resetCheckPoint();
+				nPlayerDough2->setPosition(nPlayerDough->getPosition() - sf::Vector2f(0.f, 50.f));
+			}
+			else
+			{
+				nPlayerDough->setPosition(nPlayerDough2->getPosition() - sf::Vector2f(0.f, 50.f));
+			}
+		}
+		else
+		{
+			nPlayerDough->resetCheckPoint();
+		}
+	}
+	if (nPlayerDough2 != nullptr && nPlayerDough2->getAnimationState() != Entity::State::Dead && !nWorldBounds.intersects(nPlayerDough2->getBoundingRect()))
+	{
+		nPlayerDough2->getDamage(1);
+		if (nPlayerDough->getAnimationState() != Entity::State::Dead)
+		nPlayerDough2->setPosition(nPlayerDough->getPosition() - sf::Vector2f(0.f, 50.f));
+		else nPlayerDough2->resetCheckPoint();
+	}
+
+
+
+	nSceneGraph.setRange(nWorldView.getCenter().x);
+	nTime -= dt;
+	applyNormal();
+	applyGravity();
+	// enemiesAttackPlayer();
+	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
+	while (!nCommandQueue.isEmpty())
+	{
+		const Command& command = nCommandQueue.pop();
+		for (std::size_t i = 0; i < LayerCount; ++i)
+		{
+			if (nCategoryLayers[i] & command.category)
+				nSceneLayers[i]->onCommand(command, dt);
+		}
+	}
+	handleCollisions();
+	removeSceneNode();
 
   nSceneGraph.update(dt, nCommandQueue);
   // Regular update step, adapt position (correct if outside view)
@@ -138,6 +179,9 @@ void World::applyGravity()
 	applyGravity.category = Category::Entity;
 	applyGravity.action = derivedAction<Entity>([this] (Entity& Dough, sf::Time)
 	{
+		if (Dough.getCategory() & Category::PlayerDough && Dough.getAnimationState() == Entity::State::Dead)
+		return;
+
 		Dough.accelerate(0.f, nGravity);
 	});
 	
@@ -147,6 +191,10 @@ void World::applyGravity()
 void World::adaptCameraPosition()
 {
 	sf::Vector2f postiion = nPlayerDough->getPosition();
+	if (nPlayerDough2 != nullptr)
+	{
+		postiion = (nPlayerDough->getPosition() + nPlayerDough2->getPosition()) / 2.f;
+	}
 
 	// Camera move to the right
 	if (postiion.x > nWorldView.getCenter().x)
@@ -317,15 +365,24 @@ void World::loadMap(std::string level)
 		}
 		nSceneLayers[Enemies]->attachChild(std::move(enemy));
 	}
+
 	
 	// Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough2));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nPlayerDough->setCheckPoint(nSpawnPosition);
 	nSceneLayers[Player]->attachChild(std::move(leader));
+	// std::unique_ptr<Dough> leader1(new Dough(Dough::Dough2));
+	// leader1->setPosition(nSpawnPosition);
+	// leader1->setPlayer2(true);
+	// nPlayerDough2 = leader1.get();
+	// leader1->setCheckPoint(nSpawnPosition);
+	// nSceneLayers[Player]->attachChild(std::move(leader1));
 
 	// Slide
+	std::cout << "SlideBlock" << std::endl;
+
 
 	for (auto& slide : config["SlideBlock"])
 	{
@@ -404,7 +461,11 @@ bool World::isWin() {
 }
 
 bool World::isLose() {
-	return nTime <= sf::Time::Zero || nPlayerDough->isMarkedForRemoval();
+	if ( nTime <= sf::Time::Zero ) return true;
+
+	if (nPlayerDough2 != nullptr)
+		return nPlayerDough->isMarkedForRemoval() && nPlayerDough2->isMarkedForRemoval();
+	return nPlayerDough->isMarkedForRemoval();
 }
 
 void World::applyNormal()
@@ -445,12 +506,6 @@ void World::removeSceneNode()
 	std::vector<SceneNode*> nodes;
 	removeSceneNode.action = derivedAction<SceneNode>([this, &nodes] (SceneNode& node, sf::Time)
 	{
-		if ((node.getCategory() & Category::PlayerDough) && !node.isMarkedForRemoval() && !nWorldBounds.intersects(node.getBoundingRect()))
-		{
-			Dough* nPlayerDough = static_cast<Dough*>(&node);
-			nPlayerDough->getDamage(1);
-			nPlayerDough->resetCheckPoint();
-		}
 
 		if (node.isMarkedForRemoval())
 		{	

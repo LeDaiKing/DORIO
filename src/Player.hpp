@@ -20,6 +20,13 @@ class Player
 			StandUp,
 			Jump,
 			Fire,
+			MoveLeft1,
+			MoveRight1,
+			MoveUp1,
+			Sit1,
+			StandUp1,
+			Jump1,
+			Fire1,
 			ActionCount
 		};
 

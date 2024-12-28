@@ -84,6 +84,7 @@ class World : private sf::NonCopyable
 		sf::Vector2f nSpawnPosition;
 		// float								mScrollSpeed;
 		Dough* nPlayerDough;
+		Dough* nPlayerDough2;
 		CheckPoint* nCup;
 		
 		Hub nHub;
