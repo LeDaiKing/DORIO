@@ -4,7 +4,7 @@
         "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 0,
         "Time": 300,
-        "StartPoint": [224, 480],
+        "StartPoint": [11584, 480],
 
         "SlideBlock": [
             {
@@ -72,6 +72,7 @@
     "Level2":
     {
         "MapImage": "res/Background/Map/map2_final2.png",
+        "MapImage": "res/Background/Map/map2_final2.png",
         "Background": 1,
         "Time": 1000,
         "StartPoint": [5125, 448],
@@ -119,7 +120,7 @@
         "MapImage": "res/Background/Map/map3_final1.png",
         "Background": 2,
         "Time": 1000,
-        "StartPoint": [20910, 265],
+        "StartPoint": [20896, 265],
         "SlideBlock": [
                 {
                     "Position": [

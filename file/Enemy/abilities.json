@@ -29,7 +29,7 @@
     {
         "HitBox": [25, 20],
         "Speed": [576, 0],
-        "MaxVelocity": [64, 200],
+        "MaxVelocity": [100, 200],
         "JumpVelocity": 0
     },
     "SnailShell":

@@ -47,7 +47,6 @@ namespace Textures
 		BackGround1,
 		BackGround2,
 		BackGround3,
-
 		LeaderboardScreen,
 		TitleScreen,
 		ChooseModeScreen,
