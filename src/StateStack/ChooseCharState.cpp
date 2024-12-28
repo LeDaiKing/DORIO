@@ -64,7 +64,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
 
     nStat.setString("Speed: " + std::to_string(nSpeed1) + "\n" + " Jump: " + std::to_string(nJumpVelocity1));
     nStat.setFont(FontHolder::getInstance().get(Fonts::Bytebounce));
-    nStat.setPosition(256, 624);
+    nStat.setPosition(370, 610);
     nStat.setFillColor(sf::Color::White);
     nStat.setCharacterSize(64);
     //nStat.setOutlineColor(sf::Color::Black);
