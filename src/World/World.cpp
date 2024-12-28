@@ -361,7 +361,7 @@ void World::loadMap(std::string level)
 
 	
 	// Dough
-	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1));
+	std::unique_ptr<Dough> leader(new Dough(Dough::Dough1, *nContext.sounds));
 	nPlayerDough = leader.get();
 	nPlayerDough->setPosition(nSpawnPosition);
 	nPlayerDough->setCheckPoint(nSpawnPosition);
@@ -414,9 +414,9 @@ void World::loadMap(std::string level)
 }
 
 bool World::isWin() {
-	// if (nCup!= nullptr && !nCup->isCheck()) return false;
-	// if (nPlayerDough == nullptr) return false;
-	// assert(nPlayerDough != nullptr);
+	if (nCup!= nullptr && !nCup->isCheck()) return false;
+	if (nPlayerDough == nullptr) return false;
+	assert(nPlayerDough != nullptr);
 	std::ofstream file(*nContext.saveFile + "score.bin", std::ios::binary);
 	float nSecond = nTime.asSeconds();
 	float nHP = nPlayerDough->getHitPoints();
@@ -600,7 +600,7 @@ void World::load(std::ifstream& saveFile, int lev)
 	
 	int type;
 	saveFile.read(reinterpret_cast<char*>(&type), sizeof(type));
-	std::unique_ptr<Dough> leader(new Dough(static_cast<Dough::Type>(type)));
+	std::unique_ptr<Dough> leader(new Dough(static_cast<Dough::Type>(type), *nContext.sounds));
 	nPlayerDough = leader.get();
 	nPlayerDough->load(saveFile);
 	nSceneLayers[Player]->attachChild(std::move(leader));

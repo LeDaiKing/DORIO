@@ -27,7 +27,7 @@ class Dough : public Entity
 		using Entity::State;
 
 	public:
-		Dough(Type type);
+		Dough(Type type, SoundPlayer& sounds);
 		virtual unsigned int getCategory() const;
 
 		virtual void jump();
