@@ -1,5 +1,5 @@
 {
-    "Level1":
+    "Level3":
     {
         "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 0,
@@ -115,7 +115,7 @@
             }
         ]
     },
-    "Level3":
+    "Level1":
     {
         "MapImage": "res/Background/Map/map3_final1.png",
         "Background": 2,
