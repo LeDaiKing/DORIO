@@ -189,6 +189,7 @@ namespace Textures
 		RetryButtonSelected,
 		RetryButtonPressed,
 		WinningScreen,
+		Cup,
 
 		statBox,
 		PurpleRectangle,

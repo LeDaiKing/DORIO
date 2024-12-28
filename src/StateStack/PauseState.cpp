@@ -24,6 +24,7 @@ PauseState::PauseState(StateStack& stack, Context context)
     {
         requestStackClear();
         requestStackPush(States::ChooseSlot);
+        getPreviousFolder(*getContext().saveFile);
     });
 
     auto saveButton = std::make_shared<GUI::Button>(context, Textures::ID::SaveButtonNormal, Textures::ID::SaveButtonSelected, Textures::ID::SaveButtonPressed);

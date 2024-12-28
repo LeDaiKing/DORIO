@@ -36,6 +36,7 @@ LosingState::LosingState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::Game);
+        requestStackPush(States::ID::Loading);
     });
 }
 

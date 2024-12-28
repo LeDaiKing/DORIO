@@ -249,6 +249,7 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::ThreeStarBadgeBlank, "res/UI/threeStarBadge_b.png");
 
 	TextureHolder::getInstance().load(Textures::ID::ChoosePlayerDeco, "res/Background/choosePlayerDeco.png");
+	TextureHolder::getInstance().load(Textures::ID::Cup, "res/ui/char1Sprite.png");
 
 	TextureHolder::getInstance().load(Textures::ID::OnePlayerButtonNormal, "res/UI/onePlayerButton.png");
 	TextureHolder::getInstance().load(Textures::ID::OnePlayerButtonSelected, "res/UI/onePlayerButton_s.png");

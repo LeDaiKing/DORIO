@@ -53,9 +53,9 @@ namespace GUI{
 
         private:
         Callback nCallback;
-        sf::Texture& nNormalTexture;
-        sf::Texture& nSelectedTexture;
-        sf::Texture& nPressedTexture;
+        sf::Texture nNormalTexture;
+        sf::Texture nSelectedTexture;
+        sf::Texture nPressedTexture;
         SoundPlayer& nSoundPlayer;
         bool nIsSelected = true;
         bool nIsPressable = true;

@@ -8,7 +8,7 @@
 WinningState::WinningState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
-, nCharacterSprite()
+, nCupSprite()
 , leaderboardButton(context, Textures::ID::LeaderboardButtonNormal, Textures::ID::LeaderboardButtonSelected, Textures::ID::LeaderboardButtonPressed)
 , startButton(context, Textures::ID::StartButtonNormal, Textures::ID::StartButtonSelected, Textures::ID::StartButtonPressed)
 , nClock()
@@ -21,8 +21,8 @@ WinningState::WinningState(StateStack& stack, Context context)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::WinningScreen));
     saveCurrentState();
-    nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
-    nCharacterSprite.setPosition(792, 238);
+    nCupSprite.setTexture(TextureHolder::getInstance().get(Textures::Cup));
+    nCupSprite.setPosition(792, 238);
 
     nClock.setTexture(TextureHolder::getInstance().get(Textures::ClockHub));
     nClock.setPosition(169, 370);
@@ -82,7 +82,7 @@ void WinningState::draw()
     sf::RenderWindow& window = *getContext().window;
     window.setView(window.getDefaultView());
     window.draw(nBackgroundSprite);
-    window.draw(nCharacterSprite);
+    window.draw(nCupSprite);
     window.draw(leaderboardButton);
     window.draw(startButton);
     textScore.setText(std::to_string((int) nScore));

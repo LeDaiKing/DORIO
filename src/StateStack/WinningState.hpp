@@ -29,7 +29,7 @@ class WinningState : public State{
         const float DELAY = 1;
         int nSelectedSlot = -1;
         sf::Sprite nBackgroundSprite;
-        sf::Sprite nCharacterSprite;
+        sf::Sprite nCupSprite;
         GUI::Button startButton;
         GUI::Button leaderboardButton;
         sf::Sprite nClock;

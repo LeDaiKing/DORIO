@@ -430,11 +430,11 @@ bool World::isWin() {
 	file.write(reinterpret_cast<char*>(&isCoin), sizeof(isCoin));
 	file.close();
 
-	std::ofstream map(*nContext.saveFile + "map.bin", std::ios::binary);
+	std::ifstream map(*nContext.saveFile + "map.bin", std::ios::binary);
 	std::vector<bool> badge;
 	for (int i = 0; i < 6; i++) {
 		bool ok = false;
-		map.write((char*)&ok, sizeof(bool));
+		map.read((char*)&ok, sizeof(bool));
 		badge.push_back(ok);
 	}
 	map.close();

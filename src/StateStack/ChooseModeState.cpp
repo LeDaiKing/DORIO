@@ -132,17 +132,6 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
             if (i == 0) kitchenModeBadge[0].setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
             if (i == 1) hallwayModeBadge[0].setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
             if (i == 2) gardenModeBadge[0].setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
-            if (i == 0) {
-                std::cout << "Hallway Mode Unlocked" << std::endl;
-                hallwayMode->setNormalTexture(Textures::ID::HallwayModeNormal);
-                hallwayMode->setIsSelected(true);
-                hallwayMode->setIsPressable(true);
-            }
-            if (i == 1) {
-                gardenMode->setNormalTexture(Textures::ID::GardenModeNormal);
-                gardenMode->setIsSelected(true);
-                gardenMode->setIsPressable(true);
-            }
         }
         if (isCoin == true) {
             if (i == 0) kitchenModeBadge[1].setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeNormal));

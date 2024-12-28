@@ -43,6 +43,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
         selectedChar = 1;
+        nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
+        nStat.setString("Speed: " + std::to_string(nSpeed1) + "\n" + " Jump: " + std::to_string(nJumpVelocity1));
     });
     auto charSlot2 = std::make_shared<GUI::Button>(context, Textures::ID::CharSlot2Normal, Textures::ID::CharSlot2Selected, Textures::ID::CharSlot2Pressed);
     charSlot2->setPosition({1088, 131});
@@ -50,6 +52,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
         selectedChar = 2;
+        nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
+        nStat.setString("Speed: " + std::to_string(nSpeed2) + "\n" + " Jump: " + std::to_string(nJumpVelocity2));
     });
 
     std::string key = std::string("Dough/") + "Dough1";
@@ -107,6 +111,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
             selectedChar = 2;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
+            std::cout << "aaa" << std::endl;
             nStat.setString("Speed: " + std::to_string(nSpeed2) + "\n" + " Jump: " + std::to_string(nJumpVelocity2));
         }   
     });
@@ -126,7 +131,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     {
         requestStackPop();
         requestStackPush(States::Game);
-        requestStackPush(States::ID::Transition);
+        requestStackPush(States::ID::Loading);
     });
 
     settingButton.setPosition({75, 92});
@@ -195,10 +200,11 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
         requestStackPop();
         requestStackPush(States::Game);
-        requestStackPush(States::ID::Transition);
+        requestStackPush(States::ID::Loading);
         return false;
     }
-    nGUIContainer.handleEvent(event);
+    if (event.type != sf::Event::MouseMoved)
+        nGUIContainer.handleEvent(event);
     backButton.handleEvent(event);
     previousButton.handleEvent(event);
     nextButton.handleEvent(event);
