@@ -80,6 +80,7 @@ sf::Vector2<T> toVector2(const nlohmann::json& json);
 bool isFileEmpty(const std::string& fileName);
 bool isFolderEmpty(const std::string& folderName);
 void clearFolder(const std::string& folderName);
+void getPreviousFolder(std::string& folderName);
 
 #include "Utility.inl"
 

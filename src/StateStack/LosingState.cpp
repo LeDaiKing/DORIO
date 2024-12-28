@@ -2,6 +2,9 @@
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
 
+#include <fstream>
+
+
 LosingState::LosingState(StateStack& stack, Context context)
 : State(stack, context)
 , nBackgroundSprite()
@@ -9,8 +12,8 @@ LosingState::LosingState(StateStack& stack, Context context)
 , homeButton(context, Textures::ID::HomeButtonNormal, Textures::ID::HomeButtonSelected, Textures::ID::HomeButtonPressed)
 , retryButton(context, Textures::ID::RetryButtonNormal, Textures::ID::RetryButtonSelected, Textures::ID::RetryButtonPressed)
 {
+    saveCurrentState();
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::LosingScreen));
-    
     leaderboardButton.setPosition(955, 700);
     leaderboardButton.setIsSelected(false);
     leaderboardButton.setCallback([this] ()
@@ -70,4 +73,13 @@ bool LosingState::handleEvent(const sf::Event& event)
     homeButton.handleEvent(event);
     retryButton.handleEvent(event);
     return false;
+}
+
+void LosingState::saveCurrentState() {
+    Context context = getContext();
+    std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
+    assert(savefile.is_open());
+    int state = States::ID::Losing;
+    savefile.write((char*)&state, sizeof(int));
+    savefile.close();
 }

@@ -25,8 +25,8 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         file.write((char*)&level, sizeof(int));
         file.close();
         requestStackPop();
-        requestStackPush(States::Game);
-        requestStackPush(States::Loading);
+        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Transition);
     });
 
     auto hallwayMode = std::make_shared<GUI::Button>(context, Textures::ID::HallwayModeNormal, Textures::ID::HallwayModeSelected, Textures::ID::HallwayModePressed);
@@ -38,8 +38,8 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         file.write((char*)&level, sizeof(int));
         file.close();
         requestStackPop();
-        requestStackPush(States::Game);
-        requestStackPush(States::Loading);
+        requestStackPush(States::ChoosePlayer);
+        requestStackPush(States::Transition);
     });
 
     auto gardenMode = std::make_shared<GUI::Button>(context, Textures::ID::GardenModeNormal, Textures::ID::GardenModeSelected, Textures::ID::GardenModePressed);
@@ -51,7 +51,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         file.write((char*)&level, sizeof(int));
         file.close();
         requestStackPop();
-        requestStackPush(States::Game);
+        requestStackPush(States::ChoosePlayer);
         requestStackPush(States::Loading);
     });
 
@@ -84,7 +84,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChooseCharacter);
+        requestStackPush(States::ChooseSlot);
         requestStackPush(States::ID::Transition);
     });
 

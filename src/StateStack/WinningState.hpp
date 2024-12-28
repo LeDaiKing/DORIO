@@ -21,6 +21,7 @@ class WinningState : public State{
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
+        virtual void saveCurrentState();
     private:
         const float speed = 50;
         const float secondToScore = 1;

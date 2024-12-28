@@ -49,6 +49,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
         requestStackPop();
         requestStackPush(States::ChooseSlot);
         requestStackPush(States::ID::Transition);
+        getPreviousFolder(*getContext().saveFile);
     });  
 
     settingButton.setPosition({75, 92});
@@ -125,7 +126,7 @@ void ChoosePlayerState::saveCurrentState() {
     Context context = getContext();
     std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
     assert(savefile.is_open());
-    int state = States::ID::ChooseCharacter;
+    int state = States::ID::ChoosePlayer;
     savefile.write((char*)&state, sizeof(int));
     savefile.close();
 }

@@ -246,6 +246,14 @@ void clearFolder(const std::string& folderName)
 	}
 }
 
+void getPreviousFolder(std::string& folderName) {
+	folderName.pop_back();
+	while (folderName.back() != '/')
+	{
+		folderName.pop_back();
+	}
+}
+
 bool checkInRange(const sf::FloatRect& rect1, const sf::Vector2f& range)
 {
 	if (rect1 == sf::FloatRect())

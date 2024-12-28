@@ -65,6 +65,7 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
         requestStackPop();
         requestStackPush(States::Title);
         requestStackPush(States::ID::Transition);
+
     });
 
     settingButton.setPosition({75, 92});
@@ -189,17 +190,20 @@ bool ChooseSlotState::handleEvent(const sf::Event& event)
         nameBox.handleEvent(event);
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Enter) {
-                State::Context context = getContext();
-                std::string filename = *context.saveFile + "Save" + std::to_string(nSelectedSlot) + "/" + "name.bin";
-                std::ofstream file(filename, std::ios::binary);
                 int length = nameBox.getInput().size();
-                file.write((char*)&length, sizeof(int));
-                file.write(nameBox.getInput().c_str(), length);
-                file.close();
-                requestStackPop();
-                requestStackPush(States::ChoosePlayer);
-                requestStackPush(States::ID::Transition);
-                *context.saveFile = *context.saveFile + "Save" + std::to_string(nSelectedSlot) + "/";
+                if (length > 0) {
+                    State::Context context = getContext();
+                    std::string filename = *context.saveFile + "Save" + std::to_string(nSelectedSlot) + "/" + "name.bin";
+                    std::ofstream file(filename, std::ios::binary);
+                    
+                    file.write((char*)&length, sizeof(int));
+                    file.write(nameBox.getInput().c_str(), length);
+                    file.close();
+                    requestStackPop();
+                    requestStackPush(States::ChooseMode);
+                    requestStackPush(States::ID::Transition);
+                    *context.saveFile = *context.saveFile + "Save" + std::to_string(nSelectedSlot) + "/";
+                }
             }
             if (event.key.code == sf::Keyboard::Escape) {
                 isConfirm = false;

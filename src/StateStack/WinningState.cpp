@@ -20,7 +20,7 @@ WinningState::WinningState(StateStack& stack, Context context)
 , coinBadge()
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::LeaderboardScreen));
-    
+    saveCurrentState();
     nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
     nCharacterSprite.setPosition(792, 238);
 
@@ -153,4 +153,13 @@ bool WinningState::handleEvent(const sf::Event& event)
     leaderboardButton.handleEvent(event);
     startButton.handleEvent(event);
     return false;
+}
+
+void WinningState::saveCurrentState() {
+    Context context = getContext();
+    std::ofstream savefile(*context.saveFile + "state.bin", std::ios::binary);
+    assert(savefile.is_open());
+    int state = States::ID::ChooseSlot;
+    savefile.write((char*)&state, sizeof(int));
+    savefile.close();
 }

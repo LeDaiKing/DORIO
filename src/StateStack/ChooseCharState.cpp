@@ -100,7 +100,7 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     saveButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChooseMode);
+        requestStackPush(States::Game);
         requestStackPush(States::ID::Transition);
     });
 
@@ -164,7 +164,7 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
 {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
         requestStackPop();
-        requestStackPush(States::ChooseMode);
+        requestStackPush(States::Game);
         requestStackPush(States::ID::Transition);
         return false;
     }
