@@ -20,7 +20,8 @@ class ChooseCharState : public State{
         virtual void saveCurrentState();
     private:
         sf::Sprite nBackgroundSprite;
-        sf::Sprite nChar, nCharIntro;
+        sf::Text nStat;
+        sf::Sprite nChar, nCharIntro, nStatBox;
         Animation nCharAni1;
         Animation nCharAni2;
         GUI::Container nGUIContainer;
@@ -29,5 +30,7 @@ class ChooseCharState : public State{
         GUI::Button nextButton;
         GUI::Button saveButton;
         GUI::Button settingButton;
+        int nSpeed1, nJumpVelocity1;
+        int nSpeed2, nJumpVelocity2;
         int selectedChar = 1;
 };

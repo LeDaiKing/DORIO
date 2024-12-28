@@ -182,6 +182,7 @@ void Game::loadTextures() {
 
 	TextureHolder::getInstance().load(Textures::ID::CharIntro, "res/UI/charIntro.png");
 	TextureHolder::getInstance().load(Textures::ID::CharIntro2, "res/UI/charIntro2.png");
+	TextureHolder::getInstance().load(Textures::ID::statBox, "res/UI/statBox.png");
 	TextureHolder::getInstance().load(Textures::ID::VolumeBlock, "res/UI/volumeBlock.png");
 
 	TextureHolder::getInstance().load(Textures::ID::ChooseModeButtonNormal, "res/UI/chooseModeButton.png");
@@ -328,6 +329,7 @@ void Game::loadTextures() {
 
 void Game::loadFonts() {
 	FontHolder::getInstance().load(Fonts::Main, "res/Fonts/SuperMario256.ttf");
+	FontHolder::getInstance().load(Fonts::Bytebounce, "res/Fonts/ByteBounce.ttf");
 }
 
 void Game::processInput() {

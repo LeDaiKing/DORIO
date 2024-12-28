@@ -50,8 +50,8 @@ MusicState::MusicState(StateStack& stack, Context context)
     nGUIContainerText.pack(soundText);
 
 
-    nMusicBar.setPosition(316, 400);
-    nSoundBar.setPosition(316, 564);
+    nMusicBar.setPosition(390, 250);
+    nSoundBar.setPosition(390, 500);
     nMusicBar.setVolume(context.music->getVolume());
     nSoundBar.setVolume(context.sounds->getVolume());
 }

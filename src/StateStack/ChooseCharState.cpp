@@ -1,4 +1,5 @@
 #include "ChooseCharState.hpp"
+#include "ConfigLoader.hpp"
 #include "../UI/Button.hpp"
 #include "../UI/Label.hpp"
 #include <iostream>
@@ -22,6 +23,8 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     nChar.setPosition({376, 289});
     nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
     nCharIntro.setPosition({208, 53});
+    nStatBox.setTexture(TextureHolder::getInstance().get(Textures::statBox));
+    nStatBox.setPosition({208, 563});
 
     nCharAni1.addAnimationState(0, 96, 12, sf::seconds(1), sf::Vector2i(32, 32), true);
     nCharAni1.setAnimationState(0);
@@ -48,6 +51,24 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
         // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
         selectedChar = 2;
     });
+
+    std::string key = std::string("Dough/") + "Dough1";
+	const nlohmann::json& config1 = ConfigLoader::getInstance().getConfig(key.c_str());
+	nSpeed1 = toVector2<float>(config1["Speed"]).x;
+	nJumpVelocity1 = config1["JumpVelocity"];
+
+    std::string key2 = std::string("Dough/") + "Dough2";
+	const nlohmann::json& config2 = ConfigLoader::getInstance().getConfig(key.c_str());
+	nSpeed2 = toVector2<float>(config2["Speed"]).x;
+	nJumpVelocity2 = config2["JumpVelocity"];
+
+    nStat.setString("Speed: " + std::to_string(nSpeed1) + "\n" + " Jump: " + std::to_string(nJumpVelocity1));
+    nStat.setFont(FontHolder::getInstance().get(Fonts::Bytebounce));
+    nStat.setPosition(256, 624);
+    nStat.setFillColor(sf::Color::White);
+    nStat.setCharacterSize(64);
+    //nStat.setOutlineColor(sf::Color::Black);
+    //nStat.setOutlineThickness(2.f);
     
     previousButton.setPosition({284.5, 482.5});
     previousButton.setIsSelected(false);
@@ -59,12 +80,14 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
             selectedChar = 1;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
+            nStat.setString("Speed: " + std::to_string(nSpeed1) + "\n" + " Jump: " + std::to_string(nJumpVelocity1));
         }
         else
         {
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
             selectedChar = 2;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
+            nStat.setString("Speed: " + std::to_string(nSpeed2) + "\n" + " Jump: " + std::to_string(nJumpVelocity2));
         }
     });
     nextButton.setPosition({792.5, 482.5});
@@ -77,13 +100,15 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char1Sprite));
             selectedChar = 1;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro));
+            nStat.setString("Speed: " + std::to_string(nSpeed1) + "\n" + " Jump: " + std::to_string(nJumpVelocity1));  
         }
         else
         {
             // nChar.setTexture(TextureHolder::getInstance().get(Textures::char2Sprite));
             selectedChar = 2;
             nCharIntro.setTexture(TextureHolder::getInstance().get(Textures::CharIntro2));
-        }
+            nStat.setString("Speed: " + std::to_string(nSpeed2) + "\n" + " Jump: " + std::to_string(nJumpVelocity2));
+        }   
     });
 
     backButton.setPosition({75, 705});  
@@ -137,6 +162,8 @@ void ChooseCharState::draw()
     window.draw(nCharIntro);
     window.draw(saveButton);
     window.draw(settingButton);
+    window.draw(nStatBox);
+    window.draw(nStat);
 }
 
 bool ChooseCharState::update(sf::Time dt)
@@ -174,6 +201,7 @@ bool ChooseCharState::handleEvent(const sf::Event& event)
     nextButton.handleEvent(event);
     saveButton.handleEvent(event);
     settingButton.handleEvent(event);
+
     return false;
 }
 

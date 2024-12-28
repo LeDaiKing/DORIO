@@ -172,6 +172,7 @@ namespace Textures
 		RetryButtonSelected,
 		RetryButtonPressed,
 
+		statBox,
 		PurpleRectangle,
 		VolumeBlock,
 		
@@ -247,7 +248,8 @@ namespace Fonts
 	enum ID
 	{
 		Main,
-		Mario
+		Mario,
+		Bytebounce,
 	};
 }
 
