@@ -55,7 +55,7 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     backButton.setCallback([this] ()
     {
         requestStackPop();
-        requestStackPush(States::ChooseSlot);
+        requestStackPush(States::ChooseMode);
         requestStackPush(States::ID::Transition);
     });  
 
