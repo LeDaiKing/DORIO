@@ -4,7 +4,7 @@
         "MapImage": "res/Background/Map/map1_full2.png.png",
         "Background": 0,
         "Time": 300,
-        "StartPoint": [96, 480],
+        "StartPoint": [224, 480],
 
         "SlideBlock": [
             {
@@ -71,9 +71,104 @@
     },
     "Level2":
     {
-        "MapImage": "res/Background/Map/map_final2.png",
+        "MapImage": "res/Background/Map/map2_final2.png",
         "Background": 1,
-        "Time": 100,
-        "StartPoint": [150, 480]
+        "Time": 1000,
+        "StartPoint": [5125, 448],
+        "SlideBlock": [
+            {
+                "Position": [
+                    85,
+                    10
+                ],
+                "Offset": [
+                    [
+                        256,
+                        0
+                    ]
+                ]
+            },
+            {
+                "Position": [
+                    330,
+                    15
+                ],
+                "Offset": [
+                    [
+                        192,
+                        0
+                    ]
+                ]
+            },
+            {
+                "Position": [
+                    337,
+                    13
+                ],
+                "Offset": [
+                    [
+                        96,
+                        0
+                    ]
+                ]
+            }
+        ]
+    },
+    "Level3":
+    {
+        "MapImage": "res/Background/Map/map3_final1.png",
+        "Background": 2,
+        "Time": 1000,
+        "StartPoint": [20910, 265],
+        "SlideBlock": [
+                {
+                    "Position": [
+                        672,
+                        14
+                    ],
+                    "Offset": [
+                        [
+                            224,
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "Position": [
+                        681,
+                        12
+                    ],
+                    "Offset": [
+                        [
+                            192,
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "Position": [
+                        713,
+                        13
+                    ],
+                    "Offset": [
+                        [
+                            320,
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "Position": [
+                        988,
+                        9
+                    ],
+                    "Offset": [
+                        [
+                            128,
+                            0
+                        ]
+                    ]
+                }
+        ]
     }
 }

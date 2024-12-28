@@ -257,7 +257,7 @@ void World::loadMap(std::string level)
 			std::unique_ptr<Block> block = BlockFactory::createBlock("Gold", sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));
 		}
-		else if (color.toInteger() == 0xB2B2FF)
+		else if (color.toInteger() == 0xB2B2FF || color.toInteger() == 0x111162FF)
 		{
 			std::unique_ptr<Block> block = BlockFactory::createBlock("UnderFloor" + level1, sf::Vector2f(x + 16, y + 16));
 			nSceneLayers[Map]->attachChild(std::move(block));

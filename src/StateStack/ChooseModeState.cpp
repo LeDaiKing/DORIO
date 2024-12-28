@@ -53,7 +53,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         file.close();
         requestStackPop();
         requestStackPush(States::ChoosePlayer);
-        requestStackPush(States::Loading);
+        requestStackPush(States::Transition);
     });
 
     kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::OneStarBadgeBlank)));
