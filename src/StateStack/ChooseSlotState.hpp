@@ -18,6 +18,7 @@
 class ChooseSlotState : public State{
     public:
         ChooseSlotState(StateStack& stack, Context context);
+        virtual ~ChooseSlotState();
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);

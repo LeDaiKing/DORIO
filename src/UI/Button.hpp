@@ -18,6 +18,9 @@ namespace GUI{
         
         Button(State::Context context, Textures::ID normal, Textures::ID selected, Textures::ID pressed);
 
+        void setNormalTexture(Textures::ID);
+        void setSelectedTexture(Textures::ID);
+        void setPressedTexture(Textures::ID);
         void setNormalSprite();
         void setSelectedSprite();
         void setPressedSprite();
@@ -29,6 +32,7 @@ namespace GUI{
         void setToggle(bool flag);
 
         void setIsSelected(bool flag);
+        void setIsPressable(bool flag);
 
         virtual void update(sf::Time dt);
         virtual bool isSelectable() const;
@@ -49,11 +53,12 @@ namespace GUI{
 
         private:
         Callback nCallback;
-        const sf::Texture& nNormalTexture;
-        const sf::Texture& nSelectedTexture;
-        const sf::Texture& nPressedTexture;
+        sf::Texture& nNormalTexture;
+        sf::Texture& nSelectedTexture;
+        sf::Texture& nPressedTexture;
         SoundPlayer& nSoundPlayer;
         bool nIsSelected = true;
+        bool nIsPressable = true;
         bool nIsSelecting = false;
         sf::Sprite nSprite;
         Animation nSelectedAni;

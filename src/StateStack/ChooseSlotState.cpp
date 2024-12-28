@@ -132,6 +132,10 @@ ChooseSlotState::ChooseSlotState(StateStack& stack, Context context)
     nGUIContainerConfirm.selectNext();
 }
 
+ChooseSlotState::~ChooseSlotState() {
+    
+}
+
 void ChooseSlotState::draw()
 {
     sf::RenderWindow& window = *getContext().window;
@@ -195,10 +199,19 @@ bool ChooseSlotState::handleEvent(const sf::Event& event)
                     State::Context context = getContext();
                     std::string filename = *context.saveFile + "Save" + std::to_string(nSelectedSlot) + "/" + "name.bin";
                     std::ofstream file(filename, std::ios::binary);
-                    
                     file.write((char*)&length, sizeof(int));
                     file.write(nameBox.getInput().c_str(), length);
                     file.close();
+
+                    filename = *context.saveFile + "Save" + std::to_string(nSelectedSlot) + "/" + "map.bin";
+                    std::ofstream map(filename, std::ios::binary);
+                    for (int i = 0; i < 6; i++) {
+                        bool ok = false;
+                        map.write((char*)&ok, sizeof(bool));
+                    }
+
+                    map.close();
+
                     requestStackPop();
                     requestStackPush(States::ChooseMode);
                     requestStackPush(States::ID::Transition);

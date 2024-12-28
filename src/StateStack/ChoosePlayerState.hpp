@@ -16,6 +16,7 @@
 class ChoosePlayerState : public State{
     public:
         ChoosePlayerState(StateStack& stack, Context context);
+        virtual ~ChoosePlayerState();
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);

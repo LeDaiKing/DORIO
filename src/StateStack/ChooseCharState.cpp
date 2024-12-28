@@ -142,6 +142,9 @@ ChooseCharState::ChooseCharState(StateStack& stack, Context context)
     nGUIContainer.pack(charSlot2, true);
 }
 
+ChooseCharState::~ChooseCharState() {
+
+}
 
 void ChooseCharState::draw()
 {

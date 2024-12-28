@@ -218,16 +218,19 @@ void Game::loadTextures() {
 	TextureHolder::getInstance().load(Textures::ID::MusicButtonPressed, "res/UI/musicButton_p.png");
 
 	TextureHolder::getInstance().load(Textures::ID::PurpleRectangle, "res/UI/purpleRectangle.png");
+	TextureHolder::getInstance().load(Textures::ID::WinningScreen, "res/Background/winningScreen.png");
 
 	TextureHolder::getInstance().load(Textures::ID::KitchenModeNormal, "res/UI/kitchenMode.png");
 	TextureHolder::getInstance().load(Textures::ID::KitchenModeSelected, "res/UI/kitchenMode_s.png");
 	TextureHolder::getInstance().load(Textures::ID::KitchenModePressed, "res/UI/kitchenMode_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::HallwayModeNormal, "res/UI/hallwayMode.png");
+	TextureHolder::getInstance().load(Textures::ID::HallwayModeLocked, "res/UI/hallwayMode_l.png");
 	TextureHolder::getInstance().load(Textures::ID::HallwayModeSelected, "res/UI/hallwayMode_s.png");
 	TextureHolder::getInstance().load(Textures::ID::HallwayModePressed, "res/UI/hallwayMode_s.png");
 
 	TextureHolder::getInstance().load(Textures::ID::GardenModeNormal, "res/UI/gardenMode.png");
+	TextureHolder::getInstance().load(Textures::ID::GardenModeLocked, "res/UI/gardenMode_l.png");
 	TextureHolder::getInstance().load(Textures::ID::GardenModeSelected, "res/UI/gardenMode_s.png");
 	TextureHolder::getInstance().load(Textures::ID::GardenModePressed, "res/UI/gardenMode_s.png");
 

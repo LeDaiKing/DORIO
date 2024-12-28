@@ -28,6 +28,10 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     onePlayerButton->setIsSelected(true);
     onePlayerButton->setCallback([this] ()
     {
+        std::ofstream file(*getContext().saveFile + "numberPlayer.bin", std::ios::binary);
+        int numberPlayer = 1;
+        file.write((char*)&numberPlayer, sizeof(int));
+        file.close();
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
         requestStackPush(States::ID::Transition);
@@ -38,6 +42,10 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
     twoPlayerButton->setIsSelected(true);
     twoPlayerButton->setCallback([this] ()
     {
+        std::ofstream file(*getContext().saveFile + "numberPlayer.bin", std::ios::binary);
+        int numberPlayer = 2;
+        file.write((char*)&numberPlayer, sizeof(int));
+        file.close();
         requestStackPop();
         requestStackPush(States::ChooseCharacter);
         requestStackPush(States::ID::Transition);
@@ -49,7 +57,6 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
         requestStackPop();
         requestStackPush(States::ChooseSlot);
         requestStackPush(States::ID::Transition);
-        getPreviousFolder(*getContext().saveFile);
     });  
 
     settingButton.setPosition({75, 92});
@@ -62,6 +69,10 @@ ChoosePlayerState::ChoosePlayerState(StateStack& stack, Context context)
 
     nGUIContainer.pack(onePlayerButton);
     nGUIContainer.pack(twoPlayerButton);
+}
+
+ChoosePlayerState::~ChoosePlayerState() {
+    
 }
 
 void ChoosePlayerState::draw()

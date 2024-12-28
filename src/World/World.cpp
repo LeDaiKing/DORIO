@@ -25,8 +25,9 @@
 
 int World::nGravity = 700;
 
-World::World(sf::RenderWindow& window)
+World::World(sf::RenderWindow& window, State::Context context)
 : nWindow(window)
+, nContext(context)
 , nWorldView(window.getDefaultView())
 , nSceneGraph()
 , nSceneLayers()
@@ -47,31 +48,30 @@ World::World(sf::RenderWindow& window)
 	// nHub = Hub();
 }
 
-void World::update(sf::Time dt)
-{
-	nSceneGraph.setRange(nWorldView.getCenter().x);
-	nTime -= dt;
-	applyNormal();
-	applyGravity();
-	// enemiesAttackPlayer();
-	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
-	while (!nCommandQueue.isEmpty())
-	{
-		const Command& command = nCommandQueue.pop();
-		for (std::size_t i = 0; i < LayerCount; ++i)
-		{
-			if (nCategoryLayers[i] & command.category)
-				nSceneLayers[i]->onCommand(command, dt);
-		}
-	}
-	handleCollisions();
-	removeSceneNode();
 
-	nSceneGraph.update(dt, nCommandQueue);
-	// Regular update step, adapt position (correct if outside view)
+void World::update(sf::Time dt) {
+  nSceneGraph.setRange(nWorldView.getCenter().x);
+  nTime -= dt;
+  applyNormal();
+  applyGravity();
+  // enemiesAttackPlayer();
+  // Forward commands to scene graph, adapt velocity (scrolling, diagonal
+  // correction)
+  while (!nCommandQueue.isEmpty()) {
+    const Command& command = nCommandQueue.pop();
+    for (std::size_t i = 0; i < LayerCount; ++i) {
+      if (nCategoryLayers[i] & command.category)
+        nSceneLayers[i]->onCommand(command, dt);
+    }
+  }
+  handleCollisions();
+  removeSceneNode();
 
-	adaptCameraPosition();
-	nHub.update(dt, *nPlayerDough, nTime);
+  nSceneGraph.update(dt, nCommandQueue);
+  // Regular update step, adapt position (correct if outside view)
+
+  adaptCameraPosition();
+  nHub.update(dt, *nPlayerDough, nTime);
 }
 
 void World::draw()
@@ -180,6 +180,7 @@ void World::adaptCameraPosition()
 
 void World::loadMap(std::string level)
 {
+	nLevel = std::stoi(level);
 	std::string key = "Map/Level" + level;
 	nlohmann::json config = ConfigLoader::getInstance().getConfig(key.c_str());
 
@@ -363,19 +364,42 @@ void World::loadMap(std::string level)
 }
 
 bool World::isWin() {
-	if (nCup!= nullptr && !nCup->isCheck()) return false;
-	if (nPlayerDough == nullptr) return false;
-	assert(nPlayerDough != nullptr);
-	std::ofstream file("file/Score/score.txt");
-	// file << nTime.asSeconds() << std::endl;
-	file << nTime.asSeconds() << std::endl;
-	// file << nPlayerDough->getHitPoints() << std::endl;
-	file << nPlayerDough->getHitPoints() << std::endl;
-	// file << nPlayerDough->getScore() << std::endl;
-	file << nPlayerDough->getScore() << std::endl;
-	file << 1 << std::endl; // win game
-	file << (nPlayerDough->getCoinsCount() > 100) << std::endl; // get all coins
+	// if (nCup!= nullptr && !nCup->isCheck()) return false;
+	// if (nPlayerDough == nullptr) return false;
+	// assert(nPlayerDough != nullptr);
+	std::ofstream file(*nContext.saveFile + "score.bin", std::ios::binary);
+	float nSecond = nTime.asSeconds();
+	float nHP = nPlayerDough->getHitPoints();
+	float nScore = nPlayerDough->getScore();
+	bool isWin = 1;
+	bool isCoin = nPlayerDough->getCoinsCount() > 100;
+	file.write(reinterpret_cast<char*>(&nSecond), sizeof(nSecond));
+	file.write(reinterpret_cast<char*>(&nHP), sizeof(nHP));
+	file.write(reinterpret_cast<char*>(&nScore), sizeof(nScore));
+	file.write(reinterpret_cast<char*>(&isWin), sizeof(isWin));
+	file.write(reinterpret_cast<char*>(&isCoin), sizeof(isCoin));
 	file.close();
+
+	std::ofstream map(*nContext.saveFile + "map.bin", std::ios::binary);
+	std::vector<bool> badge;
+	for (int i = 0; i < 6; i++) {
+		bool ok = false;
+		map.write((char*)&ok, sizeof(bool));
+		badge.push_back(ok);
+	}
+	map.close();
+
+	if (isWin)
+		badge[(nLevel - 1) * 2] = true;
+	if (isCoin)
+		badge[(nLevel - 1) * 2 + 1] = true;
+
+	std::ofstream mapWrite(*nContext.saveFile + "map.bin", std::ios::binary);
+	for (int i = 0; i < 6; i++) {
+		bool ok = badge[i];
+		mapWrite.write((char*)&ok, sizeof(bool));
+	}
+	mapWrite.close();
 	return true;
 }
 
@@ -514,6 +538,7 @@ void World::save(std::ofstream& saveFile)
 
 void World::load(std::ifstream& saveFile, int lev)
 {
+	nLevel = lev + 1;
 	saveFile.read(reinterpret_cast<char*>(&nWorldBounds), sizeof(nWorldBounds));
 	sf::Texture& texture = TextureHolder::getInstance().get(static_cast<Textures::ID>(lev));
 	sf::IntRect textureRect(nWorldBounds);

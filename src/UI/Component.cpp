@@ -4,6 +4,7 @@ namespace GUI{
     Component::Component()
     : nIsSelected(false)
     , nIsActive(false)
+    , nIsPressable(false)
     {
     }
     
@@ -31,7 +32,7 @@ namespace GUI{
     }
 
     bool Component::isPressable() const {
-        return false;
+        return nIsPressable;
     }
 
     bool Component::isActive() const

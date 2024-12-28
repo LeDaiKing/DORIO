@@ -6,7 +6,7 @@
 
 GameState::GameState(StateStack& stack, Context context)
 : State(stack, context)
-, nWorld(*context.window)
+, nWorld(*context.window, context)
 , nPlayer(*context.player)
 {
 
@@ -27,6 +27,10 @@ GameState::GameState(StateStack& stack, Context context)
         --level;
         nWorld.load(fileData, level);
     }
+}
+
+GameState::~GameState() {
+    
 }
 
 void GameState::draw()

@@ -34,6 +34,7 @@ namespace GUI
         private:
             bool nIsSelected;
             bool nIsActive;
+            bool nIsPressable;
 
     };
 }

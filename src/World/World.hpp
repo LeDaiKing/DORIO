@@ -12,6 +12,7 @@
 #include "CheckPoint.hpp"
 #include "../Command/CommandQueue.hpp"
 #include "../Command/Command.hpp"
+#include "../StateStack/State.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -31,7 +32,7 @@ namespace sf
 class World : private sf::NonCopyable
 {
 	public:
-		explicit World(sf::RenderWindow& window);
+		explicit World(sf::RenderWindow& window, State::Context context);
 		void update(sf::Time dt);
 		void draw();
 		
@@ -72,6 +73,7 @@ class World : private sf::NonCopyable
 	private:
 		sf::RenderWindow& nWindow;
 		sf::View nWorldView;
+		State::Context nContext;
 
 		SceneNode nSceneGraph;
 		std::array<SceneNode*, LayerCount>	nSceneLayers;
@@ -88,4 +90,5 @@ class World : private sf::NonCopyable
 		sf::Time nTime;
 
 		static int nGravity;
+		int nLevel;
 };

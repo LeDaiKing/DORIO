@@ -30,6 +30,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
     });
 
     auto hallwayMode = std::make_shared<GUI::Button>(context, Textures::ID::HallwayModeNormal, Textures::ID::HallwayModeSelected, Textures::ID::HallwayModePressed);
+    std::cout << "Hallway Mode create" << std::endl;
     hallwayMode->setPosition({655.565, 165.5});
     hallwayMode->setCallback([this] ()
     {
@@ -55,14 +56,6 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::Loading);
     });
 
-    auto creativeMode = std::make_shared<GUI::Button>(context, Textures::ID::CreativeModeNormal, Textures::ID::CreativeModeSelected, Textures::ID::CreativeModePressed);
-    creativeMode->setPosition({655.5, 555});
-    creativeMode->setCallback([this] ()
-    {
-        requestStackPop();
-        requestStackPush(States::Creative);
-    });
-
     kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::OneStarBadgeBlank)));
     kitchenModeBadge.push_back(sf::Sprite(TextureHolder::getInstance().get(Textures::ThreeStarBadgeBlank)));
     kitchenModeBadge[0].setPosition({237, 256});
@@ -86,6 +79,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPop();
         requestStackPush(States::ChooseSlot);
         requestStackPush(States::ID::Transition);
+        getPreviousFolder(*getContext().saveFile);
     });
 
     // playStartButton.setPosition({1077, 681});
@@ -113,12 +107,59 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::ID::Transition);
     });
 
+    std::ifstream file(*context.saveFile + "map.bin", std::ios::binary);
+    for (int i = 0; i < 3; i++) {
+        bool isWin = false;
+        bool isCoin = false;
+        file.read((char*)&isWin, sizeof(bool));
+        file.read((char*)&isCoin, sizeof(bool));
+        std::cout << isWin << " " << isCoin << std::endl;
+        if (isWin == false) {
+            if (i == 0) {
+                std::cout << "Hallway Mode Locked" << std::endl;
+                hallwayMode->setNormalTexture(Textures::ID::HallwayModeLocked);
+                hallwayMode->setIsSelected(false);
+                hallwayMode->setIsPressable(false);
+            }
+            else if (i == 1) {
+                gardenMode->setNormalTexture(Textures::ID::GardenModeLocked);
+                gardenMode->setIsSelected(false);
+                gardenMode->setIsPressable(false);
+            }
+        }
+
+        if (isWin == true) {
+            if (i == 0) kitchenModeBadge[0].setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
+            if (i == 1) hallwayModeBadge[0].setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
+            if (i == 2) gardenModeBadge[0].setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
+            if (i == 0) {
+                std::cout << "Hallway Mode Unlocked" << std::endl;
+                hallwayMode->setNormalTexture(Textures::ID::HallwayModeNormal);
+                hallwayMode->setIsSelected(true);
+                hallwayMode->setIsPressable(true);
+            }
+            if (i == 1) {
+                gardenMode->setNormalTexture(Textures::ID::GardenModeNormal);
+                gardenMode->setIsSelected(true);
+                gardenMode->setIsPressable(true);
+            }
+        }
+        if (isCoin == true) {
+            if (i == 0) kitchenModeBadge[1].setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeNormal));
+            if (i == 1) hallwayModeBadge[1].setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeNormal));
+            if (i == 2) gardenModeBadge[1].setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeNormal));
+        }
+    }
+
     nGUIContainer.pack(kitchenMode);
     nGUIContainer.pack(hallwayMode);
     nGUIContainer.pack(gardenMode);
-    nGUIContainer.pack(creativeMode);
     sf::RenderWindow& window = *getContext().window;    
     window.setKeyRepeatEnabled(true);    
+}
+
+ChooseModeState::~ChooseModeState() {
+    std::cout << "ChooseModeState Destructor" << std::endl;
 }
 
 void ChooseModeState::draw()

@@ -19,7 +19,7 @@ WinningState::WinningState(StateStack& stack, Context context)
 , winBadge()
 , coinBadge()
 {
-    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::LeaderboardScreen));
+    nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::WinningScreen));
     saveCurrentState();
     nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
     nCharacterSprite.setPosition(792, 238);
@@ -58,10 +58,14 @@ WinningState::WinningState(StateStack& stack, Context context)
         requestStackPush(States::ID::Transition);
     });
 
-    std::ifstream file("file/Score/score.txt");
-    file >> nSecond >> nHP >> nScore;
+    std::ifstream file(*getContext().saveFile + "score.bin", std::ios::binary);
     bool isAchieveWin, isAchieveCoin;
-    file >> isAchieveWin >> isAchieveCoin;
+    file.read((char*)&nSecond, sizeof(float));
+    file.read((char*)&nHP, sizeof(float));
+    file.read((char*)&nScore, sizeof(float));
+    file.read((char*)&isAchieveWin, sizeof(bool));
+    file.read((char*)&isAchieveCoin, sizeof(bool));
+
     if (isAchieveWin) winBadge.setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeNormal));
     else winBadge.setTexture(TextureHolder::getInstance().get(Textures::ThreeStarBadgeBlank));
     if (isAchieveCoin) coinBadge.setTexture(TextureHolder::getInstance().get(Textures::OneStarBadgeNormal));

@@ -18,6 +18,8 @@ namespace GUI{
     , nIsToggle(false)
     , nSoundPlayer(*context.sounds)
     , nButSize(-1, -1)
+    , nIsSelected(true)
+    , nIsPressable(true)
     {
         nSelectedAni.addAnimationState(0, 0, 2, sf::seconds(1.0f), sf::Vector2i(486, 274), true);
         nSelectedAni.setAnimationState(0);
@@ -26,6 +28,19 @@ namespace GUI{
         // nText.setPosition(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));        
     }
 
+    void Button::setNormalTexture(Textures::ID id) {
+        std::cout << "Set Normal Texture " << id << std::endl;
+        nNormalTexture = TextureHolder::getInstance().get(id);
+        setNormalSprite();
+    }
+
+    void Button::setSelectedTexture(Textures::ID id) {
+        nSelectedTexture = TextureHolder::getInstance().get(id);
+    }
+
+    void Button::setPressedTexture(Textures::ID id) {
+        nPressedTexture = TextureHolder::getInstance().get(id);
+    }
 
     void Button::setNormalSprite() {
       nSprite.setTexture(nNormalTexture, true);
@@ -89,6 +104,10 @@ namespace GUI{
         nIsSelected = flag;
     }
 
+    void Button::setIsPressable(bool flag) {
+        nIsPressable = flag;
+    }
+
     void Button::update(sf::Time dt) {
         if (nIsSelecting) {
             nSelectedAni.update(dt);
@@ -98,10 +117,11 @@ namespace GUI{
     bool Button::isSelectable() const { return nIsSelected; }
 
     bool Button::isPressable() const {
-        return true;
+        return nIsPressable;
     }
 
     void Button::select() {
+        if (isSelectable() == false) return;
         //nIsSelecting = true;
         Component::select();
         setSelectedSprite();
@@ -119,6 +139,7 @@ namespace GUI{
     }
 
     void Button::activate() {
+        if (isPressable() == false) return;
         std::cerr << "Button activated" << std::endl;
 
         Component::activate();
@@ -156,7 +177,7 @@ namespace GUI{
             }
         }
         if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
+            if (event.mouseButton.button == sf::Mouse::Left && nIsPressable) {
                 sf::Transform transform = getTransform();
                 sf::Vector2f mousePos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
                 if (nSprite.getGlobalBounds().contains(transform.getInverse().transformPoint(mousePos))) {
