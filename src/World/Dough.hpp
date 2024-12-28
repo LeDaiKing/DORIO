@@ -53,6 +53,7 @@ class Dough : public Entity
 		virtual void load(std::ifstream& file);
 		virtual void save(std::ofstream& file);
 		void setMotionless(bool flag);
+		virtual bool isMarkedForRemoval() const;
 
 	protected:
 		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);

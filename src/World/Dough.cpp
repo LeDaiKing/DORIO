@@ -178,6 +178,7 @@ void Dough::setUpEntity()
 	addAnimationState(State::Jump, 32, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
 	addAnimationState(State::DoubleJump, 32, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
 	addAnimationState(State::Fall, 64, 5, sf::seconds(0.35f), sf::Vector2i(32, 32), false);
+	addAnimationState(State::Dead, 128,8, sf::seconds(0.7f), sf::Vector2i(32, 32), false);
 
 
 	// Big dough
@@ -264,6 +265,7 @@ void Dough::getDamage(int damage)
 	}
 	// nSprite.setAnimationState(State::Hit);
 	nHitPoints -= damage;
+	if (nCurrentState != State::Dead && nHitPoints == 0) setAnimationState(State::Dead);
 }
 
 void Dough::handleCollisionEnemies(SceneNode& graph)
@@ -609,4 +611,9 @@ void Dough::load(std::ifstream& file)
 void Dough::setMotionless(bool flag)
 {
 	nMotionless = flag;
+}
+
+bool Dough::isMarkedForRemoval() const
+{
+	return nCurrentState == State::Dead && nSprite.isFinished();
 }

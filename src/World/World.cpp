@@ -289,7 +289,7 @@ void World::loadMap(std::string level)
 
 	for (auto& ghost : enemyConfig["Ghost"])
 	{
-		std::unique_ptr<Ghost> enemy(new Ghost(Enemy::Ghost, toVector2<float>(ghost["Position"])));
+		std::unique_ptr<Ghost> enemy(new Ghost(Enemy::Ghost, toVector2<float>(ghost["Position"]) + sf::Vector2f(16.0f, 16.0f)));
 		for (auto& ai : ghost["AI"])
 		{
 			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
@@ -299,7 +299,7 @@ void World::loadMap(std::string level)
 
 	for (auto& chicken : enemyConfig["Chicken"])
 	{
-		std::unique_ptr<Chicken> enemy(new Chicken(Enemy::Chicken, toVector2<float>(chicken["Position"])));
+		std::unique_ptr<Chicken> enemy(new Chicken(Enemy::Chicken, toVector2<float>(chicken["Position"]) + sf::Vector2f(16.0f, 16.0f)));
 		for (auto& ai : chicken["AI"])
 		{
 			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
@@ -309,7 +309,7 @@ void World::loadMap(std::string level)
 
 	for (auto& snail : enemyConfig["Snail"])
 	{
-		std::unique_ptr<Snail> enemy(new Snail(Enemy::Snail, toVector2<float>(snail["Position"])));
+		std::unique_ptr<Snail> enemy(new Snail(Enemy::Snail, toVector2<float>(snail["Position"]) + sf::Vector2f(16.0f, 16.0f)));
 		for (auto& ai : snail["AI"])
 		{
 			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
@@ -380,7 +380,7 @@ bool World::isWin() {
 }
 
 bool World::isLose() {
-	return nTime <= sf::Time::Zero || nPlayerDough->getHitPoints() <= 0;
+	return nTime <= sf::Time::Zero || nPlayerDough->isMarkedForRemoval();
 }
 
 void World::applyNormal()
