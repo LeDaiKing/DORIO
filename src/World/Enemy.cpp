@@ -143,6 +143,7 @@ void Enemy::moveToPosition(sf::Time dt)
     if (length(nDestination - getPosition()) < 3.f)
     {
         setVelocity(0.f, 0.f);
+        nAcceleration = {0.f, 0.f};
         setPosition(nDestination);
         setAIState(None);
         return;
@@ -224,7 +225,7 @@ void Enemy::addBehavior(int type, float x, float y)
     switch (type)
     {
     case 0:
-        addMoveBehavior({x, y});
+        addMoveBehavior(sf::Vector2f(x, y));
         break;
     case 1:
         addWaitBehavior(sf::seconds(x));

@@ -278,7 +278,8 @@ void World::loadMap(std::string level)
 
 	for (auto& cockroach : enemyConfig["CockRoach"])
 	{
-		std::unique_ptr<CockRoach> enemy(new CockRoach(Enemy::CockRoach, toVector2<float>(cockroach["Position"])));
+		sf::Vector2f position = toVector2<float>(cockroach["Position"]);
+		std::unique_ptr<CockRoach> enemy(new CockRoach(Enemy::CockRoach, position + sf::Vector2f(16.0f, 16.0f)));
 		for (auto& ai : cockroach["AI"])
 		{
 			enemy->addBehavior(ai.at(0), ai.at(1), ai.at(2));
