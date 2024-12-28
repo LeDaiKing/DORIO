@@ -131,7 +131,7 @@ namespace GUI{
         if (!nIsToggle) {
             deactivate();
         }
-        nSoundPlayer.play(SoundEffect::ClickedButton);
+        nSoundPlayer.play(SoundEffect::ui);
     }
 
     void Button::deactivate() {
