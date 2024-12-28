@@ -51,13 +51,6 @@ World::World(sf::RenderWindow& window, State::Context context)
 
 void World::update(sf::Time dt)
 {
-	// if ((node.getCategory() & Category::PlayerDough) && !node.isMarkedForRemoval() && !nWorldBounds.intersects(node.getBoundingRect()))
-	// {
-	// 	Dough* nPlayerDough = static_cast<Dough*>(&node);
-	// 	nPlayerDough->getDamage(1);
-	// 	nPlayerDough->resetCheckPoint();
-	// }
-
 	if (nPlayerDough->getAnimationState() != Entity::State::Dead && !nWorldBounds.intersects(nPlayerDough->getBoundingRect()))
 	{
 		nPlayerDough->getDamage(1);
