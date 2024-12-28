@@ -24,6 +24,7 @@ GameState::GameState(StateStack& stack, Context context)
     else {
         int level;
         fileLevel.read((char*)&level, sizeof(int));
+        --level;
         nWorld.load(fileData, level);
     }
 }
