@@ -18,11 +18,13 @@ WinningState::WinningState(StateStack& stack, Context context)
 , textScore("")
 , winBadge()
 , coinBadge()
+, nSoundPlayer(*context.sounds)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::WinningScreen));
     saveCurrentState();
-    nCupSprite.setTexture(TextureHolder::getInstance().get(Textures::Cup));
-    nCupSprite.setPosition(792, 238);
+    nSoundPlayer.play(SoundEffect::levelcomplete);
+    nCharacterSprite.setTexture(TextureHolder::getInstance().get(Textures::Char1Sprite));
+    nCharacterSprite.setPosition(792, 238);
 
     nClock.setTexture(TextureHolder::getInstance().get(Textures::ClockHub));
     nClock.setPosition(169, 370);

@@ -11,7 +11,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
 , backButton(context, Textures::ID::BackButtonNormal, Textures::ID::BackButtonSelected, Textures::ID::BackButtonPressed)
 // , playStartButton(context, ButtonTextures::ID::playStartButton)
 , settingButton(context, Textures::ID::SettingButtonNormal, Textures::ID::SettingButtonSelected, Textures::ID::SettingButtonPressed)
-, chooseCharButton(context, Textures::ID::ChooseCharButtonNormal, Textures::ID::ChooseCharButtonSelected, Textures::ID::ChooseCharButtonPressed)
+//, chooseCharButton(context, Textures::ID::ChooseCharButtonNormal, Textures::ID::ChooseCharButtonSelected, Textures::ID::ChooseCharButtonPressed)
 {
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::ChooseModeScreen));
     saveCurrentState();
@@ -98,6 +98,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::Instruction);
         requestStackPush(States::ID::Transition);
     });
+    /*
     chooseCharButton.setPosition({75, 221});
     chooseCharButton.setIsSelected(false);
     chooseCharButton.setCallback([this] ()
@@ -106,7 +107,7 @@ ChooseModeState::ChooseModeState(StateStack& stack, Context context)
         requestStackPush(States::ChooseCharacter);
         requestStackPush(States::ID::Transition);
     });
-
+    */
     std::ifstream file(*context.saveFile + "map.bin", std::ios::binary);
     for (int i = 0; i < 3; i++) {
         bool isWin = false;
@@ -160,7 +161,7 @@ void ChooseModeState::draw()
     window.draw(backButton);
     // window.draw(playStartButton);
     window.draw(settingButton);
-    window.draw(chooseCharButton);
+    //window.draw(chooseCharButton);
     for (auto& badge : kitchenModeBadge)
         window.draw(badge);
     for (auto& badge : hallwayModeBadge)
@@ -184,9 +185,6 @@ bool ChooseModeState::update(sf::Time dt)
         settingButton.setSelectedSprite();
     else settingButton.setNormalSprite();
 
-    if (chooseCharButton.isMouseOver(window))
-        chooseCharButton.setSelectedSprite();
-    else chooseCharButton.setNormalSprite();
     return true;
 }
 
@@ -196,7 +194,7 @@ bool ChooseModeState::handleEvent(const sf::Event& event)
     backButton.handleEvent(event);
     // playStartButton.handleEvent(event);
     settingButton.handleEvent(event);
-    chooseCharButton.handleEvent(event);
+    //chooseCharButton.handleEvent(event);
     return false;
 }
 

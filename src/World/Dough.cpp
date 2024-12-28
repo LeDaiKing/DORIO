@@ -238,10 +238,12 @@ void Dough::jump()
 		setVelocity(getVelocity().x, -nJumpVelocity);
 		stateJump++;
 	} 
+	nSoundPlayer.play(SoundEffect::jump);
 }
 
 void Dough::attackEnemy(Enemy& enemy)
 {
+	nSoundPlayer.play(SoundEffect::land);
 	enemy.getDamage(1);
 	if (enemy.getHitPoints() == 0) nScore += 100;
 }
@@ -249,6 +251,7 @@ void Dough::attackEnemy(Enemy& enemy)
 void Dough::getDamage(int damage)
 {
 	// setAnimationState(State::Hit);
+	nSoundPlayer.play(SoundEffect::hurt);
 	if (nTimeDamage > sf::Time::Zero)
 		return;
 	
@@ -311,6 +314,14 @@ void Dough::handleCollisionItems(SceneNode& graph)
 		if (side != collision::Side::None && !item.isMarkedForRemoval())
 		{
 			item.activate(*this);
+			if (item.getType() == Item::Type::Coin)
+			{
+				nSoundPlayer.play(SoundEffect::coin);
+			}
+			else if (item.getType() == Item::Type::Heart || item.getType() == Item::Type::Big || item.getType() == Item::Type::FireBig)
+			{
+				nSoundPlayer.play(SoundEffect::item);
+			}
 		}
 	}
 
@@ -459,6 +470,7 @@ void Dough::setAnimationState(State type)
 
 void Dough::growUPBig()
 {
+	nSoundPlayer.play(SoundEffect::powerup);
 	addHitPoints(1);
 	if (nGrowUp == Big || nGrowUp == FireBig) return;
 	nGrowUp = Big;
@@ -468,6 +480,7 @@ void Dough::growUPBig()
 
 void Dough::growUPFireBig()
 {
+	nSoundPlayer.play(SoundEffect::powerup);
 	addHitPoints(1);
 	if (nGrowUp == FireBig) return;
 	nGrowUp = FireBig;
@@ -513,8 +526,10 @@ void Dough::fire(CommandQueue& commands)
 		if (nDirection) fireBall->setTargetDirection(sf::Vector2f(-1.f, 0.f));
 		else fireBall->setTargetDirection(sf::Vector2f(1.f, 0.f));
 		node.attachChild(std::move(fireBall));
+		nSoundPlayer.play(SoundEffect::shoot);
 	};
 	commands.push(fire);
+	
 }
 
 void Dough::addHitPoints(int points)

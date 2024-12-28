@@ -7,6 +7,7 @@
 #include "../UI/Label.hpp"
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
+#include "../Music/SoundPlayer.hpp"
 #include "../Utility.hpp"
 #include <vector>
 
@@ -48,6 +49,7 @@ class WinningState : public State{
         float delayUpdate = 0;
         float alphaWin = 0;
         float alphaCoin = 0;
+        SoundPlayer& nSoundPlayer;
         // GUI::Button startButton;
         // GUI::Button deleteButton;
         // GUI::Button resetButton;

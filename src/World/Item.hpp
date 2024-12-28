@@ -25,6 +25,7 @@ class Item : public SceneNode
         Item(Type type, sf::Vector2f position);
         virtual unsigned int getCategory() const;
         virtual sf::FloatRect getBoundingRect() const;
+        virtual Type getType() const;   
         virtual void activate(Entity& player) = 0;
         virtual bool isMarkedForRemoval() const;
         virtual void load(std::ifstream& file);

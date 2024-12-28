@@ -8,6 +8,7 @@
 #include "../Holder/ResourceIdentifiers.hpp"
 #include "../Holder/ResourceHolder.hpp"
 #include "../Utility.hpp"
+#include "../Music/SoundPlayer.hpp"
 #include <vector>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -24,4 +25,5 @@ class LosingState : public State{
         GUI::Button leaderboardButton;
         GUI::Button homeButton;
         GUI::Button retryButton;
+        SoundPlayer& nSoundPlayer;
 };

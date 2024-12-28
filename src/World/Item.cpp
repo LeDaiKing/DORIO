@@ -44,6 +44,11 @@ sf::FloatRect Item::getBoundingRect() const
     return getWorldTransform().transformRect(nAnimation.getGlobalBounds());
 }
 
+Item::Type Item::getType() const
+{
+    return nType;
+}
+
 bool Item::isMarkedForRemoval() const
 {
     return nIsCollected;

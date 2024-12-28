@@ -11,8 +11,10 @@ LosingState::LosingState(StateStack& stack, Context context)
 , leaderboardButton(context, Textures::ID::LeaderboardButtonNormal, Textures::ID::LeaderboardButtonSelected, Textures::ID::LeaderboardButtonPressed)
 , homeButton(context, Textures::ID::HomeButtonNormal, Textures::ID::HomeButtonSelected, Textures::ID::HomeButtonPressed)
 , retryButton(context, Textures::ID::RetryButtonNormal, Textures::ID::RetryButtonSelected, Textures::ID::RetryButtonPressed)
+, nSoundPlayer(*context.sounds)
 {
     saveCurrentState();
+    nSoundPlayer.play(SoundEffect::gameover);
     nBackgroundSprite.setTexture(TextureHolder::getInstance().get(Textures::LosingScreen));
     leaderboardButton.setPosition(955, 700);
     leaderboardButton.setIsSelected(false);
